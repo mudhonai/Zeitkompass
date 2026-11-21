@@ -1017,8 +1017,8 @@ function computeYear(y){
   const longD=[],restD=[],dk=Object.keys(days);
   dk.forEach((k,ix)=>{const dc=days[k];if(dc.work&&dc.net>(+S.maxDaily||10)+1e-6)longD.push(k);
     const nx=dk[ix+1];if(nx&&dc.work&&days[nx].work&&dc.times&&days[nx].times){let a=toMin(dc.times[0]),b=toMin(dc.times[1]);if(b<=a)b+=1440;const gap=(toMin(days[nx].times[0])+1440-b)/60;if(gap<(+S.minRest||11)-1e-6)restD.push({k:nx,gap})}});
-  let rp=pool0,rk=konto0,poolDay=rp>=S.pool-1e-6?'':null;
-  for(let m=0;m<12&&poolDay===null;m++){if(C_pre(m))continue;for(let d=1;d<=dim(y,m);d++){const k=K(y,m,d),dc=days[k];let c=dc.ist-dc.soll+dc.zSum;if(d===dim(y,m))c+=months[m].mz;
+  let rp=pool0,rk=konto0;{let m0=0;while(m0<12&&C_pre(m0))m0++;if(m0>0&&months[m0-1]){rp=months[m0-1].pool;rk=months[m0-1].konto}}let poolDay=rp>=S.pool-1e-6?'':null;
+  for(let m=0;m<12&&poolDay===null;m++){if(C_pre(m))continue;for(let d=1;d<=dim(y,m);d++){const k=K(y,m,d),dc=days[k];let c=dc.ist-dc.soll+dc.zSum-(dc.fza||0);if(d===dim(y,m))c+=months[m].mz;
     if(c>0){const t=Math.min(c,Math.max(0,S.pool-rp));rp+=t;rk+=c-t}else if(c<0){const t=Math.min(rk,-c);rk-=t;rp+=c+t}
     if(rp>=S.pool-1e-6){poolDay=k;break}}}
   function C_pre(m){return months[m].pre}
