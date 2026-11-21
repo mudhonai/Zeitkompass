@@ -93,6 +93,9 @@ button{cursor:pointer}
 .alert b{color:#fff}
 .alert .btn{padding:5px 11px;font-size:calc(12.5px*var(--fs,1));white-space:nowrap}
 .d.over{outline:2px solid #ff6b74;outline-offset:-1px}
+@keyframes mobp{0%,100%{box-shadow:inset 0 0 0 200px rgba(229,48,60,0)}50%{box-shadow:inset 0 0 0 200px rgba(229,48,60,.62)}}
+.d.mobover,.md.mobover{animation:mobp 1.8s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.d.mobover,.md.mobover{animation:none;box-shadow:inset 0 0 0 200px rgba(229,48,60,.4)}}
 .d.limit{outline:2px dashed #f0bf5a;outline-offset:-1px}
 .fill.neg{background:var(--g-red)}
 .gauge .gs{display:flex;gap:16px;margin-top:7px;font-size:calc(12px*var(--fs,1));color:var(--ink2)}
@@ -1346,6 +1349,7 @@ function cellCls(dc){
   if(UI.sel.has(dc.k))c.push('sel');
   if(dc.k===todayK)c.push('is-today');
   if(dc.e.n)c.push('has-n');
+  if(dc.e.t==='mobil'){const C=computeYear(+dc.k.slice(0,4)),M=C&&C.months[+dc.k.slice(5,7)-1];if(M&&M.mobQ>(+ST.settings.mobilMax||50)+1e-6)c.push('mobover')}
   return c.join(' ');
 }
 function renderYear(){
