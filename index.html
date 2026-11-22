@@ -1320,7 +1320,7 @@ function renderPegel(){
    <div class="gauge">
      <div class="gl"><b>Freizeitkonto</b><span><strong class="${chg('konto',konto)}">${fmt(konto)}</strong> h</span></div>
      <div class="tube"><div class="fill konto" style="width:${kp*100}%"></div></div>
-     <div class="gs">${soon?`<span class="w">${fh(soon.h)} verfallen am ${monthEnd(soon.exp)}</span>`:'<span>Nichts läuft ab</span>'}${C.expTot>0.004?`<span>${fh(C.expTot)} schon verfallen</span>`:''}</div>
+     <div class="gs">${soon?`<span class="w">Nächster Verfall laut Planung: ${fh(soon.h)} ${soon.src<0?'aus dem Vorjahr':'aus '+MON[soon.src%12]}, am ${monthEnd(soon.exp)}</span>`:'<span>Nichts läuft ab</span>'}${C.expTot>0.004?`<span>${fh(C.expTot)} schon verfallen</span>`:''}</div>
      <div class="gs"><span>Prognose 31.12.: ${fh(C.konto)}, ${conv(C.konto)}</span></div>
    </div>
    ${(()=>{let tk=0,pl=0;Object.values(C.days).forEach(dc=>{if(dc.vac){if(dc.k<=todayK)tk+=dc.vac;else pl+=dc.vac}});const rest=S.vacation-tk-pl;let zk=null;const O=(ST.years[UI.year]||{}).official||{};for(let m=11;m>=0;m--)if(O[m]&&O[m].urlK){zk={m,...O[m].urlK};break}
