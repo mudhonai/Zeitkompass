@@ -973,6 +973,7 @@ function calcDay(k,pm){
     if(half){r.cred=so/2;r.fza=so/2;r.ist=r.net+so/2}
   }else if(T.credit){r.ist=so;r.cred=so}
   else if(e.t==='fza'){r.ist=so;r.cred=so;r.fza=so}
+  else if(i.halb&&so>0&&!stored(k)){r.ist=so;r.cred=so;r.halbOffen=true}
   if(e.t==='urlaub'&&so>0)r.vac=i.halb?.5:1;
   return r;
 }
@@ -1035,7 +1036,7 @@ function computeYear(y){
     if(dc.i.dow===0&&k.slice(5)==='01-01'){const b=dc.work;we.tot++;if(b)we.so++}
     if(dc.work&&(dc.i.legal||dc.i.ft))we.ft++}
   const freeFrom=s0=>{let mn=Infinity;for(let i=s0;i<12;i++)mn=Math.min(mn,months[i].konto);return mn===Infinity?kEnd:mn};const availFree=freeFrom(ty<y?0:ty>y?12:tmo);
-  return MEMO[y]={poolDay,pool0,konto0,we,y,months,days,pool,konto:kEnd,lotsEnd:lots,expTot,vac,series,streak,fairs,pm,jup,avail,availLbl,availFree,freeFrom,longD,restD};
+  return MEMO[y]={halbK:Object.keys(days).filter(k=>days[k].halbOffen),poolDay,pool0,konto0,we,y,months,days,pool,konto:kEnd,lotsEnd:lots,expTot,vac,series,streak,fairs,pm,jup,avail,availLbl,availFree,freeFrom,longD,restD};
 }
 function parseH(v){v=String(v==null?'':v).trim();if(!v)return 0;if(v.includes(':')){const neg=v.startsWith('-'),a=v.replace('-','').split(':');const h=(+a[0]||0)+(+a[1]||0)/60;return neg?-h:h}return parseFloat(v.replace(',','.'))||0}
 /*PARSER-START*/
@@ -1171,6 +1172,7 @@ function limitAlerts(C){
   const S=ST.settings,out=[],lst=a=>a.slice(0,6).map(fd).join(', ')+(a.length>6?' und '+(a.length-6)+' weitere':'');
   if(C.longD.length){const id='max:'+C.longD.length+':'+C.longD[0];if(!isDis(id))out.push(`<div class="alert w" data-grp="long"><span><b>${C.longD.length} ${C.longD.length===1?'Tag':'Tage'} über ${fmt(+S.maxDaily,0)} Stunden</b>: ${lst(C.longD).replace(/\.?$/,'.')} Nach MTV § 8 sind bis 10 Stunden erlaubt, mit Betriebsvereinbarung bis 12.</span><button class="btn" data-act="goto-day" data-k="${C.longD[0]}">Zum ${fd(C.longD[0]).slice(4)}</button><button class="x" data-act="dismiss" data-id="${id}" aria-label="Schließen">✕</button></div>`)}
   if(C.restD.length){const ks=C.restD.map(r=>r.k),id='rest:'+ks.length+':'+ks[0];if(!isDis(id))out.push(`<div class="alert" data-grp="rest"><span><b>Ruhezeit unter ${fmt(+S.minRest,0)} Stunden</b> vor ${lst(ks).replace(/\.?$/,'.')} Kürzeste Pause zwischen zwei Diensten: ${fhm(Math.min(...C.restD.map(r=>r.gap)))} Stunden.</span><button class="btn" data-act="goto-day" data-k="${ks[0]}">Zum ${fd(ks[0]).slice(4)}</button><button class="x" data-act="dismiss" data-id="${id}" aria-label="Schließen">✕</button></div>`)}
+  {const hk=C.halbK||[],id='halb:'+(hk[0]||'').slice(0,4);if(hk.length&&!isDis(id))out.push(`<div class="alert" data-grp="halb"><span><b>Halber Tag offen</b>: ${hk.map(fd).join(' und ').replace(/\.?$/,'.')} Ein halber Tag ist frei, die andere Hälfte bitte als Urlaub oder JÜP eintragen. Bis dahin wird sie nicht als Minus gerechnet.</span><button class="btn" data-act="goto-day" data-k="${hk[0]}">Zum ${fd(hk[0]).slice(4)}</button><button class="x" data-act="dismiss" data-id="${id}" aria-label="Schließen">✕</button></div>`)}
   if(C.mobOver&&C.mobOver.length){const L=+S.mobilMax||50;out.push(`<div class="alert" data-grp="mob"><span><b>Mobiles Arbeiten über ${fmt(L,0)} %</b>: ${C.mobOver.map(x=>MON[x.m]+' '+fmt(x.mobQ,0)+' %').join(', ')}. Erlaubt sind höchstens ${fmt(L,0)} % der Arbeitszeit im Monat.</span></div>`)}
   return out.length?`<div class="alerts">${out.join('')}</div>`:'';
 }
@@ -1262,7 +1264,7 @@ function renderPegel(){
   const reached=C.months.find(m=>m.pool>=S.pool-1e-6);
   const soon=C.lotsEnd.filter(l=>l.h>0.004).sort((a,b)=>a.exp-b.exp)[0];
   const vacLeft=S.vacation-C.vac;
-  const mL=+S.mobilMax||50;let V={mobOver:C.months.filter(x=>x.mobQ>mL+1e-6),jup:C.jup,we:C.we,vac:C.vac,zs:sum(C.months.map(m=>m.zs)),series:C.series,longD:C.longD,restD:C.restD,scope:'Jahr'};
+  const mL=+S.mobilMax||50;let V={mobOver:C.months.filter(x=>x.mobQ>mL+1e-6),jup:C.jup,we:C.we,vac:C.vac,zs:sum(C.months.map(m=>m.zs)),series:C.series,longD:C.longD,restD:C.restD,halbK:C.halbK,scope:'Jahr'};
   if(mv){const pre=UI.year+'-'+pad(UI.month+1),inM=k=>k.slice(0,7)===pre,TK=todayK,ks=Object.keys(C.days).filter(inM);
     const j={days:0,h:0,daysT:0,hT:0},w={full:0,sa:0,so:0,ft:0,tot:0};let vac=0;
     ks.forEach(k=>{const dc=C.days[k];if(dc.e.t==='fza'&&dc.soll>0){const dd=(dc.e.half||dc.i.halb)?.5:1,hh=dc.fza||0;j.days+=dd;j.h+=hh;if(k<=TK){j.daysT+=dd;j.hT+=hh}}vac+=dc.vac;
@@ -1270,7 +1272,7 @@ function renderPegel(){
       if(dc.i.dow===6){w.tot++;const su=computeYear(+addDays(k,1).slice(0,4)).days[addDays(k,1)],a=dc.work,b=su?su.work:false;if(a&&b)w.full++;else if(a)w.sa++;else if(b)w.so++}
       if(dc.i.dow===0&&k.slice(8)==='01'){const sa=computeYear(+addDays(k,-1).slice(0,4)).days[addDays(k,-1)];if(dc.work&&!(sa&&sa.work)){w.tot++;w.so++}}});
     const a0=pre+'-01',a1=pre+'-31';
-    V={mobOver:[C.months[UI.month]].filter(x=>x.mobQ>mL+1e-6),jup:j,we:w,vac,zs:C.months[UI.month].zs,series:C.series.filter(x=>x.b>=a0&&x.a<=a1),longD:C.longD.filter(inM),restD:C.restD.filter(x=>inM(x.k)),scope:MON[UI.month]}}
+    V={mobOver:[C.months[UI.month]].filter(x=>x.mobQ>mL+1e-6),jup:j,we:w,vac,zs:C.months[UI.month].zs,series:C.series.filter(x=>x.b>=a0&&x.a<=a1),longD:C.longD.filter(inM),restD:C.restD.filter(x=>inM(x.k)),halbK:C.halbK.filter(inM),scope:MON[UI.month]}}
   $('#pegel').classList.toggle('pcol',!!UI.pegCol);
   if(UI.pegCol){const av=mv?(UI.month===0?C.konto0:C.months[UI.month-1].konto):C.avail,mi=mv?UI.month:sm===99?TD.getMonth():sm<0?0:sm,MM=C.months[mi],mo=MM.mobQ>mL+1e-6;
     $('#pegel').innerHTML=`<div class="pcl"><span class="sl-lbl">Stand ${mv?MON[UI.month]+' '+UI.year:sm===99?'heute':sm<0?'Jahresbeginn':'Ende '+MON[sm]}</span>
@@ -1280,9 +1282,9 @@ function renderPegel(){
   $('#pegel').innerHTML=`
    <div class="stich">${mv?`Stand Ende ${MON[UI.month]} ${UI.year}<span style="display:none">`:''}Stand <select data-act-stich aria-label="Stichtag"><option value="-1" ${sm<0?'selected':''}>Jahresbeginn ${UI.year}</option>${isCur?`<option value="99" ${sm===99?'selected':''}>heute, ${fd(todayK)}</option>`:''}${MON.map((n,i)=>`<option value="${i}" ${i===sm?'selected':''}>Ende ${n} ${UI.year}</option>`).join('')}</select>${mv?'</span>':''}${!mv&&sm!==autoM?'<button class="linkbtn" data-act="stich-reset">zurück auf '+(autoM===11?'Jahresende':autoM<0?'Jahresbeginn':'heute')+'</button>':''}<span>Gutschrift ${mv?'im Monat <b>'+fh(C.months[UI.month].credit)+'</b>, bis Monatsende':'bis dahin'} <b class="${chg('gut',gut)}">${fh(gut)}</b>, im ganzen Jahr <b class="${chg('gutJ',gutJ)}">${fh(gutJ)}</b></span><button class="tgb pegtg" data-act="tg-peg" aria-expanded="true">Einklappen<i class="tgi">▴</i></button></div>
    <div class="gauge">
-     <div class="gl"><b>Pauschale noch zu leisten</b><span><strong class="${chg('pool',pool)}">${fmt(Math.max(0,S.pool-pool))}</strong> von ${fmt(S.pool,0)} h</span></div>
+     <div class="gl"><b>Pauschale noch zu leisten</b><span><strong class="${chg('pool',pool)}">${fmt(Math.min(S.pool,Math.max(0,S.pool-pool)))}</strong> von ${fmt(S.pool,0)} h</span></div>
      <div class="tube"><div class="fill pool" style="width:${Math.max(0,Math.min(1,(S.pool-pool)/S.pool))*100}%"></div></div>
-     <div class="gs">${pool<0?`<span class="w">${fh(-pool)} Minusstunden zusätzlich</span>`:`<span>${fh(Math.max(0,pool))} geleistet</span>`}${C.poolDay?`<span class="${(prev.pd||'')!==C.poolDay&&prev.pd!=null?'chg':''}">laut Planung erledigt am ${fd(C.poolDay)}</span>`:C.poolDay===''?'<span>schon erledigt</span>':`<span class="w">laut Planung bis 31.12. nicht erreicht</span>`}</div>
+     <div class="gs">${pool<0?`<span class="w">dazu ${fh(-pool)} Minus</span>`:`<span>${fh(Math.max(0,pool))} geleistet</span>`}${C.poolDay?`<span class="${(prev.pd||'')!==C.poolDay&&prev.pd!=null?'chg':''}">laut Planung erledigt am ${fd(C.poolDay)}</span>`:C.poolDay===''?'<span>schon erledigt</span>':`<span class="w">laut Planung bis 31.12. nicht erreicht</span>`}</div>
    </div>
    <div class="gauge">
      ${(()=>{UI._av=mv?(UI.month===0?C.konto0:C.months[UI.month-1].konto):C.avail;UI._avl=mv?'Stand Anfang '+MON[UI.month]:C.availLbl;return''})()}${(()=>{UI._fr=mv?C.freeFrom(UI.month):C.availFree;return''})()}<div class="gl"><b>JÜP verfügbar</b><span><strong class="${UI._fr<0?'neg':''}">${fmt(UI._fr/daily(),1)}</strong> Tage</span></div>
@@ -1316,8 +1318,8 @@ function renderPegel(){
      <div class="tube"><div class="fill mob ${over?'over':''}" style="width:${Math.min(100,q/mL*100)}%"></div></div>
      <div class="gs"><span>${fh(M.mob)} von ${fh(M.mobB)}</span><span>${MON[mi]}${M.mobO?', Zeitnachweis':''}</span></div>
      <div class="gs">${over?`<span class="w">${fh(-rest)} über der Grenze</span>`:`<span>noch möglich ${fh(rest)}, ca. ${fmt(rest/daily(),1)} Tage</span>`}</div></div>`})()}
-   ${(()=>{const D=x=>!isDis(serId(x)),ov=V.series.filter(x=>x.n>S.maxSeries&&D(x)).length,lm=V.series.filter(x=>x.n===S.maxSeries&&D(x)).length,ld=V.longD.length&&!isDis('max:'+C.longD.length+':'+C.longD[0])?V.longD.length:0,rs=V.restD.length&&!isDis('rest:'+C.restD.length+':'+(C.restD[0]||{}).k)?V.restD.length:0,tot=ov+lm+(ld?1:0)+(rs?1:0)+(V.mobOver.length?1:0);
-     const ch=[];if(ov)ch.push(`<span class="hchip r" data-grp="over">${ov} ${ov===1?'Serie':'Serien'} über ${S.maxSeries} Tage</span>`);if(lm)ch.push(`<span class="hchip y" data-grp="limit">${lm}× Grenze erreicht</span>`);if(ld)ch.push(`<span class="hchip y" data-grp="long">${ld} ${ld===1?'Tag':'Tage'} über ${fmt(+S.maxDaily,0)} h</span>`);if(rs)ch.push(`<span class="hchip r" data-grp="rest">${rs}× Ruhezeit zu kurz</span>`);if(V.mobOver.length)ch.push(`<span class="hchip r" data-grp="mob">Mobil über ${fmt(mL,0)} %${mv?'':' in '+V.mobOver.length+(V.mobOver.length===1?' Monat':' Monaten')}</span>`);
+   ${(()=>{const D=x=>!isDis(serId(x)),ov=V.series.filter(x=>x.n>S.maxSeries&&D(x)).length,lm=V.series.filter(x=>x.n===S.maxSeries&&D(x)).length,ld=V.longD.length&&!isDis('max:'+C.longD.length+':'+C.longD[0])?V.longD.length:0,rs=V.restD.length&&!isDis('rest:'+C.restD.length+':'+(C.restD[0]||{}).k)?V.restD.length:0,hb=(V.halbK||[]).length&&!isDis('halb:'+UI.year)?V.halbK.length:0,tot=ov+lm+(ld?1:0)+(rs?1:0)+(V.mobOver.length?1:0)+(hb?1:0);
+     const ch=[];if(ov)ch.push(`<span class="hchip r" data-grp="over">${ov} ${ov===1?'Serie':'Serien'} über ${S.maxSeries} Tage</span>`);if(lm)ch.push(`<span class="hchip y" data-grp="limit">${lm}× Grenze erreicht</span>`);if(ld)ch.push(`<span class="hchip y" data-grp="long">${ld} ${ld===1?'Tag':'Tage'} über ${fmt(+S.maxDaily,0)} h</span>`);if(rs)ch.push(`<span class="hchip r" data-grp="rest">${rs}× Ruhezeit zu kurz</span>`);if(hb)ch.push(`<span class="hchip y" data-grp="halb">${hb}× halber Tag offen</span>`);if(V.mobOver.length)ch.push(`<span class="hchip r" data-grp="mob">Mobil über ${fmt(mL,0)} %${mv?'':' in '+V.mobOver.length+(V.mobOver.length===1?' Monat':' Monaten')}</span>`);
      return `<div class="sumline"><span class="sl-lbl">Hinweise</span>${ch.length?ch.map(c=>c.replace('<span class="hchip','<span data-act="go-alert" role="button" tabindex="0" title="Zum Hinweis" class="hchip clk')).join(''):'<span class="hchip g">alles im Rahmen</span>'}<span class="sl-sp"></span>${tot?`<button class="tgb ${UI.showAlerts?'on':''} ${ov||rs?'warn':''}" data-act="tg-alerts" aria-expanded="${!!UI.showAlerts}"><span class="tgc">${tot}</span>${UI.showAlerts?'Hinweise ausblenden':'Hinweise anzeigen'}<i class="tgi">▾</i></button>`:''}<button class="tgb ${UI.showFacts?'on':''}" data-act="tg-facts" aria-expanded="${!!UI.showFacts}">${UI.showFacts?'Kennzahlen ausblenden':'Kennzahlen anzeigen'}<i class="tgi">▾</i></button></div>`})()}
    <div class="pfull ${UI.showFacts?'':'hidebox'}">
    <div class="facts">
