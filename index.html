@@ -464,6 +464,10 @@ tr.clk{cursor:pointer}tr.clk:hover td{background:rgba(0,0,0,.035)}
 html[data-design="vis"] .ko{width:.78em;height:.78em;vertical-align:-.04em}
 .kneedle{transform-box:view-box;transform-origin:33px 33px;animation:kswing 1.8s ease-out .3s both}
 @keyframes kswing{0%{transform:rotate(-70deg)}35%{transform:rotate(35deg)}60%{transform:rotate(-15deg)}80%{transform:rotate(6deg)}100%{transform:rotate(0deg)}}
+.qrrow{display:flex;gap:16px;align-items:flex-start}.qrrow p{margin:0 0 8px}.qr{width:132px;height:132px;flex:none;border-radius:10px;background:#fff;padding:4px;box-sizing:border-box}
+.rv{max-width:720px;width:100%}.rv-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.rv-k{font-size:calc(12px*var(--fs,1));letter-spacing:.12em;text-transform:uppercase;color:#E85D04;font-weight:700}.rv-h{font:800 calc(30px*var(--fs,1))/1.1 var(--font-d);margin-top:4px}
+.rv-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:16px 0 10px}.rv-g div{border:1px solid rgba(127,127,127,.28);border-radius:12px;padding:10px 12px}.rv-g b{display:block;font-size:calc(22px*var(--fs,1));line-height:1.2}.rv-g span{font-size:calc(12px*var(--fs,1));opacity:.75}
+.rv-f{display:flex;flex-wrap:wrap;gap:6px}.rv-c{font-size:calc(12px*var(--fs,1));border-radius:20px;padding:4px 10px;background:rgba(127,127,127,.14)}
 .copy{margin:14px 6px 4px;text-align:right;font-size:calc(11.5px*var(--fs,1));letter-spacing:.02em;opacity:.55}
 .vlogo,.vsub{display:none}
 :root[data-design="vis"]{
@@ -808,6 +812,7 @@ html[data-design="glas"] .vtitle{display:flex;flex-direction:column}
 <div class="rangebar glass" id="cbar" hidden style="max-width:min(900px,calc(100vw - 30px))"></div>
 <div class="tip glass" id="tip" hidden></div>
 <div class="modal" id="rptwin" hidden><div class="sheet glass fw rp" role="dialog" aria-modal="true" aria-label="Prüfbericht" id="rptsheet"></div></div>
+<div class="modal" id="revwin" hidden><div class="sheet glass rv" role="dialog" aria-modal="true" aria-label="Jahresrückblick" id="revsheet"></div></div>
 <div class="modal" id="fairwin" hidden><div class="sheet glass fw" role="dialog" aria-modal="true" aria-label="Messe" id="fwsheet"></div></div>
 <div class="modal" id="settings" hidden><div class="sheet glass" role="dialog" aria-modal="true" aria-label="Einstellungen" id="sheet"></div></div>
 <input type="file" id="importFile" accept="application/json,.json" hidden>
@@ -1192,9 +1197,16 @@ function renderToday(){
   else clock=`<span class="clk">${e.s}–${e.e}, netto ${fhm(dc.net)} h</span><button class="btn ghost" data-act="open-today">Korrigieren</button>`;
   const py=d.getMonth()===0?d.getFullYear()-1:d.getFullYear(),pmn=(d.getMonth()+11)%12,O=(ST.years[py]||{}).official||{},zid='zn:'+py+'-'+pmn;
   const zn=!(O[pmn]&&O[pmn].saldo!=null)&&!isDis(zid)?`<div class="alert info"><span><b>Zeitnachweis ${MON[pmn]} ${py}</b> ist noch nicht abgeglichen.</span><button class="btn" data-act="zn-goto">PDF laden</button><button class="x" data-act="dismiss" data-id="${zid}" aria-label="Schließen">✕</button></div>`:'';
+  const nE=Object.values(ST.years).reduce((s,Y)=>s+Object.keys((Y&&Y.entries)||{}).length,0),lb=ST.settings.lastBackup,ago=lb?Math.round((P(k)-P(lb))/864e5):null,bid='bk:'+k.slice(0,7);
+  const bk=nE>0&&(lb==null||ago>30)&&!isDis(bid)?`<div class="alert info"><span><b>${lb?'Letztes Backup vor '+ago+' Tagen':'Noch kein Backup gespeichert'}.</b> Die Daten liegen nur in diesem Browser. Ein Backup als Datei schützt vor Verlust.</span><button class="btn" data-act="export-json">Jetzt sichern</button><button class="x" data-act="dismiss" data-id="${bid}" aria-label="Schließen">✕</button></div>`:'';
+  const ry=d.getMonth()===11&&d.getDate()>=15?d.getFullYear():d.getMonth()===0&&d.getDate()<=15?d.getFullYear()-1:null,rid='rv:'+ry;
+  const rv=ry&&!isDis(rid)?`<div class="alert info"><span><b>Dein Jahr ${ry}</b>: Stunden, Messen, Wochenenden und mehr auf einen Blick.</span><button class="btn" data-act="review" data-y="${ry}">Jahresrückblick</button><button class="x" data-act="dismiss" data-id="${rid}" aria-label="Schließen">✕</button></div>`:'';
+  let cd='';if(e.t==='urlaub'&&dc.soll>0){let b=k;for(let i=1;i<=90;i++){const x=addDays(k,i),xd=dayOf(x);if(!xd)break;if(xd.e.t==='urlaub'&&xd.soll>0)b=x;else if(!(xd.soll===0&&!xd.work))break}const n=Math.round((P(b)-P(k))/864e5);cd=`<div><span>Urlaub</span><b>bis ${fd(b).slice(4)}</b><span>${n?'noch '+n+(n===1?' Tag':' Tage'):'letzter Tag'}</span></div>`}
+  else{for(let i=1;i<=400;i++){const x=addDays(k,i),xd=dayOf(x);if(xd&&xd.e.t==='urlaub'&&xd.soll>0){cd=`<div><span>Nächster Urlaub</span><b>ab ${fd(x).slice(4)}</b><span>${i===1?'morgen':'noch '+i+' Tage'}</span></div>`;break}}}
+  const tzn=zn+bk+rv;
   el.innerHTML=`<div class="td-main"><div class="td-date">Heute, ${WDL[dc.i.dow]}, ${d.getDate()}. ${MON[d.getMonth()]}</div><div class="td-what"><b>${TYPES[e.t].label}${f?' '+esc(f.name):''}${phase}</b>${dc.work&&!running&&!e.e?' · '+dc.times[0]+'–'+dc.times[1]:''}${dc.i.name?' · '+esc(dc.i.name):''}</div></div>
-   <div class="td-facts">${stk?`<div><span>Arbeitstag am Stück</span><b class="${stk>ST.settings.maxSeries?'neg':''}">${stk} von ${ST.settings.maxSeries}</b><span>${stk>=ST.settings.maxSeries?'<b class="neg">13.T fällig</b>':'freier Tag spätestens '+fd(addDays(k,ST.settings.maxSeries-stk+1))}</span></div>`:`<div><span>Ruhetag</span><b>heute frei</b></div>`}${free?`<div><span>Nächster freier Tag</span><b>${fd(free.k)}</b><span>${free.i===1?'morgen':'in '+free.i+' Tagen'}</span></div>`:''}${nf?`<div><span>Nächste Messe</span><b>${esc(nf.f?nf.f.name:'?')}</b><span>${TYPES[nf.t].label} ab ${fd(nf.k)}${nf.k.slice(0,4)!==k.slice(0,4)?nf.k.slice(0,4):''}, in ${nf.i} Tagen</span></div>`:''}</div>
-   <div class="td-clock">${clock}</div>${zn?`<div class="td-zn">${zn}</div>`:''}${weekCard(k)}`;
+   <div class="td-facts">${stk?`<div><span>Arbeitstag am Stück</span><b class="${stk>ST.settings.maxSeries?'neg':''}">${stk} von ${ST.settings.maxSeries}</b><span>${stk>=ST.settings.maxSeries?'<b class="neg">13.T fällig</b>':'freier Tag spätestens '+fd(addDays(k,ST.settings.maxSeries-stk+1))}</span></div>`:`<div><span>Ruhetag</span><b>heute frei</b></div>`}${free?`<div><span>Nächster freier Tag</span><b>${fd(free.k)}</b><span>${free.i===1?'morgen':'in '+free.i+' Tagen'}</span></div>`:''}${nf?`<div><span>Nächste Messe</span><b>${esc(nf.f?nf.f.name:'?')}</b><span>${TYPES[nf.t].label} ab ${fd(nf.k)}${nf.k.slice(0,4)!==k.slice(0,4)?nf.k.slice(0,4):''}, in ${nf.i} Tagen</span></div>`:''}${cd}</div>
+   <div class="td-clock">${clock}</div>${tzn?`<div class="td-zn">${tzn}</div>`:''}${weekCard(k)}`;
 }
 function weekCard(k){
   const d0=P(k),mon=addDays(k,-((d0.getDay()+6)%7));let h='';
@@ -1652,6 +1664,70 @@ function renderFairs(){
 
 /* ===== Messe-Fenster ===== */
 function fairDays(id){const out=[];[UI.year-1,UI.year,UI.year+1].forEach(y=>{const E=(ST.years[y]||{}).entries||{};Object.keys(E).forEach(k=>{if(E[k].f===id)out.push(k)})});return out.sort()}
+function fairCopy(){
+  const id=UI.fw,f=fairById(id);if(!f)return;const y=UI.year,ty=y+1,E=(ST.years[y]||{}).entries||{},src=Object.keys(E).filter(k=>E[k].f===id).sort();
+  if(!src.length){alert(`${f.name} hat ${y} keine Tage. Erst die Messe in ${y} anlegen.`);return}
+  const T=yearData(ty),TE=T.entries,map=src.map(k=>[k,addDays(k,364)]),ph={};
+  map.forEach(([a,n])=>{const t=E[a].t,p=ph[t]||(ph[t]={a:n,b:n});if(n<p.a)p.a=n;if(n>p.b)p.b=n});
+  const sum=['aufbau','laufzeit','abbau'].filter(t=>ph[t]).map(t=>`${TYPES[t].label}: ${fd(ph[t].a)} bis ${fd(ph[t].b)}`).join('\n');
+  const old=Object.keys(TE).filter(k=>TE[k].f===id),busy=map.filter(([a,n])=>TE[n]&&TE[n].f!==id&&TE[n].t!=='gleitzeit'&&TE[n].t!=='frei').length;
+  const msg=`${f.name} ${ty} vorschlagen, mit denselben Wochentagen wie ${y}:\n\n${sum}\n\n${old.length?`In ${ty} sind schon ${old.length} Tage dieser Messe eingetragen. Sie werden ersetzt.\n`:''}${busy?`${busy} Tage sind schon anders belegt und werden überschrieben.\n`:''}Bitte danach mit dem Messekalender ${ty} abgleichen. Übernehmen?`;
+  if(!confirm(msg))return;
+  old.forEach(k=>{delete TE[k]});
+  map.forEach(([a,n])=>{const e=E[a],o={t:e.t,f:id};['s','e','p'].forEach(x=>{if(e[x]!=null&&e[x]!=='')o[x]=e[x]});(ST.years[+n.slice(0,4)]?ST.years[+n.slice(0,4)]:yearData(+n.slice(0,4))).entries[n]=o});
+  invalidate();save();UI.year=ty;renderFairWin();render();
+}
+function ics(y){
+  const C=computeYear(y),ks=Object.keys(C.days).sort(),ev=[];let cur=null;
+  const keyOf=dc=>{const t=dc.e.t;if(['aufbau','laufzeit','abbau'].includes(t)&&dc.e.f){const f=fairById(dc.e.f);return(f?f.name:'Messe')+' – '+TYPES[t].label}if(t==='urlaub'&&dc.soll>0)return'Urlaub';if(t==='fza'&&dc.soll>0)return dc.e.t13?'13.T (frei)':(dc.e.half?'JÜP (halber Tag)':'JÜP');return null};
+  ks.forEach(k=>{const dc=C.days[k],key=keyOf(dc);
+    if(cur&&key===cur.key){cur.b=k;return}
+    if(cur&&key===null&&!dc.work&&dc.soll===0&&(cur.key==='Urlaub'||cur.key==='JÜP'))return;
+    if(cur)ev.push(cur);cur=key?{key,a:k,b:k}:null});
+  if(cur)ev.push(cur);
+  const D=k=>k.replace(/-/g,''),esc2=s=>s.replace(/\\/g,'\\\\').replace(/;/g,'\;').replace(/,/g,'\\,'),now=new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z';
+  const L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Zeitkompass//DE','CALSCALE:GREGORIAN','X-WR-CALNAME:Zeitkompass '+y];
+  ev.forEach(x=>{L.push('BEGIN:VEVENT','UID:zk-'+D(x.a)+'-'+hashS(x.key)+'@zeitkompass','DTSTAMP:'+now,'DTSTART;VALUE=DATE:'+D(x.a),'DTEND;VALUE=DATE:'+D(addDays(x.b,1)),'SUMMARY:'+esc2(x.key),'TRANSP:'+(x.key==='Urlaub'||x.key.startsWith('JÜP')||x.key.startsWith('13.T')?'TRANSPARENT':'OPAQUE'),'END:VEVENT')});
+  L.push('END:VCALENDAR');return L.join('\r\n')+'\r\n';
+}
+function reviewData(y){
+  const C=computeYear(y);let wd=0,h=0,night=0;Object.values(C.days).forEach(dc=>{if(dc.work){wd++;h+=dc.net;night+=dc.z.na>0?1:0}});
+  const zs=sum(C.months.map(m=>m.zs)),we=C.we||{full:0,sa:0,so:0,ft:0,tot:0},ser=Math.max(0,...Object.values(C.streak));
+  const fs=Object.keys(C.fairs).map(id=>({f:fairById(id),d:C.fairs[id].days})).filter(x=>x.f).sort((a,b)=>b.d-a.d);
+  return{y,wd,h,zs,we,ser,fs,jup:C.jup.days,vac:C.vac,night};
+}
+function openReview(y){
+  const R=reviewData(y),W=R.we,wf=W.full+W.sa+W.so;
+  $('#revsheet').innerHTML=`<div class="rv-top"><div><div class="rv-k">Jahresrückblick</div><div class="rv-h">Dein Jahr ${y}</div></div><button class="btn icon ghost" data-act="rv-close" aria-label="Schließen">✕</button></div>
+   <div class="rv-g">
+    <div><b>${fmt(R.h,0)} h</b><span>gearbeitet an ${R.wd} Tagen</span></div>
+    <div><b>${fh(R.zs)}</b><span>Zuschläge als Zeitgutschrift</span></div>
+    <div><b>${R.fs.length}</b><span>${R.fs.length===1?'Messe':'Messen'}${R.fs[0]?', am längsten: '+esc(R.fs[0].f.name):''}</span></div>
+    <div><b>${wf}</b><span>Wochenenden mit Arbeit, ${W.full} davon komplett</span></div>
+    <div><b>${W.tot-wf}</b><span>Wochenenden ganz frei</span></div>
+    <div><b>${R.ser}</b><span>Tage am Stück, längste Serie</span></div>
+    <div><b>${fmt(R.vac,1)}</b><span>Urlaubstage</span></div>
+    <div><b>${fmt(R.jup,1)}</b><span>JÜP-Tage</span></div>
+   </div>
+   ${R.fs.length?`<div class="rv-f">${R.fs.slice(0,10).map(x=>`<span class="rv-c">${esc(x.f.name)} <b>${x.d}</b></span>`).join('')}</div>`:''}
+   <div class="btnrow" style="margin-top:14px"><button class="btn primary" data-act="rv-img" data-y="${y}">Als Bild speichern</button><button class="btn" data-act="rv-close">Schließen</button></div>
+   <p class="cap" style="margin-top:8px">Berechnet aus allen eingetragenen und vorbelegten Tagen. Das Bild enthält nur diese Zahlen, keine Zeiten und keine Namen.</p>`;
+  $('#settings').hidden=true;$('#revwin').hidden=false;
+}
+async function reviewImage(y){
+  const R=reviewData(y),W=R.we,wf=W.full+W.sa+W.so,c=document.createElement('canvas');c.width=1080;c.height=1350;const g=c.getContext('2d');
+  const bg=g.createLinearGradient(0,0,0,1350);bg.addColorStop(0,'#1f2128');bg.addColorStop(1,'#16171a');g.fillStyle=bg;g.fillRect(0,0,1080,1350);
+  const F=(w,s)=>`${w} ${s}px "Archivo","Instrument Sans",Arial,sans-serif`;
+  g.save();g.translate(140,150);g.strokeStyle='#F4F3F0';g.lineWidth=12;g.beginPath();g.arc(0,0,44,0,Math.PI*2);g.stroke();g.fillStyle='#E85D04';g.beginPath();g.moveTo(0,-34);g.lineTo(11,0);g.lineTo(-11,0);g.closePath();g.fill();g.fillStyle='#8D9199';g.beginPath();g.moveTo(0,34);g.lineTo(11,0);g.lineTo(-11,0);g.closePath();g.fill();g.restore();
+  g.fillStyle='#E85D04';g.font=F(700,30);g.fillText('ZEITKOMPASS · JAHRESRÜCKBLICK',215,140);g.fillStyle='#F4F3F0';g.font=F(900,92);g.fillText('Dein Jahr '+y,215,225);
+  const T=[[fmt(R.h,0)+' h','gearbeitet an '+R.wd+' Tagen'],[fh(R.zs),'Zuschläge als Zeitgutschrift'],[String(R.fs.length),R.fs.length===1?'Messe':'Messen'],[String(wf),'Wochenenden mit Arbeit'],[String(W.tot-wf),'Wochenenden ganz frei'],[String(R.ser),'Tage am Stück, längste Serie'],[fmt(R.vac,1),'Urlaubstage'],[fmt(R.jup,1),'JÜP-Tage']];
+  T.forEach((t,i)=>{const x=90+(i%2)*470,yy=340+Math.floor(i/2)*200;g.fillStyle='rgba(255,255,255,.06)';g.beginPath();g.roundRect?g.roundRect(x,yy,430,170,24):g.rect(x,yy,430,170);g.fill();g.fillStyle='#F4F3F0';g.font=F(800,64);g.fillText(t[0],x+34,yy+88);g.fillStyle='#A9ACB3';g.font=F(500,28);g.fillText(t[1],x+34,yy+136)});
+  if(R.fs[0]){g.fillStyle='#A9ACB3';g.font=F(500,28);g.fillText('Längste Messe: '+R.fs[0].f.name+' ('+R.fs[0].d+' Tage)',90,1180)}
+  g.fillStyle='#6B6F77';g.font=F(500,24);g.fillText('zeitkompass4250.netlify.app',90,1270);g.textAlign='right';g.fillText('© '+y+' Marc Simon',990,1270);
+  const blob=await new Promise(r=>c.toBlob(r,'image/png'));if(!blob)return;
+  try{const file=new File([blob],'jahresrueckblick-'+y+'.png',{type:'image/png'});if(navigator.canShare&&navigator.canShare({files:[file]})&&matchMedia('(pointer:coarse)').matches){await navigator.share({files:[file],title:'Dein Jahr '+y});return}}catch(e){if(e&&e.name==='AbortError')return}
+  download('jahresrueckblick-'+y+'.png',blob,'image/png');
+}
 function openFairWin(id){UI.fw=id;renderFairWin();$('#fairwin').hidden=false}
 function closeFairWin(){UI.fw=null;$('#fairwin').hidden=true;render()}
 function renderFairWin(){
@@ -1668,7 +1744,7 @@ function renderFairWin(){
      <td>${fh(dc.net)}</td><td>${dc.zSum?'+'+fh(dc.zSum):''}</td><td class="${bal<0?'neg':'pos'}">${fhs(bal)}</td>
      <td><input type="text" data-fwk="${k}" data-fwf="n" value="${esc(e.n||'')}" placeholder="Notiz" style="width:100%;min-width:110px"></td></tr>`});
   $('#fwsheet').innerHTML=`<div class="fw-head"><div class="fw-name"><input type="text" data-fwn="name" value="${esc(f.name)}" aria-label="Name der Messe"><input type="text" data-fwn="k" value="${esc(f.k)}" aria-label="Kürzel" style="width:80px"></div>
-     <div class="fw-act"><button class="btn" data-act="fw-add" data-w="pre">+ Tag davor</button><button class="btn" data-act="fw-add" data-w="post">+ Tag danach</button><button class="btn" data-act="fair-goto" data-id="${esc(id)}">Im Kalender zeigen</button><button class="btn icon ghost" data-act="fw-close" aria-label="Schließen">✕</button></div></div>
+     <div class="fw-act"><button class="btn" data-act="fw-add" data-w="pre">+ Tag davor</button><button class="btn" data-act="fw-add" data-w="post">+ Tag danach</button><button class="btn" data-act="fair-goto" data-id="${esc(id)}">Im Kalender zeigen</button><button class="btn" data-act="fw-copy">In ${UI.year+1} übernehmen</button><button class="btn icon ghost" data-act="fw-close" aria-label="Schließen">✕</button></div></div>
    <div class="fw-stats"><div><span>Tage</span><b>${st.days}</b></div><div><span>Sa/So</span><b>${st.we}</b></div><div><span>Feiertage</span><b>${st.ft}</b></div><div><span>Netto</span><b>${fh(st.net)}</b></div><div><span>Zuschläge</span><b>${fh(st.z)}</b></div><div><span>Guthaben</span><b class="pos">${fhs(st.over)}</b></div></div>
    <div class="fw-scroll">${ks.length?`<table class="fw-t"><thead><tr><th style="text-align:left">Tag</th><th style="text-align:left">Phase</th><th>Beginn</th><th>Ende</th><th>Pause</th><th>Netto</th><th>Zuschläge</th><th>Bilanz</th><th style="text-align:left">Notiz</th></tr></thead><tbody>${rows}</tbody></table>`:'<div class="hint-line">Keine Tage eingetragen. Mit „+ Tag davor“ oder im Kalender Tage zuweisen.</div>'}</div>
    <div class="hint-line">Änderungen gelten sofort. Pause leer lassen für die gesetzliche Pause. Guthaben ist die Zeit über Soll plus Zuschläge.</div>`;
@@ -1804,9 +1880,12 @@ function renderSettings(){
      ${ST.fairs.map(f=>`<div class="fr"><input type="text" data-fair="${esc(f.id)}" data-k="name" value="${esc(f.name)}" aria-label="Name"><input type="text" data-fair="${esc(f.id)}" data-k="k" value="${esc(f.k)}" aria-label="Kürzel"><button data-act="fair-del" data-id="${esc(f.id)}" aria-label="${esc(f.name)} entfernen">✕</button></div>`).join('')}
      <button class="btn" data-act="fair-add">Messe hinzufügen</button></section>
    <section class="sbox"><h3>Daten</h3>
-     <div class="btnrow"><button class="btn" data-act="export-json">Backup speichern</button><button class="btn" data-act="import-json">Backup laden</button><button class="btn" data-act="export-csv">CSV ${UI.year}</button><button class="btn" data-act="print">Kalender als PDF</button></div>
-     <p>Gespeichert wird im Browser und, wenn verfügbar, in deinem Konto. Ein Backup schützt zusätzlich.</p>
+     <div class="btnrow"><button class="btn" data-act="export-json">Backup speichern</button><button class="btn" data-act="import-json">Backup laden</button><button class="btn" data-act="export-csv">CSV ${UI.year}</button><button class="btn" data-act="print">Kalender als PDF</button><button class="btn" data-act="export-ics">Für Handykalender ${UI.year}</button><button class="btn" data-act="review" data-y="${UI.year}">Jahresrückblick ${UI.year}</button></div>
+     <p>Gespeichert wird im Browser und, wenn verfügbar, in deinem Konto. Ein Backup schützt zusätzlich. Letztes Backup: ${S.lastBackup?fd(S.lastBackup).slice(4)+S.lastBackup.slice(0,4):'noch keins'}.</p>
+     <p>„Für Handykalender“ speichert Messen, Urlaub, JÜP und 13.T als .ics-Datei. Auf dem Handy öffnen, dann übernimmt der Kalender die Termine.</p>
      <div class="btnrow" style="margin-top:10px"><button class="btn danger" data-act="blank">Leere Vorlage für ${UI.year}</button></div><p>Setzt nur das angezeigte Jahr auf Gleitzeit und freie Wochenenden zurück. Einstellungen, Messen und andere Jahre bleiben. Vorher am besten ein Backup speichern.</p></section>
+   <section class="sbox"><h3>App teilen</h3>
+     <div class="qrrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" class="qr" aria-label="QR-Code zur Zeitkompass-App"><path fill="#fff" d="M0 0h33v33h-33z"/><path class="qrline" stroke="#16171a" d="M2 2.5h7m1 0h1m1 0h1m3 0h4m2 0h1m1 0h7m-29 1h1m5 0h1m6 0h2m5 0h1m1 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m1 0h5m1 0h6m2 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m3 0h1m1 0h1m1 0h1m2 0h1m2 0h1m1 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m2 0h2m1 0h5m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m1 0h1m1 0h2m5 0h2m3 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-18 1h2m1 0h1m4 0h1m-20 1h1m1 0h1m3 0h2m1 0h2m2 0h3m3 0h1m3 0h1m2 0h1m1 0h1m-28 1h1m3 0h1m1 0h1m1 0h9m1 0h1m2 0h2m3 0h2m-29 1h3m1 0h1m1 0h2m1 0h4m2 0h2m2 0h3m1 0h4m1 0h1m-27 1h2m3 0h1m1 0h1m1 0h3m6 0h4m1 0h1m-25 1h1m3 0h6m1 0h2m1 0h1m3 0h1m2 0h1m5 0h1m-26 1h2m2 0h1m3 0h1m3 0h2m2 0h1m2 0h2m3 0h2m-29 1h1m1 0h1m1 0h1m1 0h1m3 0h2m1 0h3m1 0h1m1 0h1m4 0h1m3 0h1m-27 1h1m2 0h1m1 0h2m1 0h3m1 0h1m3 0h2m1 0h2m1 0h1m-23 1h3m1 0h1m4 0h1m1 0h4m2 0h1m2 0h2m4 0h1m-27 1h2m3 0h1m1 0h1m1 0h1m1 0h4m1 0h3m1 0h2m2 0h3m-29 1h3m3 0h1m1 0h1m6 0h3m1 0h1m4 0h2m2 0h1m-24 1h1m2 0h1m1 0h4m1 0h2m2 0h1m1 0h1m1 0h1m-24 1h10m2 0h2m2 0h1m2 0h7m1 0h1m-20 1h2m1 0h2m2 0h1m1 0h1m1 0h2m3 0h3m1 0h1m-29 1h7m1 0h1m1 0h2m1 0h3m1 0h1m2 0h1m1 0h1m1 0h1m3 0h1m-29 1h1m5 0h1m7 0h1m4 0h2m3 0h1m2 0h2m-29 1h1m1 0h3m1 0h1m2 0h1m1 0h1m1 0h2m4 0h7m1 0h2m-29 1h1m1 0h3m1 0h1m3 0h1m2 0h5m1 0h1m1 0h1m2 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m2 0h1m2 0h7m3 0h1m2 0h2m-29 1h1m5 0h1m3 0h1m1 0h1m2 0h2m1 0h1m1 0h1m3 0h2m-26 1h7m1 0h3m2 0h4m3 0h4m4 0h1"/></svg><div><p>Kollegen scannen den Code mit der Handykamera und haben den Zeitkompass sofort, mit leerem Kalender. Eigene Daten werden nicht geteilt.</p><p><b>zeitkompass4250.netlify.app</b></p><div class="btnrow"><button class="btn" data-act="copy-link">Link kopieren</button></div></div></div></section>
   </div>`;
 }
 function setPath(path,val){const p=path.split('.');let o=ST.settings;for(let i=0;i<p.length-1;i++)o=o[p[i]];o[p[p.length-1]]=val}
@@ -1973,7 +2052,13 @@ document.addEventListener('click',ev=>{
     case'plan-one':{if(UI.plan){const p=UI.plan.props[+b.dataset.i];if(p)askConfirm([{k:p.k,t13:!!p.fix}],`Vorschlag: ${fd(p.k)} als ${p.fix?'13.T':'JÜP'} setzen.`,true)}break}
     case'fair-add':{const id='m'+Date.now().toString(36);ST.fairs.push({id,k:'NEU',name:'Neue Messe'});save();renderSettings();break}
     case'fair-del':{const id=b.dataset.id,used=Object.values(ST.years).some(Y=>Object.values(Y.entries).some(e=>e.f===id));if(used&&!confirm('Diese Messe ist Tagen zugeordnet. Trotzdem entfernen? Die Tage behalten ihre Tagesart.'))break;ST.fairs=ST.fairs.filter(f=>f.id!==id);Object.values(ST.years).forEach(Y=>Object.values(Y.entries).forEach(e=>{if(e.f===id)delete e.f}));invalidate();save();renderSettings();render();break}
-    case'export-json':download('zeitkompass-backup-'+todayK+'.json',JSON.stringify(ST,null,1),'application/json');break;
+    case'export-json':download('zeitkompass-backup-'+todayK+'.json',JSON.stringify(ST,null,1),'application/json');ST.settings.lastBackup=todayK;save();renderToday();if(!$('#settings').hidden)renderSettings();break;
+    case'export-ics':download('zeitkompass-'+UI.year+'.ics',ics(UI.year),'text/calendar');break;
+    case'review':openReview(+b.dataset.y||UI.year);break;
+    case'rv-close':$('#revwin').hidden=true;break;
+    case'rv-img':reviewImage(+b.dataset.y);break;
+    case'copy-link':{const u='https://zeitkompass4250.netlify.app';const done=()=>{b.textContent='Kopiert';setTimeout(()=>{b.textContent='Link kopieren'},1800)};try{navigator.clipboard.writeText(u).then(done,()=>{prompt('Link kopieren:',u)})}catch(x){prompt('Link kopieren:',u)}break}
+    case'fw-copy':fairCopy();break;
     case'import-json':$('#importFile').click();break;
     case'export-csv':download('stunden-'+UI.year+'.csv',csv(),'text/csv');break;
     case'print':{calPdf();break}
@@ -2086,6 +2171,7 @@ $('#sheet').addEventListener('change',ev=>{
 $('#sheet').addEventListener('input',ev=>{const el=ev.target;if(el.dataset&&el.dataset.set==='fontS'){ST.settings.fontS=+el.value;applyGlass();const o=$('#fsv');if(o)o.textContent=el.value+' %';return}if(el.dataset&&el.dataset.col){const S=ST.settings;S.colors=S.colors||{};const d=COLDEF.find(x=>x[0]===el.dataset.col);if(d&&el.value.toLowerCase()===d[2])delete S.colors[el.dataset.col];else S.colors[el.dataset.col]=el.value;applyColors();clearTimeout(window.__colT);window.__colT=setTimeout(()=>{save();render()},400);return}if(el.dataset&&el.dataset.set==='glassT2'){ST.settings.glassT2=+el.value;applyGlass();const o=$('#gtv');if(o)o.textContent=el.value+' %'}});
 $('#settings').addEventListener('click',ev=>{if(ev.target.id==='settings')$('#settings').hidden=true});
 $('#fairwin').addEventListener('click',ev=>{if(ev.target.id==='fairwin')closeFairWin()});
+$('#revwin').addEventListener('click',ev=>{if(ev.target.id==='revwin')$('#revwin').hidden=true});
 $('#rptwin').addEventListener('click',ev=>{if(ev.target.id==='rptwin')closeReport()});
 $('#fairwin').addEventListener('change',ev=>{const el=ev.target.closest('[data-fwk]');if(el){fwField(el);return}const n=ev.target.closest('[data-fwn]');if(n&&UI.fw){const f=fairById(UI.fw),v=n.value.trim();if(f&&v){f[n.dataset.fwn]=v;save();render(true)}renderFairWin()}});
 
@@ -2111,7 +2197,7 @@ document.addEventListener('mouseup',()=>{
 document.addEventListener('keydown',ev=>{
   if(ev.key==='Escape'&&DP){dpClose();return}
   if(ev.key==='Enter'&&ev.target&&(ev.target.id==='nfName'||ev.target.id==='nfK')){ev.preventDefault();const b=document.querySelector('[data-act="nf-save"]');if(b)b.click();return}
-  if(ev.key==='Escape'){if(!$('#rptwin').hidden)closeReport();else if(!$('#fairwin').hidden)closeFairWin();else if(!$('#settings').hidden)$('#settings').hidden=true;else if(UI.drawer){closeDrawer();render()}else if(UI.sel.size){UI.sel.clear();renderRange();render()}}
+  if(ev.key==='Escape'){if(!$('#revwin').hidden)$('#revwin').hidden=true;else if(!$('#rptwin').hidden)closeReport();else if(!$('#fairwin').hidden)closeFairWin();else if(!$('#settings').hidden)$('#settings').hidden=true;else if(UI.drawer){closeDrawer();render()}else if(UI.sel.size){UI.sel.clear();renderRange();render()}}
   if(UI.drawer&&!/INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName)){
     if(ev.key==='ArrowLeft'){UI.drawer=addDays(UI.drawer,-1);renderDrawer();render(true)}
     if(ev.key==='ArrowRight'){UI.drawer=addDays(UI.drawer,1);renderDrawer();render(true)}
