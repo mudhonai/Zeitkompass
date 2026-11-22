@@ -464,6 +464,10 @@ tr.clk{cursor:pointer}tr.clk:hover td{background:rgba(0,0,0,.035)}
 html[data-design="vis"] .ko{width:.78em;height:.78em;vertical-align:-.04em}
 .kneedle{transform-box:view-box;transform-origin:33px 33px;animation:kswing 1.8s ease-out .3s both}
 @keyframes kswing{0%{transform:rotate(-70deg)}35%{transform:rotate(35deg)}60%{transform:rotate(-15deg)}80%{transform:rotate(6deg)}100%{transform:rotate(0deg)}}
+@keyframes kswing2{0%{transform:rotate(0deg)}20%{transform:rotate(55deg)}45%{transform:rotate(-30deg)}65%{transform:rotate(14deg)}82%{transform:rotate(-5deg)}100%{transform:rotate(0deg)}}
+@keyframes kswing3{0%{transform:rotate(0deg)}30%{transform:rotate(-110deg)}55%{transform:rotate(40deg)}75%{transform:rotate(-12deg)}90%{transform:rotate(4deg)}100%{transform:rotate(0deg)}}
+@keyframes kswing4{0%{transform:rotate(0deg)}40%{transform:rotate(360deg)}60%{transform:rotate(345deg)}80%{transform:rotate(364deg)}100%{transform:rotate(360deg)}}
+@keyframes kswing5{0%{transform:rotate(0deg)}15%{transform:rotate(-25deg)}30%{transform:rotate(25deg)}45%{transform:rotate(-18deg)}60%{transform:rotate(12deg)}75%{transform:rotate(-6deg)}100%{transform:rotate(0deg)}}
 .qrrow{display:flex;gap:16px;align-items:flex-start}.qrrow p{margin:0 0 8px}.qr{width:132px;height:132px;flex:none;border-radius:10px;background:#fff;padding:4px;box-sizing:border-box}
 .rv{max-width:720px;width:100%}.rv-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}.rv-k{font-size:calc(12px*var(--fs,1));letter-spacing:.12em;text-transform:uppercase;color:#E85D04;font-weight:700}.rv-h{font:800 calc(30px*var(--fs,1))/1.1 var(--font-d);margin-top:4px}
 .rv-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:16px 0 10px}.rv-g div{border:1px solid rgba(127,127,127,.28);border-radius:12px;padding:10px 12px}.rv-g b{display:block;font-size:calc(22px*var(--fs,1));line-height:1.2}.rv-g span{font-size:calc(12px*var(--fs,1));opacity:.75}
@@ -2219,6 +2223,10 @@ function hideTip(){$('#tip').hidden=true}
 applyTheme();render();
 initDb();
 }
+/* Kompassnadeln bei jedem Klick */
+(function(){const V=['kswing2','kswing3','kswing4','kswing5'];let last=0;
+document.addEventListener('click',ev=>{if(ev.target.closest('.modal,.drawer'))return;const t=Date.now();if(t-last<250)return;last=t;
+document.querySelectorAll('.kneedle').forEach((n,i)=>{const v=V[Math.floor(Math.random()*V.length)],dir=Math.random()<.5?'normal':'reverse',d=(1.4+Math.random()*.8).toFixed(2);n.style.animation='none';void n.getBoundingClientRect();n.style.animation=`${v} ${d}s ease-out ${i*0.08}s 1 ${dir} both`})},true)})();
 </script>
 <script>
 if('serviceWorker' in navigator){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})})}
