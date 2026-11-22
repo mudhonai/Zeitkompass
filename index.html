@@ -13,6 +13,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Zeitkompass">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"%3E%3Crect width="64" height="64" rx="14" fill="%2316171a"/%3E%3Ccircle cx="32" cy="32" r="20" fill="none" stroke="%23fff" stroke-width="6"/%3E%3Cpolygon points="32,15 37,32 27,32" fill="%23E85D04"/%3E%3Cpolygon points="32,49 37,32 27,32" fill="%238D9199"/%3E%3Ccircle cx="32" cy="32" r="2.6" fill="%23fff"/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Instrument+Sans:wght@400..700&family=Archivo:wght@500..900&family=JetBrains+Mono:ital,wght@0,400..700;1,400..600&display=swap" rel="stylesheet">
@@ -459,6 +460,10 @@ tr.clk{cursor:pointer}tr.clk:hover td{background:rgba(0,0,0,.035)}
 }
 
 /* VIS-DESIGN-START */
+.ko{display:inline-block;width:.6em;height:.6em;vertical-align:-.03em;margin:0 .02em;overflow:visible}
+html[data-design="vis"] .ko{width:.78em;height:.78em;vertical-align:-.04em}
+.kneedle{transform-box:view-box;transform-origin:33px 33px;animation:kswing 1.8s ease-out .3s both}
+@keyframes kswing{0%{transform:rotate(-70deg)}35%{transform:rotate(35deg)}60%{transform:rotate(-15deg)}80%{transform:rotate(6deg)}100%{transform:rotate(0deg)}}
 .vlogo,.vsub{display:none}
 :root[data-design="vis"]{
   color-scheme:light;
@@ -777,8 +782,8 @@ html[data-design="glas"] .vtitle{display:flex;flex-direction:column}
 <div class="wrap">
   <header class="top glass">
     <div class="brand">
-      <div class="vlogo" aria-hidden="true"><svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/><path d="M12 13v3l2 1.5"/></svg></div>
-      <div class="vtitle"><h1>Zeitkompass</h1><div class="vsub">Arbeitszeit, Zuschläge und JÜP nach MTV</div></div>
+      <div class="vlogo" aria-hidden="true"><svg viewBox="0 0 66 66" width="30" height="30"><circle cx="33" cy="33" r="27" fill="none" stroke="currentColor" stroke-width="8"/><g class="kneedle"><polygon points="33,12 39.5,33 26.5,33" fill="#E85D04"/><polygon points="33,54 39.5,33 26.5,33" fill="#8D9199"/><circle cx="33" cy="33" r="3.5" fill="currentColor"/></g></svg></div>
+      <div class="vtitle"><h1 aria-label="Zeitkompass"><span aria-hidden="true">Zeitk<svg class="ko" viewBox="0 0 66 66"><circle cx="33" cy="33" r="26.5" fill="none" stroke="currentColor" stroke-width="12"/><g class="kneedle"><polygon points="33,12 40,33 26,33" fill="#E85D04"/><polygon points="33,54 40,33 26,33" fill="#8D9199"/></g></svg>mpass</span></h1><div class="vsub">Arbeitszeit, Zuschläge und JÜP nach MTV</div></div>
       <div class="yearnav"><button data-act="year-prev" aria-label="Vorheriges Jahr">‹</button><span id="yearLbl"></span><button data-act="year-next" aria-label="Nächstes Jahr">›</button></div>
     </div>
     <nav class="tabs" role="tablist" aria-label="Ansicht">
