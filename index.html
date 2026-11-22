@@ -937,7 +937,7 @@ function phases(y){
 }
 function rule(k,e,pm){
   const T=ST.settings.times;
-  if(e.t==='fza'&&e.half){const so=soll(k)/2,m=480+Math.round(so*60);return['halbJuep','halben JÜP-Tag',['08:00',pad(Math.floor(m/60))+':'+pad(m%60)]]}
+  if(e.t==='fza'&&e.half&&!info(k).halb){const so=soll(k)/2,m=480+Math.round(so*60);return['halbJuep','halben JÜP-Tag',['08:00',pad(Math.floor(m/60))+':'+pad(m%60)]]}
   if(e.t==='gleitzeit'||e.t==='mobil'){const fr=P(k).getDay()===5&&T.gleitFr,mo=e.t==='mobil';return fr?['gleitFr',mo?'mobilen Freitag':'Gleitzeit-Freitag',T.gleitFr]:['gleit',mo?'mobilen Arbeitstag':'Gleitzeittag',T.gleit]}
   if(e.t==='aufbau'&&pm.lastAuf.has(k))return['lastAuf','letzten Aufbautag',T.lastAuf];
   if(e.t==='laufzeit'&&pm.first.has(k))return['firstMesse','ersten Messetag',T.firstMesse];
@@ -948,7 +948,7 @@ function pauseFor(g){const p=ST.settings.pause;if(p.mode==='fixed')return g>0?Ma
 
 function calcDay(k,pm){
   const i=info(k),so=soll(k,i),e=entry(k),T=TYPES[e.t]||TYPES.frei,S=ST.settings,R=S.rates;
-  const half=e.t==='fza'&&!!e.half&&so>0;
+  const half=e.t==='fza'&&!!e.half&&so>0&&!i.halb;
   const r={k,i,e,soll:so,ist:0,gross:0,pause:0,net:0,z:{sa:0,so:0,ft:0,na:0},zSum:0,moSa:0,moFr:0,work:!!T.work||half,times:null,zt:false,vac:0};
   if(T.work||half){
     const tm=timesFor(k,e,pm);r.times=tm;const a=toMin(tm[0]);let b=toMin(tm[1]);
@@ -1353,7 +1353,7 @@ function renderPegel(){
 }
 
 /* ===== Jahresansicht ===== */
-function lab(dc){const e=dc.e;if(e.t==='gleitzeit')return dc.soll>0?'GLZ':'';if(e.t==='mobil'&&!e.f)return'Mobil';if(e.t==='fza')return e.t13?'13.T':e.half?'JÜP ½':'JÜP';if(e.t==='urlaub')return'Urlaub';if(e.f){const f=fairById(e.f);if(!f)return'?';const y=dc.k.slice(0,4);if(e.t==='aufbau'&&firstOf(e.f,'aufbau',y)===dc.k)return'Aufbau '+(f.name.length<=10?f.name:f.k);if(e.t==='laufzeit'&&firstOf(e.f,'laufzeit',y)===dc.k)return'Laufzeit';if(e.t==='abbau'&&firstOf(e.f,'abbau',y)===dc.k)return'Abbau';return f.k}return({dienst:'Dienst',aufbau:'Aufbau',laufzeit:'Laufzeit',abbau:'Abbau'})[e.t]||''}
+function lab(dc){const e=dc.e;if(e.t==='gleitzeit')return dc.soll>0?'GLZ':'';if(e.t==='mobil'&&!e.f)return'Mobil';if(e.t==='fza')return e.t13?'13.T':(e.half&&!dc.i.halb)?'JÜP ½':'JÜP';if(e.t==='urlaub')return'Urlaub';if(e.f){const f=fairById(e.f);if(!f)return'?';const y=dc.k.slice(0,4);if(e.t==='aufbau'&&firstOf(e.f,'aufbau',y)===dc.k)return'Aufbau '+(f.name.length<=10?f.name:f.k);if(e.t==='laufzeit'&&firstOf(e.f,'laufzeit',y)===dc.k)return'Laufzeit';if(e.t==='abbau'&&firstOf(e.f,'abbau',y)===dc.k)return'Abbau';return f.k}return({dienst:'Dienst',aufbau:'Aufbau',laufzeit:'Laufzeit',abbau:'Abbau'})[e.t]||''}
 function chipColor(t){const u=colOf(t);if(u)return u;return{arbeit:'var(--a-arb)',mobil:'var(--a-mob)',aufbau:'var(--a-auf)',abbau:'var(--a-auf)',laufzeit:'var(--a-lauf)',dienst:'var(--a-dienst)',gleitzeit:'rgba(255,255,255,.5)'}[t]||'transparent'}
 function offLinked(dc){
   if(dc.work||dc.soll>0||dc.zt)return false;const off=x=>x&&(x.e.t==='fza'||x.e.t==='urlaub')&&x.soll>0;
@@ -1679,7 +1679,7 @@ function fairCopy(){
 }
 function ics(y){
   const C=computeYear(y),ks=Object.keys(C.days).sort(),ev=[];let cur=null;
-  const keyOf=dc=>{const t=dc.e.t;if(['aufbau','laufzeit','abbau'].includes(t)&&dc.e.f){const f=fairById(dc.e.f);return(f?f.name:'Messe')+' – '+TYPES[t].label}if(t==='urlaub'&&dc.soll>0)return'Urlaub';if(t==='fza'&&dc.soll>0)return dc.e.t13?'13.T (frei)':(dc.e.half?'JÜP (halber Tag)':'JÜP');return null};
+  const keyOf=dc=>{const t=dc.e.t;if(['aufbau','laufzeit','abbau'].includes(t)&&dc.e.f){const f=fairById(dc.e.f);return(f?f.name:'Messe')+' – '+TYPES[t].label}if(t==='urlaub'&&dc.soll>0)return'Urlaub';if(t==='fza'&&dc.soll>0)return dc.e.t13?'13.T (frei)':((dc.e.half&&!dc.i.halb)?'JÜP (halber Tag)':'JÜP');return null};
   ks.forEach(k=>{const dc=C.days[k],key=keyOf(dc);
     if(cur&&key===cur.key){cur.b=k;return}
     if(cur&&key===null&&!dc.work&&dc.soll===0&&(cur.key==='Urlaub'||cur.key==='JÜP'))return;
@@ -1773,13 +1773,13 @@ function renderDrawer(){
    <div class="field zrf"><span class="fl">Von–bis eintragen</span><div class="zr"><span>${fd(k)} bis</span><span class="dpw"><input type="text" inputmode="numeric" placeholder="TT.MM" id="zrBis" data-mf="zr" value="" autocomplete="off" aria-label="bis Datum"><button type="button" class="dpb" data-act="dp-open" data-for="zr" aria-label="Kalender öffnen"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2.5"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></button></span><button class="btn" data-act="zr-apply">Eintragen</button></div>
    <label class="ck zrck"><input type="checkbox" id="zrSkip" checked> Wochenenden und Feiertage auslassen</label>
    <div class="subhint">Trägt „${TYPES[e.t].label}“${e.f&&T.work?' mit der Messe':''} auf alle Tage bis zum gewählten Datum ein. Rückgängig ist möglich.</div></div>`;
-  if(T.work||(e.t==='fza'&&e.half&&dc.soll>0)){
+  if(T.work||(e.t==='fza'&&e.half&&dc.soll>0&&!dc.i.halb)){
     if(T.work)h+=`<label class="field"><span class="fl">Messe</span><select data-f="f"><option value="">Keine</option>${ST.fairs.map(f=>`<option value="${esc(f.id)}" ${e.f===f.id?'selected':''}>${esc(f.name)} (${esc(f.k)})</option>`).join('')}</select></label>`;
     h+=`    <div class="row2"><label>Beginn<input type="time" data-f="s" value="${dc.times[0]}"></label><label>Ende<input type="time" data-f="e" value="${dc.times[1]}"></label></div>
     <div class="subhint">${custom?'Eigene Zeiten <button data-act="reset-times">Standard wiederherstellen</button>':'Standardzeit für '+rl[1]}</div>
     <div class="field"><span class="fl">Pause</span><div class="pauserow"><select data-f="pm"><option value="auto" ${manual?'':'selected'}>${ST.settings.pause.mode==='fixed'?'Feste Pause':'Gesetzlich'} (${autoP} Min.)</option><option value="manual" ${manual?'selected':''}>Manuell</option></select>${manual?`<input type="number" min="0" step="5" data-f="p" value="${+e.p}" aria-label="Pause in Minuten">`:'<span></span>'}</div></div>`;
   }
-  if(e.t==='fza')h+=`<label class="chk"><input type="checkbox" data-f="t13" ${e.t13?'checked':''}> Pflichtfrei nach 13 Tagen (13.T)</label>${dc.soll>0?`<label class="chk"><input type="checkbox" data-f="half" ${e.half?'checked':''}> Halber JÜP-Tag (${fh(dc.soll/2)} JÜP, Rest wird gearbeitet)</label>`:''}`;
+  if(e.t==='fza')h+=`<label class="chk"><input type="checkbox" data-f="t13" ${e.t13?'checked':''}> Pflichtfrei nach 13 Tagen (13.T)</label>${dc.soll>0&&!dc.i.halb?`<label class="chk"><input type="checkbox" data-f="half" ${e.half?'checked':''}> Halber JÜP-Tag (${fh(dc.soll/2)} JÜP, Rest wird gearbeitet)</label>`:''}`;
   h+=`<label class="field"><span class="fl">Notiz</span><textarea data-f="n" placeholder="Optional">${esc(e.n||'')}</textarea></label>`;
   const R=ST.settings.rates,bal=dc.ist-dc.soll+dc.zSum;
   h+=`<div class="calc"><dl class="kv">
