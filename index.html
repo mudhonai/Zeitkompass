@@ -464,6 +464,7 @@ tr.clk{cursor:pointer}tr.clk:hover td{background:rgba(0,0,0,.035)}
 html[data-design="vis"] .ko{width:.78em;height:.78em;vertical-align:-.04em}
 .kneedle{transform-box:view-box;transform-origin:33px 33px;animation:kswing 1.8s ease-out .3s both}
 @keyframes kswing{0%{transform:rotate(-70deg)}35%{transform:rotate(35deg)}60%{transform:rotate(-15deg)}80%{transform:rotate(6deg)}100%{transform:rotate(0deg)}}
+.copy{margin:14px 6px 4px;text-align:right;font-size:calc(11.5px*var(--fs,1));letter-spacing:.02em;opacity:.55}
 .vlogo,.vsub{display:none}
 :root[data-design="vis"]{
   color-scheme:light;
@@ -800,6 +801,7 @@ html[data-design="glas"] .vtitle{display:flex;flex-direction:column}
   <section class="today glass" id="today" aria-label="Heute"></section>
   <section class="pegel glass" id="pegel" aria-label="Stundenkonto"></section>
   <main id="main"></main>
+  <p class="copy">© 2026 Marc Simon</p>
 </div>
 <aside class="drawer glass" id="drawer" aria-hidden="true" aria-label="Tag bearbeiten"></aside>
 <div class="rangebar glass" id="rangebar" hidden></div>
