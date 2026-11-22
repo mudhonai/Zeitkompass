@@ -858,7 +858,7 @@ function hol(y){
   S[E]={n:'Ostersonntag',ft:true};
   S[addDays(E,48)]={n:'Pfingstsamstag',after12:true};
   S[addDays(E,49)]={n:'Pfingstsonntag',ft:true};
-  S[K(y,11,24)]={n:'Heiligabend',ft:true,halb:true};
+  S[K(y,11,24)]={n:'Heiligabend',ft:true,frei:true};
   S[K(y,11,31)]={n:'Silvester',ft:true,halb:true};
   return HC[y]={L,S};
 }
@@ -1756,7 +1756,7 @@ function renderSettings(){
      <label>Max. Tage am Stück<input type="number" min="1" data-set="maxSeries" value="${S.maxSeries}"></label>
      <label>Max. Stunden pro Tag<input type="number" min="1" step="0.5" data-set="maxDaily" value="${S.maxDaily}"></label>
      <label>Min. Ruhezeit (h)<input type="number" min="1" step="0.5" data-set="minRest" value="${S.minRest}"></label>
-     <p>Rosenmontag ist dienstfrei. Am 24.12. und 31.12. ist ein halber Tag frei, die andere Hälfte geht von Urlaub oder JÜP ab.</p></section>
+     <p>Rosenmontag und der 24.12. sind dienstfrei, die Zeit wird nicht nachgeholt (MTV § 8 Abs. 4). Am 31.12. ist ein halber Tag frei, die andere Hälfte geht von Urlaub oder JÜP ab (MTV § 8 Abs. 5).</p></section>
    <section class="sbox"><h3>Standardzeiten</h3>
      <div class="tr"><span></span><small>Beginn</small><small>Ende</small></div>
      ${tr('Gleitzeittag Mo–Do','gleit')}${tr('Gleitzeittag Fr','gleitFr')}${tr('Messe- und Diensttag','std')}${tr('Letzter Aufbautag','lastAuf')}${tr('Erster Messetag','firstMesse')}
