@@ -339,7 +339,7 @@ html[data-design="glas"] .dpb{background:rgba(255,255,255,.1);color:var(--ink);b
 .chg{animation:chg 1.6s ease-out;border-radius:4px}
 .d.hol .n,.d.hol .w,.d.zt.hol .n,.d.zt.hol .w,.md.hol .top1 b,.md.zt.hol .top1 b{color:#ffd23f!important;opacity:1!important;text-shadow:0 1px 1px rgba(0,0,0,.45)}
 .d.we-sa.hol .n,.d.we-sa.hol .w,.d.we-so.hol .n,.d.we-so.hol .w,.md.we-sa.hol .top1 b,.md.we-so.hol .top1 b{color:#8a5d00!important;text-shadow:none}
-.tip .tip-hol{color:#ffd23f;font-weight:600}
+.tip .tip-hol{color:#ffd23f;font-weight:600}.tip .tip-note{color:#000;font-weight:600}html[data-dark] .tip .tip-note{color:#fff}
 .today{margin-top:12px;border-radius:14px;padding:10px 18px;display:grid;grid-template-columns:minmax(260px,1.1fr) 2fr auto;gap:10px 24px;align-items:center}
 .td-date{font-size:calc(12px*var(--fs,1));color:var(--ink2)}
 .td-what{font-size:calc(14px*var(--fs,1));margin-top:2px}
@@ -2243,7 +2243,7 @@ function markSel(){document.querySelectorAll('#grid [data-k]').forEach(c=>c.clas
 function showTip(c,ev){
   const k=c.dataset.k,dc=computeYear(+k.slice(0,4)).days[k];if(!dc)return;const e=dc.e,f=e.f&&fairById(e.f),t=$('#tip');
   const bal=dc.ist-dc.soll+dc.zSum;
-  t.innerHTML=`<b>${fd(k)}</b>${dc.i.name?`<div class="tip-hol">${dc.i.legal?'Feiertag':'Sondertag'}: ${esc(dc.i.name)}${dc.i.frei?', dienstfrei':''}${dc.i.halb?', halber Tag':''}${dc.i.ft?', Zuschlag '+ST.settings.rates.ft+' %':''}</div>`:''}<div>${TYPES[e.t].label}${f?', '+esc(f.name):''}${e.t13?', 13.T':''}</div>${dc.work?`<div>${dc.times[0]}–${dc.times[1]}, netto ${fh(dc.net)}</div>`:''}${dc.zSum>0?`<div>Zuschläge ${fh(dc.zSum)}</div>`:''}${Math.abs(bal)>0.004?`<div>Tagesbilanz ${fhs(bal)}</div>`:''}${e.n?`<div>${esc(e.n)}</div>`:''}${e.ist?'<div>Echte Zeiten aus Zeitnachweis</div>':''}`;
+  t.innerHTML=`<b>${fd(k)}</b>${dc.i.name?`<div class="tip-hol">${dc.i.legal?'Feiertag':'Sondertag'}: ${esc(dc.i.name)}${dc.i.frei?', dienstfrei':''}${dc.i.halb?', halber Tag':''}${dc.i.ft?', Zuschlag '+ST.settings.rates.ft+' %':''}</div>`:''}<div>${TYPES[e.t].label}${f?', '+esc(f.name):''}${e.t13?', 13.T':''}</div>${dc.work?`<div>${dc.times[0]}–${dc.times[1]}, netto ${fh(dc.net)}</div>`:''}${dc.zSum>0?`<div>Zuschläge ${fh(dc.zSum)}</div>`:''}${Math.abs(bal)>0.004?`<div>Tagesbilanz ${fhs(bal)}</div>`:''}${e.n?`<div class="tip-note">${esc(e.n)}</div>`:''}${e.ist?'<div>Echte Zeiten aus Zeitnachweis</div>':''}`;
   t.hidden=false;placeTip(ev);
 }
 function placeTip(ev){const t=$('#tip'),w=t.offsetWidth,h=t.offsetHeight;let x=ev.clientX+14,y=ev.clientY+14;if(x+w>innerWidth-8)x=ev.clientX-w-14;if(y+h>innerHeight-8)y=ev.clientY-h-14;t.style.left=x+'px';t.style.top=y+'px'}
