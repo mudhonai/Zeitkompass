@@ -1006,7 +1006,7 @@ function calcDay(k,pm){
     }
     r.zt=i.we||i.ft||i.after12;
     if(half){r.cred=so/2;r.fza=so/2;r.ist=r.net+so/2}
-  }else if(T.credit){r.ist=so;r.cred=so}
+  }else if(T.credit){const c=(e.ist&&e.oi!=null&&so>0)?e.oi:so;r.ist=c;r.cred=c}
   else if(e.t==='fza'){r.ist=so;r.cred=so;r.fza=so}
   else if(i.halb&&so>0&&!stored(k)){r.ist=so;r.cred=so;r.halbOffen=true}
   if(e.t==='urlaub'&&so>0)r.vac=i.halb?.5:1;
@@ -1021,7 +1021,7 @@ function computeYear(y){
   let pool0=0;
   if(y>cY)lots=computeYear(y-1).lotsEnd.map(l=>Object.assign({},l));
   else if(y<cY)lots=[];
-  else{pool0=+S.pool;lots=(Array.isArray(S.carryLots)?S.carryLots:[]).map(l=>{const A=absM(l.m,y);return{h:parseH(l.h),exp:A+(+S.expiryMonths),src:A}}).filter(l=>l.h>0&&l.exp>=A0).sort((a,b)=>a.src-b.src);const c=S.carry;if(+c.hours>0)lots.unshift({h:+c.hours,exp:absM(c.until,y),src:-1})}
+  else{pool0=(S.carryPool!=null&&S.carryPool!==''&&isFinite(+S.carryPool))?Math.min(+S.pool,Math.max(0,+S.carryPool)):+S.pool;lots=(Array.isArray(S.carryLots)?S.carryLots:[]).map(l=>{const A=absM(l.m,y);return{h:parseH(l.h),exp:A+(+S.expiryMonths),src:A}}).filter(l=>l.h>0&&l.exp>=A0).sort((a,b)=>a.src-b.src);const c=S.carry;if(+c.hours>0)lots.unshift({h:+c.hours,exp:absM(c.until,y),src:-1})}
   const konto0=sum(lots.filter(l=>l.exp>=y*12).map(l=>l.h));let pool=pool0,expTot=0,vac=0;const months=[],days={};
   for(let m=0;m<12;m++){
     const A=y*12+m;let ex=0;const pre=A<=A0;
@@ -1039,7 +1039,8 @@ function computeYear(y){
     let needF=fzaH;for(const l of lots){const t=Math.min(l.h,needF);l.h-=t;needF-=t;fromKonto+=t;if(needF<=1e-9)break}lots=lots.filter(l=>l.h>1e-9);
     if(credit>0){toPool=Math.min(credit,Math.max(0,S.pool-pool));pool+=toPool;toKonto=credit-toPool;if(toKonto>1e-9)lots.push({h:toKonto,exp:A+(+S.expiryMonths),src:A})}
     else if(credit<0){let need=-credit;for(const l of lots){const t=Math.min(l.h,need);l.h-=t;need-=t;fromKonto+=t;if(need<=1e-9)break}lots=lots.filter(l=>l.h>1e-9);if(need>1e-9){pool-=need;fromPool=need}}
-    if(needF>1e-9){for(const l of lots){const t=Math.min(l.h,needF);l.h-=t;needF-=t;fromKonto+=t;if(needF<=1e-9)break}lots=lots.filter(l=>l.h>1e-9);if(needF>1e-9){pool-=needF;fromPool+=needF}}
+    /* Liegt der Zeitnachweis vor, steckt nicht gedeckte Freizeit schon im Saldo (Ist zählt Freizeit nur, soweit Anspruch da war). Nicht doppelt abziehen. */
+    if(needF>1e-9&&offS==null){for(const l of lots){const t=Math.min(l.h,needF);l.h-=t;needF-=t;fromKonto+=t;if(needF<=1e-9)break}lots=lots.filter(l=>l.h>1e-9);if(needF>1e-9){pool-=needF;fromPool+=needF}}
     months.push({m,soll:so,ist,worked,z,mehr,mz,zs,credit,creditCalc,offS,istMoSa,soH,ftH,toPool,toKonto,fromKonto,fromPool,pool,konto:sum(lots.map(l=>l.h)),expired:ex,exL,...MB});
   }
   // Serien
@@ -1108,6 +1109,9 @@ function parseZN(items){
       else if(/Zuschl\S*ge f\S*r Nacht/.test(t))sum.na=v;
       else if(/Rufbereitschaft/.test(t))sum.ruf=v;
       else if(/^Saldo\s+-?\d/.test(t))sum.saldo=v;
+      else if(/Pauschale Vormonat/.test(t))sum.pvm=v;
+      else if(/Pauschale Anpassung/.test(t))sum.pan=v;
+      else if(/Pauschale Vortrag/.test(t))sum.pvf=v;
       else if(/^Freizeitanspruch/.test(t))fzIdx=idx;
       else if(/\d{2}\.\d{2}\.\d{4}\s+\d{2}\.\d{2}\.\d{4}\s+Urlaub\s/.test(t)){const n=t.match(/(-?\d+,\d{2})/g);if(n&&n.length>=3)sum.urlK={tage:+n[0].replace(',','.'),verbr:+n[1].replace(',','.'),rest:+n[2].replace(',','.')}}
       return;
@@ -1888,6 +1892,7 @@ function renderSettings(){
      ${(S.carryLots||[]).map((l,i)=>`<div class="fr" style="display:grid;grid-template-columns:1fr 90px 26px;gap:6px;margin-bottom:6px"><input type="month" data-carry="${i}" data-k="m" value="${esc(l.m)}" aria-label="Monat"><input type="text" data-carry="${i}" data-k="h" value="${esc(l.h)}" placeholder="hh:mm" aria-label="Stunden"><button class="btn ghost icon" style="width:26px;height:30px" data-act="carry-del" data-i="${i}" aria-label="Zeile entfernen">✕</button></div>`).join('')}
      <div class="btnrow"><button class="btn" data-act="carry-add">Monat hinzufügen</button></div>
      <label>Stand (Monatsende)<input type="month" data-set="carryAsOf" value="${esc(S.carryAsOf||'')}"></label>
+     <label>Pauschale zum Stand erbracht (h)<input type="number" min="0" step="0.01" data-set="carryPool" value="${S.carryPool!=null&&S.carryPool!==''?esc(S.carryPool):''}" placeholder="${S.pool} (voll)"></label>
      <label class="full" style="display:block;margin-top:8px">Quelle<input type="text" data-set="carryNote" value="${esc(S.carryNote||'')}"></label>
      <p>Summe ${fh(sum((S.carryLots||[]).map(l=>parseH(l.h))))}. Werte wie im Zeitnachweis unter „Freizeitanspruch aus“, z. B. 45:33. Alles nach dem Stand, etwa JÜP im November, rechnet der Kalender selbst weiter.</p>
      <p>Überstunden verfallen Ende des Monats, ${S.expiryMonths} Monate nach Entstehung. Freizeitausgleich baut die ältesten Stunden zuerst ab.</p></section>
@@ -2186,6 +2191,11 @@ async function importZN(files){
   if(lastZ){UI.year=lastZ.y;UI.view='auswertung';
     const S=ST.settings,lots=Object.entries(lastZ.fz||{}).map(([m,h])=>({m,h})),zA=lastZ.y*12+lastZ.m,cA=/^\d{4}-\d{2}$/.test(S.carryAsOf||'')?absM(S.carryAsOf,0):-1;
     if(zA<cA)msgs.push(`Übertrag bleibt beim neueren ${esc(S.carryNote||'Stand '+S.carryAsOf)}.`);
+    else if(!S.carryAsOf&&!(S.carryLots||[]).length&&!(+S.carry.hours>0)&&parsed.length&&parsed[0].z.y===S.startYear){
+      const fz0=parsed[0].z,l0=Object.entries(fz0.fz||{}).map(([m,h])=>({m,h})),pv=fz0.sum.pvf,done=pv!=null?Math.max(0,+S.pool-Math.abs(pv)):+S.pool,sm=sum(l0.map(l=>parseH(l.h)));
+      if(confirm(`Für ${S.startYear} ist noch kein Übertrag aus dem Vorjahr eingetragen. Ohne ihn fehlen Guthaben und Stand der Pauschale.\n\nStand aus dem Zeitnachweis ${MON[fz0.m]} ${fz0.y} als Startwert übernehmen?\nFreizeitanspruch ${fh(sm)}, Pauschale erbracht ${fh(done)} von ${fh(+S.pool)}.`)){
+        S.carryLots=l0;S.carryAsOf=fz0.y+'-'+pad(fz0.m+1);S.carryPool=Math.round(done*100)/100;S.carryNote='Stand Zeitnachweis '+pad(dim(fz0.y,fz0.m))+'.'+pad(fz0.m+1)+'.'+fz0.y;invalidate();save();
+        msgs.push(`Startstand übernommen: Freizeitanspruch ${fh(sm)}, Pauschale erbracht ${fh(done)} (Stand ${MON[fz0.m]} ${fz0.y}).`)}}
     else if(lastZ.y===S.startYear-1&&Object.keys(lastZ.fz||{}).length&&confirm(`Freizeitanspruch aus ${MON[lastZ.m]} ${lastZ.y} als Übertrag ins Jahr ${S.startYear} übernehmen?`)){S.carryLots=lots;S.carryAsOf=lastZ.y+'-'+pad(lastZ.m+1);S.carryNote='Stand Zeitnachweis '+pad(dim(lastZ.y,lastZ.m))+'.'+pad(lastZ.m+1)+'.'+lastZ.y;invalidate();save();msgs.push('Übertrag für '+S.startYear+' aktualisiert: '+lots.map(l=>l.m.slice(5)+'/'+l.m.slice(0,4)+' '+l.h).join(', ')+'.')}}
   UI.znMsg={cls:msgs.some(m=>/Abweichung|nicht/.test(m))?'w':'g',html:msgs.join('<br>')};render();
 }
