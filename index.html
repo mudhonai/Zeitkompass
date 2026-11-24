@@ -830,7 +830,7 @@ html[data-bg="xtropen"] .bgl,html[data-bg="xtropen"] .bgprev{background-image:va
   <section class="today glass" id="today" aria-label="Heute"></section>
   <section class="pegel glass" id="pegel" aria-label="Stundenkonto"></section>
   <main id="main"></main>
-  <p class="copy">© 2026 Marc Simon</p>
+  <p class="copy">© 2026 Marc Simon · <a href="#" data-disc="open" style="color:inherit">Hinweis</a></p>
 </div>
 <aside class="drawer glass" id="drawer" aria-hidden="true" aria-label="Tag bearbeiten"></aside>
 <div class="rangebar glass" id="rangebar" hidden></div>
@@ -839,6 +839,7 @@ html[data-bg="xtropen"] .bgl,html[data-bg="xtropen"] .bgprev{background-image:va
 <div class="modal" id="rptwin" hidden><div class="sheet glass fw rp" role="dialog" aria-modal="true" aria-label="Prüfbericht" id="rptsheet"></div></div>
 <div class="modal" id="revwin" hidden><div class="sheet glass rv" role="dialog" aria-modal="true" aria-label="Jahresrückblick" id="revsheet"></div></div>
 <div class="modal" id="fairwin" hidden><div class="sheet glass fw" role="dialog" aria-modal="true" aria-label="Messe" id="fwsheet"></div></div>
+<div class="modal" id="discwin" hidden><div class="sheet glass" role="dialog" aria-modal="true" aria-label="Hinweis" id="discsheet" style="max-width:560px"></div></div>
 <div class="modal" id="settings" hidden><div class="sheet glass" role="dialog" aria-modal="true" aria-label="Einstellungen" id="sheet"></div></div>
 <input type="file" id="importFile" accept="application/json,.json" hidden>
 <input type="file" id="bgFile" accept="image/*" hidden>
@@ -1152,6 +1153,7 @@ function mkSummary(){
 }
 window.__zkSum=()=>mkSummary();
 function pushSummary(){if(sumRef)try{sumRef.set(mkSummary()).catch(()=>{})}catch(e){}}
+window.zkSave=()=>save();
 function save(){
   ST.updatedAt=Date.now();
   try{localStorage.setItem(STORE,JSON.stringify(ST))}catch(e){}
@@ -1532,7 +1534,7 @@ function openReport(y,m){const R=buildReport(y,m);if(!R)return;UI.rpt={y,m};
   $('#rptsheet').innerHTML=`<div class="fw-head"><div><h2 style="margin:0">Prüfbericht Zeitnachweis ${MON[m]} ${y}</h2><div class="rp-faz ${R.nP?'p':R.nH?'h':'o'}">${R.fazit}</div></div>
    <div class="fw-act"><button class="btn primary" data-act="rpt-pdf">Als PDF speichern</button><button class="btn icon ghost" data-act="rpt-close" aria-label="Schließen">✕</button></div></div>
    <div class="fw-scroll"><table class="fw-t rp-t"><tbody>${R.items.map(i=>`<tr class="rp-${i.lvl}"><td class="rp-b"><span>${RLV[i.lvl][0]}</span></td><td><b>${esc(i.title)}</b><div>${esc(i.detail)}</div>${i.expl?`<small>${esc(i.expl)}</small>`:''}</td></tr>`).join('')}</tbody></table></div>
-   <div class="hint-line">Nachgerechnet aus den Tageszeilen des Zeitnachweises mit den Regeln des Zeitkompass. Verbindlich ist der Zeitnachweis. Unklare Punkte vor der Freigabe mit dem Personalbetreuer klären.</div>`;
+   <div class="hint-line">Nachgerechnet aus den Tageszeilen des Zeitnachweises mit den Regeln des Zeitkompass. Verbindlich ist der Zeitnachweis. Alle Angaben ohne Gewähr. Unklare Punkte vor der Freigabe mit dem Personalbetreuer klären.</div>`;
   $('#rptwin').hidden=false}
 function closeReport(){$('#rptwin').hidden=true;UI.rpt=null}
 async function reportPdf(){const R=buildReport(UI.rpt.y,UI.rpt.m);if(!R)return;const sx=t=>String(t).replace(/\u2212/g,'-').replace(/\u2026/g,'...');R.fazit=sx(R.fazit);R.items.forEach(i=>{i.title=sx(i.title);i.detail=sx(i.detail);i.expl=sx(i.expl)});
@@ -1548,7 +1550,7 @@ async function reportPdf(){const R=buildReport(UI.rpt.y,UI.rpt.m);if(!R)return;c
     doc.setFont('helvetica','normal');doc.setFontSize(9.5);doc.setTextColor(40,46,58);doc.text(dl,L+24,yy);yy+=dl.length*4.3;
     if(el.length){doc.setFontSize(8.5);doc.setTextColor(100,108,120);doc.text(el,L+24,yy);yy+=el.length*3.8}
     yy+=3;doc.setDrawColor(225,228,233);doc.setLineWidth(.2);doc.line(L,yy-1.5,L+W,yy-1.5);yy+=2});
-  nl(14);doc.setFontSize(8);doc.setTextColor(110,118,130);doc.text(doc.splitTextToSize('Nachgerechnet aus den Tageszeilen des Zeitnachweises. Verbindlich ist der Zeitnachweis. Die Rechenregeln des Zeitkompass (MTV) sind nicht von der Personalabteilung bestätigt.',W),L,yy+4);
+  nl(14);doc.setFontSize(8);doc.setTextColor(110,118,130);doc.text(doc.splitTextToSize('Nachgerechnet aus den Tageszeilen des Zeitnachweises. Verbindlich ist der Zeitnachweis. Die Rechenregeln des Zeitkompass (MTV) sind nicht von der Personalabteilung bestätigt. Alle Angaben ohne Gewähr.',W),L,yy+4);
   await download(`Pruefbericht_${R.y}-${pad(R.m+1)}.pdf`,doc.output('arraybuffer'),'application/pdf');
 }
 /* Verfall-Planer */
@@ -1909,6 +1911,7 @@ function renderSettings(){
      <p>Gespeichert wird im Browser und, wenn verfügbar, in deinem Konto. Ein Backup schützt zusätzlich. Letztes Backup: ${S.lastBackup?fd(S.lastBackup).slice(4)+S.lastBackup.slice(0,4):'noch keins'}.</p>
      <p>„Für Handykalender“ speichert Messen, Urlaub, JÜP und 13.T als .ics-Datei. Auf dem Handy öffnen, dann übernimmt der Kalender die Termine.</p>
      <div class="btnrow" style="margin-top:10px"><button class="btn danger" data-act="blank">Leere Vorlage für ${UI.year}</button></div><p>Setzt nur das angezeigte Jahr auf Gleitzeit und freie Wochenenden zurück. Einstellungen, Messen und andere Jahre bleiben. Vorher am besten ein Backup speichern.</p></section>
+   <section class="sbox"><h3>Hinweis und Haftung</h3><p style="font-size:13px;line-height:1.5;margin:0 0 6px">Der Zeitkompass ist ein privates Hilfsmittel zur Planung und Kontrolle der eigenen Arbeitszeit. Er ist kein offizielles Werkzeug der Koelnmesse und ersetzt nicht den Zeitnachweis. Maßgeblich ist allein der offizielle Zeitnachweis. Die Berechnungen setzen die Regeln des Manteltarifvertrags um. Diese Umsetzung ist nicht von der Personalabteilung bestätigt. Alle Angaben ohne Gewähr.</p><p style="font-size:13px;line-height:1.5;margin:0">Die Nutzung ist kostenlos und freiwillig. Alle Daten bleiben auf dem eigenen Gerät.</p></section>
    <section class="sbox"><h3>App teilen</h3>
      <div class="qrrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" class="qr" aria-label="QR-Code zur Zeitkompass-App"><path fill="#fff" d="M0 0h33v33h-33z"/><path class="qrline" stroke="#16171a" d="M2 2.5h7m1 0h1m1 0h1m3 0h4m2 0h1m1 0h7m-29 1h1m5 0h1m6 0h2m5 0h1m1 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m1 0h5m1 0h6m2 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m3 0h1m1 0h1m1 0h1m2 0h1m2 0h1m1 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m2 0h2m1 0h5m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m1 0h1m1 0h2m5 0h2m3 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-18 1h2m1 0h1m4 0h1m-20 1h1m1 0h1m3 0h2m1 0h2m2 0h3m3 0h1m3 0h1m2 0h1m1 0h1m-28 1h1m3 0h1m1 0h1m1 0h9m1 0h1m2 0h2m3 0h2m-29 1h3m1 0h1m1 0h2m1 0h4m2 0h2m2 0h3m1 0h4m1 0h1m-27 1h2m3 0h1m1 0h1m1 0h3m6 0h4m1 0h1m-25 1h1m3 0h6m1 0h2m1 0h1m3 0h1m2 0h1m5 0h1m-26 1h2m2 0h1m3 0h1m3 0h2m2 0h1m2 0h2m3 0h2m-29 1h1m1 0h1m1 0h1m1 0h1m3 0h2m1 0h3m1 0h1m1 0h1m4 0h1m3 0h1m-27 1h1m2 0h1m1 0h2m1 0h3m1 0h1m3 0h2m1 0h2m1 0h1m-23 1h3m1 0h1m4 0h1m1 0h4m2 0h1m2 0h2m4 0h1m-27 1h2m3 0h1m1 0h1m1 0h1m1 0h4m1 0h3m1 0h2m2 0h3m-29 1h3m3 0h1m1 0h1m6 0h3m1 0h1m4 0h2m2 0h1m-24 1h1m2 0h1m1 0h4m1 0h2m2 0h1m1 0h1m1 0h1m-24 1h10m2 0h2m2 0h1m2 0h7m1 0h1m-20 1h2m1 0h2m2 0h1m1 0h1m1 0h2m3 0h3m1 0h1m-29 1h7m1 0h1m1 0h2m1 0h3m1 0h1m2 0h1m1 0h1m1 0h1m3 0h1m-29 1h1m5 0h1m7 0h1m4 0h2m3 0h1m2 0h2m-29 1h1m1 0h3m1 0h1m2 0h1m1 0h1m1 0h2m4 0h7m1 0h2m-29 1h1m1 0h3m1 0h1m3 0h1m2 0h5m1 0h1m1 0h1m2 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m2 0h1m2 0h7m3 0h1m2 0h2m-29 1h1m5 0h1m3 0h1m1 0h1m2 0h2m1 0h1m1 0h1m3 0h2m-26 1h7m1 0h3m2 0h4m3 0h4m4 0h1"/></svg><div><p>Kollegen scannen den Code mit der Handykamera und haben den Zeitkompass sofort, mit leerem Kalender. Eigene Daten werden nicht geteilt.</p><p><b>zeitkompass4250.netlify.app</b></p><div class="btnrow"><button class="btn" data-act="copy-link">Link kopieren</button></div></div></div></section>
   </div>`;
@@ -2248,6 +2251,15 @@ initDb();
 (function(){const V=['kswing2','kswing3','kswing4','kswing5'];let last=0;
 document.addEventListener('click',ev=>{if(ev.target.closest('.modal,.drawer'))return;const t=Date.now();if(t-last<250)return;last=t;
 document.querySelectorAll('.kneedle').forEach((n,i)=>{const v=V[Math.floor(Math.random()*V.length)],dir=Math.random()<.5?'normal':'reverse',d=(1.4+Math.random()*.8).toFixed(2);n.style.animation='none';void n.getBoundingClientRect();n.style.animation=`${v} ${d}s ease-out ${i*0.08}s 1 ${dir} both`})},true)})();
+
+(function(){
+  const $=s=>document.querySelector(s),save=()=>{if(window.zkSave)return window.zkSave();try{localStorage.setItem('stundenkalender.v1',JSON.stringify(ST))}catch(e){}};
+  const T1='Der Zeitkompass ist ein privates Hilfsmittel zur Planung und Kontrolle der eigenen Arbeitszeit. Er ist kein offizielles Werkzeug der Koelnmesse und ersetzt nicht den Zeitnachweis. Maßgeblich ist allein der offizielle Zeitnachweis. Die Berechnungen setzen die Regeln des Manteltarifvertrags um. Diese Umsetzung ist nicht von der Personalabteilung bestätigt. Alle Angaben ohne Gewähr.',T2='Die Nutzung ist kostenlos und freiwillig. Alle Daten bleiben auf dem eigenen Gerät.';
+  function openDisc(first){$('#discsheet').innerHTML=`<h3 style="margin:0 0 10px">Hinweis</h3><p style="line-height:1.55;margin:0 0 8px">${T1}</p><p style="line-height:1.55;margin:0 0 16px">${T2}</p><div style="text-align:right"><button class="btn" data-disc="ok">${first?'Verstanden':'Schließen'}</button></div>`;$('#discwin').hidden=false}
+  document.addEventListener('click',ev=>{const b=ev.target.closest&&ev.target.closest('[data-disc]');if(!b){if(ev.target.id==='discwin'&&ST.settings.discOk)$('#discwin').hidden=true;return}ev.preventDefault();if(b.dataset.disc==='open'){openDisc(false);return}if(!ST.settings.discOk){ST.settings.discOk=1;save()}$('#discwin').hidden=true});
+  document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&!$('#discwin').hidden&&ST.settings.discOk)$('#discwin').hidden=true});
+  if(!ST.settings.discOk)setTimeout(()=>openDisc(true),300);
+})();
 </script>
 <script>
 if('serviceWorker' in navigator){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{})})}
