@@ -805,6 +805,11 @@ html[data-bg="xmarmor"] .bgl,html[data-bg="xmarmor"] .bgprev{background-image:va
 html[data-bg="xhex"] .bgl,html[data-bg="xhex"] .bgprev{background-image:var(--bg-xhex)}
 html[data-bg="xtraverse"] .bgl,html[data-bg="xtraverse"] .bgprev{background-image:var(--bg-xtraverse)}
 html[data-bg="xtropen"] .bgl,html[data-bg="xtropen"] .bgprev{background-image:var(--bg-xtropen)}</style>
+<style id="fabcss">
+.sheet-fab{position:sticky;bottom:0;display:flex;justify-content:flex-end;gap:8px;padding:10px 0 2px;margin-top:10px;pointer-events:none;opacity:0;transform:translateY(8px);transition:opacity .2s,transform .2s}
+.sheet-fab.show{opacity:1;transform:none}
+.sheet-fab .btn{pointer-events:auto;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+</style>
 </head>
 <body>
 <div class="aurora" aria-hidden="true"></div>
@@ -2259,6 +2264,14 @@ document.querySelectorAll('.kneedle').forEach((n,i)=>{const v=V[Math.floor(Math.
   document.addEventListener('click',ev=>{const b=ev.target.closest&&ev.target.closest('[data-disc]');if(!b){if(ev.target.id==='discwin'&&ST.settings.discOk)$('#discwin').hidden=true;return}ev.preventDefault();if(b.dataset.disc==='open'){openDisc(false);return}if(!ST.settings.discOk){ST.settings.discOk=1;save()}$('#discwin').hidden=true});
   document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&!$('#discwin').hidden&&ST.settings.discOk)$('#discwin').hidden=true});
   if(!ST.settings.discOk)setTimeout(()=>openDisc(true),300);
+})();
+
+(function(){
+  const M={sheet:['close-settings','Fertig'],rptsheet:['rpt-close','Schließen'],fwsheet:['fw-close','Schließen'],revsheet:['rv-close','Schließen'],drawer:['close-drawer','Schließen']};
+  function upd(el){const f=el.querySelector(':scope>.sheet-fab');if(f)f.classList.toggle('show',el.scrollTop>180&&el.scrollHeight>el.clientHeight+200)}
+  function ensure(el){const [act,lbl]=M[el.id];if(el.querySelector(':scope>.sheet-fab')||!el.firstElementChild)return;const d=document.createElement('div');d.className='sheet-fab';d.innerHTML=`<button class="btn ghost" data-fab-top="1" aria-label="Nach oben">↑ Nach oben</button><button class="btn primary" data-act="${act}">${lbl}</button>`;el.appendChild(d);upd(el)}
+  Object.keys(M).forEach(id=>{const el=document.getElementById(id);if(!el)return;new MutationObserver(()=>ensure(el)).observe(el,{childList:true});el.addEventListener('scroll',()=>upd(el),{passive:true});ensure(el)});
+  document.addEventListener('click',ev=>{const t=ev.target.closest&&ev.target.closest('[data-fab-top]');if(!t)return;const el=t.closest('.sheet,.drawer');if(el)el.scrollTo({top:0,behavior:'smooth'})});
 })();
 </script>
 <script>
