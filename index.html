@@ -810,6 +810,14 @@ html[data-bg="xtropen"] .bgl,html[data-bg="xtropen"] .bgprev{background-image:va
 .sheet-fab.show{opacity:1;transform:none}
 .sheet-fab .btn{pointer-events:auto;box-shadow:0 6px 18px rgba(0,0,0,.25)}
 </style>
+<style id="drawerdrag">
+.drawer.open{transform:translate(var(--ddx,0px),var(--ddy,0px))}
+.drawer.dragging{transition:none!important;user-select:none}
+.drawer .dh{cursor:grab;touch-action:none;position:relative;padding-top:10px}
+.drawer.dragging .dh{cursor:grabbing}
+.drawer .dh::before{content:"";position:absolute;top:0;left:50%;width:42px;height:4px;margin-left:-21px;border-radius:3px;background:currentColor;opacity:.25}
+.drawer .dh button,.drawer .dh a,.drawer .dh input,.drawer .dh select{cursor:pointer}
+</style>
 </head>
 <body>
 <div class="aurora" aria-hidden="true"></div>
@@ -835,7 +843,7 @@ html[data-bg="xtropen"] .bgl,html[data-bg="xtropen"] .bgprev{background-image:va
   <section class="today glass" id="today" aria-label="Heute"></section>
   <section class="pegel glass" id="pegel" aria-label="Stundenkonto"></section>
   <main id="main"></main>
-  <p class="copy">© 2026 Marc Simon · <a href="#" data-disc="open" style="color:inherit">Hinweis</a> · <a href="#" data-news="open" style="color:inherit">Version 1.3.3</a></p>
+  <p class="copy">© 2026 Marc Simon · <a href="#" data-disc="open" style="color:inherit">Hinweis</a> · <a href="#" data-news="open" style="color:inherit">Version 1.3.4</a></p>
 </div>
 <aside class="drawer glass" id="drawer" aria-hidden="true" aria-label="Tag bearbeiten"></aside>
 <div class="rangebar glass" id="rangebar" hidden></div>
@@ -2311,7 +2319,7 @@ document.querySelectorAll('.kneedle').forEach((n,i)=>{const v=V[Math.floor(Math.
 })();
 
 (function(){
-  const VER="1.3.3",NEWS=["Uhrzeiten lassen sich jetzt auch kurz eintragen, genau wie Daten: 7 wird 07:00, 730 wird 07:30, 7.30 oder 7,30 wird 07:30."];
+  const VER="1.3.4",NEWS=["Das Tagesfenster lässt sich jetzt mit der Maus verschieben: oben am Kopf mit dem Datum anfassen und ziehen. Beim nächsten Öffnen steht es wieder rechts.","Uhrzeiten lassen sich kurz eintragen, genau wie Daten: 7 wird 07:00, 730 wird 07:30, 7.30 oder 7,30 wird 07:30."];
   const save=()=>{if(window.zkSave)return window.zkSave();try{localStorage.setItem('stundenkalender.v1',JSON.stringify(ST))}catch(e){}};
   const bar=document.createElement('div');bar.id='zkbar';bar.style.cssText='position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:60;max-width:min(560px,calc(100vw - 24px));padding:12px 14px;border-radius:14px;background:#16171a;color:#f4f3f0;box-shadow:0 10px 30px rgba(0,0,0,.35);font-size:14px;line-height:1.45;display:none';
   document.body.appendChild(bar);
@@ -2347,6 +2355,33 @@ document.querySelectorAll('.kneedle').forEach((n,i)=>{const v=V[Math.floor(Math.
     if(t===null){el.classList.add('bad');el.title='Uhrzeit nicht erkannt, z. B. 7, 730 oder 7:30';ev.stopImmediatePropagation();return}
     el.classList.remove('bad');el.removeAttribute('title');el.value=t;},true);
   document.addEventListener('keydown',function(ev){const el=ev.target;if(ev.key==='Enter'&&el&&el.hasAttribute&&el.hasAttribute('data-tm'))el.blur()},true);
+})();
+</script>
+<script>
+/* Tagesfenster mit der Maus am Kopf verschieben */
+(function(){
+  const D=document.getElementById('drawer');if(!D)return;
+  let sx=0,sy=0,bx=0,by=0,on=false,pid=null;
+  const gx=()=>parseFloat(D.style.getPropertyValue('--ddx'))||0,gy=()=>parseFloat(D.style.getPropertyValue('--ddy'))||0;
+  D.addEventListener('pointerdown',function(ev){
+    const hd=ev.target.closest&&ev.target.closest('.dh');if(!hd||!D.contains(hd))return;
+    if(ev.target.closest('button,a,input,select,textarea,label'))return;
+    if(ev.pointerType==='mouse'&&ev.button!==0)return;
+    on=true;pid=ev.pointerId;sx=ev.clientX;sy=ev.clientY;bx=gx();by=gy();D.classList.add('dragging');
+    try{hd.setPointerCapture(pid)}catch(e){}ev.preventDefault();
+  });
+  document.addEventListener('pointermove',function(ev){if(!on||ev.pointerId!==pid)return;
+    const r=D.getBoundingClientRect(),w=r.width;
+    let dx=bx+ev.clientX-sx,dy=by+ev.clientY-sy;
+    const baseL=r.left-gx(),baseT=r.top-gy();
+    dx=Math.max(-baseL+8,Math.min(innerWidth-baseL-w+0,dx)); /* links/rechts im Fenster halten */
+    dx=Math.min(dx,innerWidth-baseL-120);
+    dy=Math.max(-baseT+4,Math.min(innerHeight-baseT-60,dy)); /* Kopf bleibt sichtbar */
+    D.style.setProperty('--ddx',dx+'px');D.style.setProperty('--ddy',dy+'px');
+  });
+  function end(ev){if(!on||(ev&&ev.pointerId!==pid))return;on=false;D.classList.remove('dragging')}
+  document.addEventListener('pointerup',end);document.addEventListener('pointercancel',end);
+  new MutationObserver(function(){if(!D.classList.contains('open')){D.style.removeProperty('--ddx');D.style.removeProperty('--ddy')}}).observe(D,{attributes:true,attributeFilter:['class']});
 })();
 </script>
 <script>
