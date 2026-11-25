@@ -819,22 +819,22 @@ html[data-bg="xtropen"] .bgl,html[data-bg="xtropen"] .bgprev{background-image:va
 .drawer .dh button,.drawer .dh a,.drawer .dh input,.drawer .dh select{cursor:pointer}
 </style>
 <style id="schulferien">
-.sfb{position:absolute;left:2px;right:2px;bottom:0;height:5px;border-radius:2px;background:#E0218A;pointer-events:none;z-index:1}
-.md .sfb{left:5px;right:5px;bottom:2px;height:6px}
-.sw.sw-sf{background:#E0218A!important;height:4px!important;border-radius:2px;border:0;box-shadow:none;align-self:center}
-.sftog{display:inline-flex!important;align-items:center;gap:8px;cursor:pointer;user-select:none;margin-left:auto;padding:5px 12px 5px 6px;border-radius:999px;border:1.5px solid #E0218A;background:rgba(224,33,138,.10);color:#B5166E!important;font-weight:700;font-size:calc(12.5px*var(--fs,1));box-shadow:0 1px 3px rgba(0,0,0,.12)}
-.sftog:hover{background:rgba(224,33,138,.20)}
+.sfb{position:absolute;left:2px;right:2px;top:0;height:5px;border-radius:2px;background:#FFD400;box-shadow:0 0 0 .5px rgba(120,90,0,.55);pointer-events:none;z-index:1}
+.md .sfb{left:5px;right:5px;top:2px;height:6px}
+.sw.sw-sf{background:#FFD400!important;height:4px!important;border-radius:2px;border:0;box-shadow:none;align-self:center}
+.sftog{display:inline-flex!important;align-items:center;gap:8px;cursor:pointer;user-select:none;margin-left:auto;padding:5px 12px 5px 6px;border-radius:999px;border:1.5px solid #FFD400;background:rgba(255,212,0,.10);color:#6b5200!important;font-weight:700;font-size:calc(12.5px*var(--fs,1));box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.sftog:hover{background:rgba(255,212,0,.20)}
 .sftog .sw-sf{display:none}
-.sftog input{-webkit-appearance:none;appearance:none;margin:0;width:32px;height:18px;border-radius:999px;background:#E8B8D2;position:relative;cursor:pointer;flex:none;border:0;padding:0;box-shadow:none;transition:background .15s}
+.sftog input{-webkit-appearance:none;appearance:none;margin:0;width:32px;height:18px;border-radius:999px;background:#e6dcae;position:relative;cursor:pointer;flex:none;border:0;padding:0;box-shadow:none;transition:background .15s}
 .sftog input::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.3);transition:left .15s}
 .sftog input:checked{background:#fff}
-.sftog input:checked::after{left:16px;background:#E0218A}
-.sftog:has(input:checked){background:#E0218A;color:#fff!important;border-color:#E0218A}
-html[data-dark] .sftog{color:#F27BBF!important;background:rgba(224,33,138,.16)}
-html[data-dark] .sftog:has(input:checked){color:#fff!important;background:#C81C7B}
+.sftog input:checked::after{left:16px;background:#3a2c00}
+.sftog:has(input:checked){background:#FFD400;color:#3a2c00!important;border-color:#d9b400}
+html[data-dark] .sftog{color:#FFE066!important;background:rgba(255,212,0,.16)}
+html[data-dark] .sftog:has(input:checked){color:#3a2c00!important;background:#FFD400}
 .mhead .sftog{margin-left:auto}
-.tip .tip-sf{color:#E0218A;font-weight:600}
-html[data-dark] .tip .tip-sf{color:#F27BBF}
+.tip .tip-sf{color:#9a7400;font-weight:600}
+html[data-dark] .tip .tip-sf{color:#FFE066}
 </style>
 </head>
 <body>
@@ -861,7 +861,7 @@ html[data-dark] .tip .tip-sf{color:#F27BBF}
   <section class="today glass" id="today" aria-label="Heute"></section>
   <section class="pegel glass" id="pegel" aria-label="Stundenkonto"></section>
   <main id="main"></main>
-  <p class="copy">© 2026 Marc Simon · <a href="#" data-disc="open" style="color:inherit">Hinweis</a> · <a href="#" data-news="open" style="color:inherit">Version 1.4.2</a></p>
+  <p class="copy">© 2026 Marc Simon · <a href="#" data-disc="open" style="color:inherit">Hinweis</a> · <a href="#" data-news="open" style="color:inherit">Version 1.4.3</a></p>
 </div>
 <aside class="drawer glass" id="drawer" aria-hidden="true" aria-label="Tag bearbeiten"></aside>
 <div class="rangebar glass" id="rangebar" hidden></div>
@@ -2337,7 +2337,7 @@ document.querySelectorAll('.kneedle').forEach((n,i)=>{const v=V[Math.floor(Math.
 })();
 
 (function(){
-  const VER="1.4.2",NEWS=["Schulferien NRW lassen sich einblenden: Mit dem magentafarbenen Schalter „Schulferien NRW“ rechts in der Legende unter dem Jahreskalender. Ferientage bekommen dann einen schmalen Streifen, der Name steht im Tooltip. Standardmäßig ausgeblendet.","Das Tagesfenster lässt sich mit der Maus verschieben: oben am Kopf mit dem Datum anfassen und ziehen."];
+  const VER="1.4.3",NEWS=["Schulferien NRW lassen sich einblenden: Mit dem gelben Schalter „Schulferien NRW“ rechts in der Legende unter dem Jahreskalender. Ferientage bekommen dann oben einen gelben Streifen, der Name steht im Tooltip. Standardmäßig ausgeblendet.","Das Tagesfenster lässt sich mit der Maus verschieben: oben am Kopf mit dem Datum anfassen und ziehen."];
   const save=()=>{if(window.zkSave)return window.zkSave();try{localStorage.setItem('stundenkalender.v1',JSON.stringify(ST))}catch(e){}};
   const bar=document.createElement('div');bar.id='zkbar';bar.style.cssText='position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:60;max-width:min(560px,calc(100vw - 24px));padding:12px 14px;border-radius:14px;background:#16171a;color:#f4f3f0;box-shadow:0 10px 30px rgba(0,0,0,.35);font-size:14px;line-height:1.45;display:none';
   document.body.appendChild(bar);
