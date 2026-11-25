@@ -822,9 +822,17 @@ html[data-bg="xtropen"] .bgl,html[data-bg="xtropen"] .bgprev{background-image:va
 .sfb{position:absolute;left:3px;right:3px;bottom:1px;height:3px;border-radius:2px;background:#c86fb0;pointer-events:none;z-index:1}
 .md .sfb{left:6px;right:6px;bottom:3px;height:4px}
 .sw.sw-sf{background:#c86fb0!important;height:4px!important;border-radius:2px;border:0;box-shadow:none;align-self:center}
-.sftog{display:inline-flex!important;align-items:center;gap:6px;cursor:pointer;user-select:none}
-.sftog input{margin:0;width:auto;cursor:pointer}
-.mhead .sftog{margin-left:auto;font-size:calc(12px*var(--fs,1));color:var(--ink2)}
+.sftog{display:inline-flex!important;align-items:center;gap:8px;cursor:pointer;user-select:none;margin-left:auto;padding:5px 12px 5px 6px;border-radius:999px;border:1.5px solid #c86fb0;background:rgba(200,111,176,.10);color:#9c3f84!important;font-weight:700;font-size:calc(12.5px*var(--fs,1));box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.sftog:hover{background:rgba(200,111,176,.20)}
+.sftog .sw-sf{display:none}
+.sftog input{-webkit-appearance:none;appearance:none;margin:0;width:32px;height:18px;border-radius:999px;background:#d9c2d3;position:relative;cursor:pointer;flex:none;border:0;padding:0;box-shadow:none;transition:background .15s}
+.sftog input::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.3);transition:left .15s}
+.sftog input:checked{background:#fff}
+.sftog input:checked::after{left:16px;background:#c86fb0}
+.sftog:has(input:checked){background:#c86fb0;color:#fff!important;border-color:#c86fb0}
+html[data-dark] .sftog{color:#e7a1d3!important;background:rgba(200,111,176,.16)}
+html[data-dark] .sftog:has(input:checked){color:#fff!important;background:#b0599a}
+.mhead .sftog{margin-left:auto}
 .tip .tip-sf{color:#c86fb0;font-weight:600}
 html[data-dark] .tip .tip-sf{color:#e7a1d3}
 </style>
@@ -853,7 +861,7 @@ html[data-dark] .tip .tip-sf{color:#e7a1d3}
   <section class="today glass" id="today" aria-label="Heute"></section>
   <section class="pegel glass" id="pegel" aria-label="Stundenkonto"></section>
   <main id="main"></main>
-  <p class="copy">© 2026 Marc Simon · <a href="#" data-disc="open" style="color:inherit">Hinweis</a> · <a href="#" data-news="open" style="color:inherit">Version 1.4.0</a></p>
+  <p class="copy">© 2026 Marc Simon · <a href="#" data-disc="open" style="color:inherit">Hinweis</a> · <a href="#" data-news="open" style="color:inherit">Version 1.4.1</a></p>
 </div>
 <aside class="drawer glass" id="drawer" aria-hidden="true" aria-label="Tag bearbeiten"></aside>
 <div class="rangebar glass" id="rangebar" hidden></div>
@@ -2329,7 +2337,7 @@ document.querySelectorAll('.kneedle').forEach((n,i)=>{const v=V[Math.floor(Math.
 })();
 
 (function(){
-  const VER="1.4.0",NEWS=["Schulferien NRW lassen sich einblenden: In der Legende unter dem Jahreskalender den Haken bei „Schulferien NRW“ setzen. Ferientage bekommen dann einen schmalen Streifen, der Name steht im Tooltip. Standardmäßig ausgeblendet.","Das Tagesfenster lässt sich mit der Maus verschieben: oben am Kopf mit dem Datum anfassen und ziehen."];
+  const VER="1.4.1",NEWS=["Schulferien NRW lassen sich einblenden: Mit dem rosa Schalter „Schulferien NRW“ rechts in der Legende unter dem Jahreskalender. Ferientage bekommen dann einen schmalen Streifen, der Name steht im Tooltip. Standardmäßig ausgeblendet.","Das Tagesfenster lässt sich mit der Maus verschieben: oben am Kopf mit dem Datum anfassen und ziehen."];
   const save=()=>{if(window.zkSave)return window.zkSave();try{localStorage.setItem('stundenkalender.v1',JSON.stringify(ST))}catch(e){}};
   const bar=document.createElement('div');bar.id='zkbar';bar.style.cssText='position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:60;max-width:min(560px,calc(100vw - 24px));padding:12px 14px;border-radius:14px;background:#16171a;color:#f4f3f0;box-shadow:0 10px 30px rgba(0,0,0,.35);font-size:14px;line-height:1.45;display:none';
   document.body.appendChild(bar);
