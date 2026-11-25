@@ -835,7 +835,7 @@ html[data-bg="xtropen"] .bgl,html[data-bg="xtropen"] .bgprev{background-image:va
   <section class="today glass" id="today" aria-label="Heute"></section>
   <section class="pegel glass" id="pegel" aria-label="Stundenkonto"></section>
   <main id="main"></main>
-  <p class="copy">© 2026 Marc Simon · <a href="#" data-disc="open" style="color:inherit">Hinweis</a> · <a href="#" data-news="open" style="color:inherit">Version 1.3.2</a></p>
+  <p class="copy">© 2026 Marc Simon · <a href="#" data-disc="open" style="color:inherit">Hinweis</a> · <a href="#" data-news="open" style="color:inherit">Version 1.3.3</a></p>
 </div>
 <aside class="drawer glass" id="drawer" aria-hidden="true" aria-label="Tag bearbeiten"></aside>
 <div class="rangebar glass" id="rangebar" hidden></div>
@@ -1777,7 +1777,7 @@ function renderFairWin(){
     const hol=i.legal||i.ft,we=i.dow===6||i.dow===0;
     rows+=`<tr class="${dc.zt?'fw-zt':''}"><td class="fw-d"><b class="${hol?'hol':''}">${WD[i.dow]} ${k.slice(8)}.${k.slice(5,7)}.</b>${i.name?`<small>${esc(i.name)}</small>`:''}</td>
      <td><select data-fwk="${k}" data-fwf="t">${['aufbau','laufzeit','abbau'].map(t=>`<option value="${t}" ${e.t===t?'selected':''}>${TYPES[t].label}</option>`).join('')}${['aufbau','laufzeit','abbau'].includes(e.t)?'':`<option selected>${TYPES[e.t].label}</option>`}<option value="x">Aus Messe entfernen</option></select></td>
-     <td><input type="text" inputmode="numeric" autocomplete="off" maxlength="5" placeholder="hh:mm" data-tm data-fwk="${k}" data-fwf="s" value="${dc.times[0]||''}" ${dc.work?'':'disabled'}></td><td><input type="text" inputmode="numeric" autocomplete="off" maxlength="5" placeholder="hh:mm" data-tm data-fwk="${k}" data-fwf="e" value="${dc.times[1]||''}" ${dc.work?'':'disabled'}></td>
+     <td><input type="text" inputmode="numeric" autocomplete="off" maxlength="8" placeholder="hh:mm" data-tm data-fwk="${k}" data-fwf="s" value="${dc.times[0]||''}" ${dc.work?'':'disabled'}></td><td><input type="text" inputmode="numeric" autocomplete="off" maxlength="8" placeholder="hh:mm" data-tm data-fwk="${k}" data-fwf="e" value="${dc.times[1]||''}" ${dc.work?'':'disabled'}></td>
      <td><input type="number" min="0" step="5" data-fwk="${k}" data-fwf="p" value="${e.p!=null&&e.p!==''?e.p:''}" placeholder="${Math.round(dc.pause*60)}" style="width:62px" title="Pause in Minuten, leer = gesetzlich"></td>
      <td>${fh(dc.net)}</td><td>${dc.zSum?'+'+fh(dc.zSum):''}</td><td class="${bal<0?'neg':'pos'}">${fhs(bal)}</td>
      <td><input type="text" data-fwk="${k}" data-fwf="n" value="${esc(e.n||'')}" placeholder="Notiz" style="width:100%;min-width:110px"></td></tr>`});
@@ -1814,7 +1814,7 @@ function renderDrawer(){
    <div class="subhint">Trägt „${TYPES[e.t].label}“${e.f&&T.work?' mit der Messe':''} auf alle Tage bis zum gewählten Datum ein. Rückgängig ist möglich.</div></div>`;
   if(T.work||(e.t==='fza'&&e.half&&dc.soll>0&&!dc.i.halb)){
     if(T.work)h+=`<label class="field"><span class="fl">Messe</span><select data-f="f"><option value="">Keine</option>${ST.fairs.map(f=>`<option value="${esc(f.id)}" ${e.f===f.id?'selected':''}>${esc(f.name)} (${esc(f.k)})</option>`).join('')}</select></label>`;
-    h+=`    <div class="row2"><label>Beginn<input type="text" inputmode="numeric" autocomplete="off" maxlength="5" placeholder="hh:mm" data-tm data-f="s" value="${dc.times[0]}"></label><label>Ende<input type="text" inputmode="numeric" autocomplete="off" maxlength="5" placeholder="hh:mm" data-tm data-f="e" value="${dc.times[1]}"></label></div>
+    h+=`    <div class="row2"><label>Beginn<input type="text" inputmode="numeric" autocomplete="off" maxlength="8" placeholder="hh:mm" data-tm data-f="s" value="${dc.times[0]}"></label><label>Ende<input type="text" inputmode="numeric" autocomplete="off" maxlength="8" placeholder="hh:mm" data-tm data-f="e" value="${dc.times[1]}"></label></div>
     <div class="subhint">${custom?'Eigene Zeiten <button data-act="reset-times">Standard wiederherstellen</button>':'Standardzeit für '+rl[1]}</div>
     <div class="field"><span class="fl">Pause</span><div class="pauserow"><select data-f="pm"><option value="auto" ${manual?'':'selected'}>${ST.settings.pause.mode==='fixed'?'Feste Pause':'Gesetzlich'} (${autoP} Min.)</option><option value="manual" ${manual?'selected':''}>Manuell</option></select>${manual?`<input type="number" min="0" step="5" data-f="p" value="${+e.p}" aria-label="Pause in Minuten">`:'<span></span>'}</div></div>`;
   }
@@ -1861,7 +1861,7 @@ function renderRange(){
 /* ===== Einstellungen ===== */
 function renderSettings(){
   const S=ST.settings,R=S.rates,Tm=S.times;
-  const tr=(lbl,key)=>`<div class="tr"><span>${lbl}</span><input type="text" inputmode="numeric" autocomplete="off" maxlength="5" placeholder="hh:mm" data-tm data-set="times.${key}.0" value="${Tm[key][0]}" aria-label="${lbl} Beginn"><input type="text" inputmode="numeric" autocomplete="off" maxlength="5" placeholder="hh:mm" data-tm data-set="times.${key}.1" value="${Tm[key][1]}" aria-label="${lbl} Ende"></div>`;
+  const tr=(lbl,key)=>`<div class="tr"><span>${lbl}</span><input type="text" inputmode="numeric" autocomplete="off" maxlength="8" placeholder="hh:mm" data-tm data-set="times.${key}.0" value="${Tm[key][0]}" aria-label="${lbl} Beginn"><input type="text" inputmode="numeric" autocomplete="off" maxlength="8" placeholder="hh:mm" data-tm data-set="times.${key}.1" value="${Tm[key][1]}" aria-label="${lbl} Ende"></div>`;
   $('#sheet').innerHTML=`<div class="sh"><h2>Einstellungen</h2><button class="btn" data-act="close-settings">Fertig</button></div>
   <div class="sgrid">
    <section class="sbox"><h3>Arbeitszeit</h3>
@@ -2311,7 +2311,7 @@ document.querySelectorAll('.kneedle').forEach((n,i)=>{const v=V[Math.floor(Math.
 })();
 
 (function(){
-  const VER="1.3.2",NEWS=["Uhrzeiten lassen sich jetzt auch kurz eintragen, genau wie Daten: 7 wird 07:00, 730 wird 07:30, 7.30 oder 7,30 wird 07:30."];
+  const VER="1.3.3",NEWS=["Uhrzeiten lassen sich jetzt auch kurz eintragen, genau wie Daten: 7 wird 07:00, 730 wird 07:30, 7.30 oder 7,30 wird 07:30."];
   const save=()=>{if(window.zkSave)return window.zkSave();try{localStorage.setItem('stundenkalender.v1',JSON.stringify(ST))}catch(e){}};
   const bar=document.createElement('div');bar.id='zkbar';bar.style.cssText='position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:60;max-width:min(560px,calc(100vw - 24px));padding:12px 14px;border-radius:14px;background:#16171a;color:#f4f3f0;box-shadow:0 10px 30px rgba(0,0,0,.35);font-size:14px;line-height:1.45;display:none';
   document.body.appendChild(bar);
@@ -2339,6 +2339,9 @@ document.querySelectorAll('.kneedle').forEach((n,i)=>{const v=V[Math.floor(Math.
     else return null;
     if(h>23||m>59)return null;return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0');}
   window.zkParseTime=pT;
+  const isT=el=>el&&el.hasAttribute&&el.hasAttribute('data-tm');
+  document.addEventListener('focusin',function(ev){const el=ev.target;if(isT(el)){el._zf=true;setTimeout(function(){try{if(document.activeElement===el)el.select()}catch(e){}},0)}},true);
+  document.addEventListener('beforeinput',function(ev){const el=ev.target;if(isT(el)&&el._zf){el._zf=false;if(/^insert/.test(ev.inputType||'')){el.value=''}}},true);
   document.addEventListener('change',function(ev){const el=ev.target;if(!el||!el.hasAttribute||!el.hasAttribute('data-tm'))return;
     const t=pT(el.value);
     if(t===null){el.classList.add('bad');el.title='Uhrzeit nicht erkannt, z. B. 7, 730 oder 7:30';ev.stopImmediatePropagation();return}
