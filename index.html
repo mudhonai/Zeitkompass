@@ -853,6 +853,7 @@ html[data-dark] .tip .tip-sf{color:#FFE066}
 #pdfwin .pv-rs.l::after{left:5px;border-left:2px solid currentColor}
 #pdfwin.drag *{user-select:none}
 </style>
+<style id="jhcol">.gauge .gs .jh{color:#57a639;font-weight:700;white-space:nowrap}.gauge .gs .jh.neg{color:var(--neg)}</style>
 </head>
 <body>
 <div class="aurora" aria-hidden="true"></div>
@@ -878,7 +879,7 @@ html[data-dark] .tip .tip-sf{color:#FFE066}
   <section class="today glass" id="today" aria-label="Heute"></section>
   <section class="pegel glass" id="pegel" aria-label="Stundenkonto"></section>
   <main id="main"></main>
-  <p class="copy">© 2026 Marc Simon · <a href="#" data-disc="open" style="color:inherit">Hinweis</a> · <a href="#" data-news="open" style="color:inherit">Version 1.5.4</a></p>
+  <p class="copy">© 2026 Marc Simon · <a href="#" data-disc="open" style="color:inherit">Hinweis</a> · <a href="#" data-news="open" style="color:inherit">Version 1.5.5</a></p>
 </div>
 <aside class="drawer glass" id="drawer" aria-hidden="true" aria-label="Tag bearbeiten"></aside>
 <div class="rangebar glass" id="rangebar" hidden></div>
@@ -1380,19 +1381,19 @@ function renderPegel(){
    <div class="gauge">
      ${(()=>{UI._av=mv?(UI.month===0?C.konto0:C.months[UI.month-1].konto):C.avail;UI._avl=mv?'Stand Anfang '+MON[UI.month]:C.availLbl;return''})()}${(()=>{UI._fr=mv?C.freeFrom(UI.month):C.availFree;return''})()}<div class="gl"><b>JÜP verfügbar</b><span><strong class="${UI._fr<0?'neg':''}">${fmt(UI._fr/daily(),1)}</strong> Tage</span></div>
      <div class="tube"><div class="fill konto" style="width:${Math.max(0,Math.min(100,UI._fr/Math.max(UI._av,kmax)*100))}%"></div></div>
-     <div class="gs"><span>${fhm(UI._fr)} h</span><span>${fmt(UI._fr/weekSoll(),1)} Wochen</span></div>
+     <div class="gs"><span class="jh${UI._fr<0?' neg':''}">${fhm(UI._fr)} h</span><span>${fmt(UI._fr/weekSoll(),1)} Wochen</span></div>
      <div class="gs"><span>noch frei verplanbar, nach allen geplanten JÜP und Einsätzen bis 31.12. Erbracht ${UI._avl.replace(/^Stand /,'')}: ${fmt(UI._av/daily(),1)} Tage</span></div>
      
    </div>
    <div class="gauge">
      <div class="gl"><b>JÜP genommen</b><span><strong>${fmt(V.jup.daysT,1)}</strong> Tage</span></div>
      <div class="tube"><div class="fill jup" style="width:${V.jup.days>0?V.jup.daysT/V.jup.days*100:0}%"></div></div>
-     <div class="gs"><span>${fh(V.jup.hT)}</span><span>bis heute</span></div>
+     <div class="gs"><span class="jh">${fh(V.jup.hT)}</span><span>bis heute</span></div>
    </div>
    <div class="gauge">
      <div class="gl"><b>JÜP geplant</b><span><strong>${fmt(V.jup.days-V.jup.daysT,1)}</strong> Tage</span></div>
      <div class="tube"><div class="fill plan" style="width:${V.jup.days>0?(V.jup.days-V.jup.daysT)/V.jup.days*100:0}%"></div></div>
-     <div class="gs"><span>${fh(V.jup.h-V.jup.hT)}</span><span>${V.jup.days>0?'von '+fmt(V.jup.days,1)+' Tagen im '+(mv?'Monat':'Jahr'):'Keine JÜP-Tage geplant'}</span></div>
+     <div class="gs"><span class="jh">${fh(V.jup.h-V.jup.hT)}</span><span>${V.jup.days>0?'von '+fmt(V.jup.days,1)+' Tagen im '+(mv?'Monat':'Jahr'):'Keine JÜP-Tage geplant'}</span></div>
    </div>
    <div class="gauge">
      <div class="gl"><b>Freizeitkonto</b><span><strong class="${chg('konto',konto)}">${fmt(konto)}</strong> h</span></div>
@@ -2363,7 +2364,7 @@ document.querySelectorAll('.kneedle').forEach((n,i)=>{const v=V[Math.floor(Math.
 })();
 
 (function(){
-  const VER="1.5.4",NEWS=["Der Kalender als PDF trägt jetzt das Kompass-Logo: als „o“ im Namen und groß oben rechts.","Das Fenster mit dem Zeitnachweis lässt sich jetzt am Kopf verschieben und an den unteren Ecken links und rechts größer oder kleiner ziehen.","Korrektur: Bei eigenen Kachelfarben bleibt das Datum im Jahreskalender schwarz auf weißem Grund, mit Übergang zur gewählten Farbe.","Hochgeladene Zeitnachweise werden jetzt als PDF auf diesem Gerät gespeichert. Im Prüfbericht und in der Auswertung öffnet der Button „Zeitnachweis“ das Original. Die PDFs sind auch im Backup enthalten. Bereits früher hochgeladene Nachweise bitte einmal neu hochladen.","Schulferien NRW lassen sich einblenden: mit dem gelben Schalter „Schulferien NRW“ rechts in der Legende unter dem Jahreskalender. Ferientage bekommen dann unten einen gelben Streifen, der Name steht im Tooltip. Standardmäßig ausgeblendet.","Das Tagesfenster lässt sich mit der Maus verschieben: oben am Kopf mit dem Datum anfassen und ziehen."];
+  const VER="1.5.5",NEWS=["Die Stunden unter JÜP verfügbar, JÜP genommen und JÜP geplant sind jetzt grün wie der Balken.","Der Kalender als PDF trägt jetzt das Kompass-Logo: als „o“ im Namen und groß oben rechts.","Das Fenster mit dem Zeitnachweis lässt sich jetzt am Kopf verschieben und an den unteren Ecken links und rechts größer oder kleiner ziehen.","Korrektur: Bei eigenen Kachelfarben bleibt das Datum im Jahreskalender schwarz auf weißem Grund, mit Übergang zur gewählten Farbe.","Hochgeladene Zeitnachweise werden jetzt als PDF auf diesem Gerät gespeichert. Im Prüfbericht und in der Auswertung öffnet der Button „Zeitnachweis“ das Original. Die PDFs sind auch im Backup enthalten. Bereits früher hochgeladene Nachweise bitte einmal neu hochladen.","Schulferien NRW lassen sich einblenden: mit dem gelben Schalter „Schulferien NRW“ rechts in der Legende unter dem Jahreskalender. Ferientage bekommen dann unten einen gelben Streifen, der Name steht im Tooltip. Standardmäßig ausgeblendet.","Das Tagesfenster lässt sich mit der Maus verschieben: oben am Kopf mit dem Datum anfassen und ziehen."];
   const save=()=>{if(window.zkSave)return window.zkSave();try{localStorage.setItem('stundenkalender.v1',JSON.stringify(ST))}catch(e){}};
   const bar=document.createElement('div');bar.id='zkbar';bar.style.cssText='position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:60;max-width:min(560px,calc(100vw - 24px));padding:12px 14px;border-radius:14px;background:#16171a;color:#f4f3f0;box-shadow:0 10px 30px rgba(0,0,0,.35);font-size:14px;line-height:1.45;display:none';
   document.body.appendChild(bar);
