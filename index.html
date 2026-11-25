@@ -868,7 +868,7 @@ html[data-dark] .tip .tip-sf{color:#FFE066}
   <section class="today glass" id="today" aria-label="Heute"></section>
   <section class="pegel glass" id="pegel" aria-label="Stundenkonto"></section>
   <main id="main"></main>
-  <p class="copy">© 2026 Marc Simon · <a href="#" data-disc="open" style="color:inherit">Hinweis</a> · <a href="#" data-news="open" style="color:inherit">Version 1.5.0</a></p>
+  <p class="copy">© 2026 Marc Simon · <a href="#" data-disc="open" style="color:inherit">Hinweis</a> · <a href="#" data-news="open" style="color:inherit">Version 1.5.1</a></p>
 </div>
 <aside class="drawer glass" id="drawer" aria-hidden="true" aria-label="Tag bearbeiten"></aside>
 <div class="rangebar glass" id="rangebar" hidden></div>
@@ -2156,7 +2156,7 @@ function txtOn(h){const n=parseInt(h.slice(1),16),r=n>>16&255,g=n>>8&255,b=n&255
 function applyColors(){
   let el=document.getElementById('usercol');if(!el){el=document.createElement('style');el.id='usercol';document.head.appendChild(el)}
   const C=ST.settings.colors||{},css=[];
-  const rule=(sel,h)=>{const t=txtOn(h);css.push(`html:root body ${sel}{background:var(--sheen),${h}!important;color:${t}!important;${t==='#fff'?'':'text-shadow:none!important;'}}`,`html:root body ${sel} :is(.n,.w,.l,.top1 b,.top1 small){color:${t}!important}`)};
+  const rule=(sel,h)=>{const t=txtOn(h),sd=sel.replace(':is(.d,.md)','.d'),sm=sel.replace(':is(.d,.md)','.md');css.push(`html:root body ${sel}{background:var(--sheen),${h}!important;color:${t}!important;${t==='#fff'?'':'text-shadow:none!important;'}}`,`html:root body ${sm} :is(.n,.w,.l,.top1 b,.top1 small){color:${t}!important}`,`html:root:not([data-split]) body ${sd} :is(.n,.w,.l){color:${t}!important}`,`html:root[data-split] body ${sd} .lab{color:${t}!important}`);if(/gleitzeit|frei/.test(sel))css.push(`html:root[data-split] body ${sd}:not(.we-sa):not(.we-so):not(.zt) :is(.n,.w){color:${t}!important}`)};
   for(const k in C){const h=C[k];if(!/^#[0-9a-f]{6}$/i.test(h))continue;
     if(k==='zt')rule(':is(.d,.md).zt',h);
     else if(k==='we')rule(':is(.d,.md):is(.we-sa,.we-so):not(.zt)',h);
@@ -2345,7 +2345,7 @@ document.querySelectorAll('.kneedle').forEach((n,i)=>{const v=V[Math.floor(Math.
 })();
 
 (function(){
-  const VER="1.5.0",NEWS=["Hochgeladene Zeitnachweise werden jetzt als PDF auf diesem Gerät gespeichert. Im Prüfbericht und in der Auswertung öffnet der Button „Zeitnachweis“ das Original. Die PDFs sind auch im Backup enthalten. Bereits früher hochgeladene Nachweise bitte einmal neu hochladen."];
+  const VER="1.5.1",NEWS=["Korrektur: Bei eigenen Kachelfarben bleibt das Datum im Jahreskalender jetzt immer lesbar.","Hochgeladene Zeitnachweise werden jetzt als PDF auf diesem Gerät gespeichert. Im Prüfbericht und in der Auswertung öffnet der Button „Zeitnachweis“ das Original. Die PDFs sind auch im Backup enthalten. Bereits früher hochgeladene Nachweise bitte einmal neu hochladen."];
   const save=()=>{if(window.zkSave)return window.zkSave();try{localStorage.setItem('stundenkalender.v1',JSON.stringify(ST))}catch(e){}};
   const bar=document.createElement('div');bar.id='zkbar';bar.style.cssText='position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:60;max-width:min(560px,calc(100vw - 24px));padding:12px 14px;border-radius:14px;background:#16171a;color:#f4f3f0;box-shadow:0 10px 30px rgba(0,0,0,.35);font-size:14px;line-height:1.45;display:none';
   document.body.appendChild(bar);
