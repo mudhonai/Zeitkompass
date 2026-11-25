@@ -837,11 +837,21 @@ html[data-dark] .sftog:has(input:checked){color:#3a2c00!important;background:#FF
 html[data-dark] .tip .tip-sf{color:#FFE066}
 </style>
 <style id="pdfview">
-#pdfwin{z-index:60}
-#pdfwin .pv{width:min(980px,100%)}
-#pdfwin .pv-pages{display:flex;flex-direction:column;gap:12px}
-#pdfwin .pv-pg{display:block;background:#fff;border-radius:6px;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+#pdfwin{position:fixed;inset:0;z-index:60;pointer-events:none}
+#pdfwin .pv{position:absolute;pointer-events:auto;display:flex;flex-direction:column;max-height:none;max-width:none;overflow:hidden;padding:14px 16px 16px;box-shadow:0 24px 60px -20px rgba(0,0,0,.55),0 0 0 1px rgba(0,0,0,.08)}
+#pdfwin .pv .fw-head{cursor:grab;touch-action:none;user-select:none;margin-bottom:10px;position:relative;padding-top:8px;flex:none}
+#pdfwin .pv .fw-head::before{content:"";position:absolute;top:0;left:50%;width:42px;height:4px;margin-left:-21px;border-radius:3px;background:currentColor;opacity:.25}
+#pdfwin.drag .pv .fw-head{cursor:grabbing}
+#pdfwin .pv .fw-head h2{font-size:calc(15px*var(--fs,1))}
+#pdfwin .pv-pages{flex:1;min-height:0;overflow:auto;display:flex;flex-direction:column;gap:12px}
+#pdfwin .pv-pg{display:block;width:100%;height:auto;background:#fff;border-radius:6px;box-shadow:0 2px 10px rgba(0,0,0,.18)}
 #pdfwin a.btn{text-decoration:none;display:inline-flex;align-items:center}
+#pdfwin .pv-rs{position:absolute;bottom:0;width:22px;height:22px;touch-action:none;z-index:2}
+#pdfwin .pv-rs.l{left:0;cursor:nesw-resize}#pdfwin .pv-rs.r{right:0;cursor:nwse-resize}
+#pdfwin .pv-rs::after{content:"";position:absolute;bottom:5px;width:10px;height:10px;opacity:.45;border-bottom:2px solid currentColor}
+#pdfwin .pv-rs.r::after{right:5px;border-right:2px solid currentColor}
+#pdfwin .pv-rs.l::after{left:5px;border-left:2px solid currentColor}
+#pdfwin.drag *{user-select:none}
 </style>
 </head>
 <body>
@@ -868,7 +878,7 @@ html[data-dark] .tip .tip-sf{color:#FFE066}
   <section class="today glass" id="today" aria-label="Heute"></section>
   <section class="pegel glass" id="pegel" aria-label="Stundenkonto"></section>
   <main id="main"></main>
-  <p class="copy">© 2026 Marc Simon · <a href="#" data-disc="open" style="color:inherit">Hinweis</a> · <a href="#" data-news="open" style="color:inherit">Version 1.5.2</a></p>
+  <p class="copy">© 2026 Marc Simon · <a href="#" data-disc="open" style="color:inherit">Hinweis</a> · <a href="#" data-news="open" style="color:inherit">Version 1.5.3</a></p>
 </div>
 <aside class="drawer glass" id="drawer" aria-hidden="true" aria-label="Tag bearbeiten"></aside>
 <div class="rangebar glass" id="rangebar" hidden></div>
@@ -2345,7 +2355,7 @@ document.querySelectorAll('.kneedle').forEach((n,i)=>{const v=V[Math.floor(Math.
 })();
 
 (function(){
-  const VER="1.5.2",NEWS=["Korrektur: Bei eigenen Kachelfarben bleibt das Datum im Jahreskalender schwarz auf weißem Grund, mit Übergang zur gewählten Farbe.","Hochgeladene Zeitnachweise werden jetzt als PDF auf diesem Gerät gespeichert. Im Prüfbericht und in der Auswertung öffnet der Button „Zeitnachweis“ das Original. Die PDFs sind auch im Backup enthalten. Bereits früher hochgeladene Nachweise bitte einmal neu hochladen."];
+  const VER="1.5.3",NEWS=["Das Fenster mit dem Zeitnachweis lässt sich jetzt am Kopf verschieben und an den unteren Ecken links und rechts größer oder kleiner ziehen.","Korrektur: Bei eigenen Kachelfarben bleibt das Datum im Jahreskalender schwarz auf weißem Grund, mit Übergang zur gewählten Farbe.","Hochgeladene Zeitnachweise werden jetzt als PDF auf diesem Gerät gespeichert. Im Prüfbericht und in der Auswertung öffnet der Button „Zeitnachweis“ das Original. Die PDFs sind auch im Backup enthalten. Bereits früher hochgeladene Nachweise bitte einmal neu hochladen."];
   const save=()=>{if(window.zkSave)return window.zkSave();try{localStorage.setItem('stundenkalender.v1',JSON.stringify(ST))}catch(e){}};
   const bar=document.createElement('div');bar.id='zkbar';bar.style.cssText='position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:60;max-width:min(560px,calc(100vw - 24px));padding:12px 14px;border-radius:14px;background:#16171a;color:#f4f3f0;box-shadow:0 10px 30px rgba(0,0,0,.35);font-size:14px;line-height:1.45;display:none';
   document.body.appendChild(bar);
@@ -2462,16 +2472,26 @@ document.querySelectorAll('.kneedle').forEach((n,i)=>{const v=V[Math.floor(Math.
   function close(){if(W)W.hidden=true;if(url){URL.revokeObjectURL(url);url=null}const c=W&&W.querySelector('.pv-pages');if(c)c.innerHTML=''}
   async function show(y,m){
     const v=await zkPdfGet(y,m);if(!v||!v.data)return;
-    if(!W){W=document.createElement('div');W.className='modal';W.id='pdfwin';W.hidden=true;
-      W.innerHTML='<div class="sheet glass pv"><div class="fw-head"><h2 style="margin:0" class="pv-t"></h2><div class="fw-act"><a class="btn pv-dl" download>Herunterladen</a><button class="btn icon ghost pv-x" aria-label="Schließen">✕</button></div></div><div class="pv-pages"></div></div>';
-      document.body.appendChild(W);W.addEventListener('click',ev=>{if(ev.target===W||ev.target.closest('.pv-x'))close()});
+    if(!W){W=document.createElement('div');W.id='pdfwin';W.hidden=true;
+      W.innerHTML='<div class="sheet glass pv"><div class="fw-head"><h2 style="margin:0" class="pv-t"></h2><div class="fw-act"><a class="btn pv-dl" download>Herunterladen</a><button class="btn icon ghost pv-x" aria-label="Schließen">✕</button></div></div><div class="pv-pages"></div><span class="pv-rs l" title="Größe ändern"></span><span class="pv-rs r" title="Größe ändern"></span></div>';
+      document.body.appendChild(W);W.addEventListener('click',ev=>{if(ev.target.closest('.pv-x'))close()});
+      const P=W.querySelector('.pv');let st=null;
+      const box0=()=>{const w=Math.min(900,innerWidth-40),hh=innerHeight-40;P.style.width=w+'px';P.style.height=hh+'px';P.style.left=Math.round((innerWidth-w)/2)+'px';P.style.top='20px'};box0();W._reset=box0;
+      P.addEventListener('pointerdown',ev=>{const rs=ev.target.closest('.pv-rs'),hd=ev.target.closest('.fw-head');if(!rs&&(!hd||ev.target.closest('button,a')))return;if(ev.pointerType==='mouse'&&ev.button!==0)return;
+        const r=P.getBoundingClientRect();st={mode:rs?(rs.classList.contains('l')?'l':'r'):'m',x:ev.clientX,y:ev.clientY,l:r.left,t:r.top,w:r.width,h:r.height,id:ev.pointerId};W.classList.add('drag');try{ev.target.setPointerCapture(ev.pointerId)}catch(e){}ev.preventDefault()});
+      document.addEventListener('pointermove',ev=>{if(!st||ev.pointerId!==st.id)return;const dx=ev.clientX-st.x,dy=ev.clientY-st.y,MW=320,MH=240;
+        if(st.mode==='m'){const l=Math.max(0,Math.min(innerWidth-st.w,st.l+dx)),t=Math.max(0,Math.min(innerHeight-MH,st.t+dy));P.style.left=l+'px';P.style.top=t+'px';P.style.height=Math.max(MH,Math.min(st.h,innerHeight-t-6))+'px'}
+        else{const hh=Math.max(MH,Math.min(innerHeight-st.t,st.h+dy));P.style.height=hh+'px';
+          if(st.mode==='r'){P.style.width=Math.max(MW,Math.min(innerWidth-st.l,st.w+dx))+'px'}
+          else{const w=Math.max(MW,Math.min(st.l+st.w,st.w-dx));P.style.width=w+'px';P.style.left=(st.l+st.w-w)+'px'}}});
+      const end=ev=>{if(st&&ev.pointerId===st.id){st=null;W.classList.remove('drag')}};document.addEventListener('pointerup',end);document.addEventListener('pointercancel',end);
       W.querySelector('.pv-dl').addEventListener('click',async ev=>{try{if(window.claude&&window.claude.use){const dl=await window.claude.use('downloads');if(dl){ev.preventDefault();const r=await fetch(url);await dl.save({filename:W.querySelector('.pv-dl').download,data:await r.blob()})}}}catch(e){}});
       document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&W&&!W.hidden){ev.stopImmediatePropagation();close()}},true)}
-    close();W.querySelector('.pv-t').textContent='Zeitnachweis '+MON[m]+' '+y;
+    const wasOpen=!W.hidden;close();if(!wasOpen&&W._reset)W._reset();W.querySelector('.pv-t').textContent='Zeitnachweis '+MON[m]+' '+y;
     url=URL.createObjectURL(new Blob([v.data],{type:'application/pdf'}));const a=W.querySelector('.pv-dl');a.href=url;a.download=v.name||('Zeitnachweis-'+y+'-'+String(+m+1).padStart(2,'0')+'.pdf');
     const box=W.querySelector('.pv-pages');box.innerHTML='<p class="hint-line">Wird geladen …</p>';W.hidden=false;
     try{const L=await window.zkLoadPdf();const doc=await L.getDocument({data:new Uint8Array(v.data.slice(0))}).promise;box.innerHTML='';
-      const wAvail=Math.max(300,box.clientWidth||900),dpr=window.devicePixelRatio||1;
+      const wAvail=Math.max(900,box.clientWidth||900),dpr=window.devicePixelRatio||1;
       for(let p=1;p<=doc.numPages;p++){const pg=await doc.getPage(p),v1=pg.getViewport({scale:1}),sc=wAvail/v1.width,vp=pg.getViewport({scale:sc*dpr});
         const c=document.createElement('canvas');c.width=vp.width;c.height=vp.height;c.style.width='100%';c.className='pv-pg';box.appendChild(c);
         await pg.render({canvasContext:c.getContext('2d'),viewport:vp}).promise}
