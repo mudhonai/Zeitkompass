@@ -836,6 +836,13 @@ html[data-dark] .sftog:has(input:checked){color:#3a2c00!important;background:#FF
 .tip .tip-sf{color:#9a7400;font-weight:600}
 html[data-dark] .tip .tip-sf{color:#FFE066}
 </style>
+<style id="pdfview">
+#pdfwin{z-index:60}
+#pdfwin .pv{width:min(980px,100%)}
+#pdfwin .pv-pages{display:flex;flex-direction:column;gap:12px}
+#pdfwin .pv-pg{display:block;background:#fff;border-radius:6px;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+#pdfwin a.btn{text-decoration:none;display:inline-flex;align-items:center}
+</style>
 </head>
 <body>
 <div class="aurora" aria-hidden="true"></div>
@@ -861,7 +868,7 @@ html[data-dark] .tip .tip-sf{color:#FFE066}
   <section class="today glass" id="today" aria-label="Heute"></section>
   <section class="pegel glass" id="pegel" aria-label="Stundenkonto"></section>
   <main id="main"></main>
-  <p class="copy">© 2026 Marc Simon · <a href="#" data-disc="open" style="color:inherit">Hinweis</a> · <a href="#" data-news="open" style="color:inherit">Version 1.4.4</a></p>
+  <p class="copy">© 2026 Marc Simon · <a href="#" data-disc="open" style="color:inherit">Hinweis</a> · <a href="#" data-news="open" style="color:inherit">Version 1.5.0</a></p>
 </div>
 <aside class="drawer glass" id="drawer" aria-hidden="true" aria-label="Tag bearbeiten"></aside>
 <div class="rangebar glass" id="rangebar" hidden></div>
@@ -1506,7 +1513,7 @@ function renderAbgleich(C){
     if(o&&o.soll!=null){const comps=[['Soll',M.soll,o.soll],['Ist Mo–Sa',M.istMoSa,o.ist],['Mehrarbeit',M.mz,o.mz],['Samstag',M.z.sa,o.sa],['Sonntagsstunden',M.soH,o.soH],['Sonntag',M.z.so,o.so],['Feiertagsstunden',M.ftH,o.ftH],['Feiertag',M.z.ft,o.ft],['Nacht',M.z.na,o.na]].filter(c=>Math.abs((c[1]||0)-(c[2]||0))>=1.5/60);
       det=comps.length?comps.map(c=>c[0]+' '+(((c[1]||0)-(c[2]||0))>0?'+':'')+fhm((c[1]||0)-(c[2]||0))).join(', '):'Alle Positionen stimmen'}
     const ok=diff!=null&&Math.abs(diff)<1.5/60;
-    rows+=`<tr><td>${MON[m]}</td><td>${fhm(M.creditCalc!=null?M.creditCalc:M.credit)}</td><td><input type="text" data-off="${m}" value="${off!=null?fhm(off).replace('−','-'):''}" placeholder="hh:mm" style="width:84px;text-align:right" aria-label="Saldo laut Zeitnachweis ${MON[m]}"></td><td class="${diff==null?'':ok?'pos':'neg'}">${diff==null?'':ok?'stimmt':(diff>0?'+':'')+fhm(diff)}</td><td style="text-align:left;white-space:normal;color:var(--ink2)">${o&&o.src==='pdf'?'Aus PDF: ':''}${det}</td><td>${o&&o.soll!=null?`<button class="btn sm" data-act="rpt-open" data-y="${UI.year}" data-m="${m}">Prüfbericht</button>`:''}</td></tr>`}
+    rows+=`<tr><td>${MON[m]}</td><td>${fhm(M.creditCalc!=null?M.creditCalc:M.credit)}</td><td><input type="text" data-off="${m}" value="${off!=null?fhm(off).replace('−','-'):''}" placeholder="hh:mm" style="width:84px;text-align:right" aria-label="Saldo laut Zeitnachweis ${MON[m]}"></td><td class="${diff==null?'':ok?'pos':'neg'}">${diff==null?'':ok?'stimmt':(diff>0?'+':'')+fhm(diff)}</td><td style="text-align:left;white-space:normal;color:var(--ink2)">${o&&o.src==='pdf'?'Aus PDF: ':''}${det}</td><td>${o&&o.soll!=null?`<button class="btn sm" data-act="rpt-open" data-y="${UI.year}" data-m="${m}">Prüfbericht</button> <button class="btn sm" data-act="zn-pdf" data-y="${UI.year}" data-m="${m}" hidden>Zeitnachweis</button>`:''}</td></tr>`}
   return `<div class="panel glass" style="margin-top:14px"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px"><h2 class="sec" style="margin:0">Abgleich mit Zeitnachweis</h2><button class="btn primary" data-act="zn-import">Zeitnachweis-PDF laden</button></div>
    ${UI.znMsg?`<div class="note has-x ${UI.znMsg.cls}" style="margin-bottom:10px">${UI.znMsg.html}<button class="x" data-act="zn-close" aria-label="Schließen">✕</button></div>`:''}
    <div class="tscroll"><table><thead><tr><th>Monat</th><th>Saldo Kalender</th><th>Saldo Zeitnachweis</th><th>Abweichung</th><th style="text-align:left">Details</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>
@@ -1569,7 +1576,7 @@ function buildReport(y,m){
 const RLV={ok:['✓','Stimmt'],hinweis:['i','Hinweis'],pruefen:['!','Prüfen'],info:['·','Info']};
 function openReport(y,m){const R=buildReport(y,m);if(!R)return;UI.rpt={y,m};
   $('#rptsheet').innerHTML=`<div class="fw-head"><div><h2 style="margin:0">Prüfbericht Zeitnachweis ${MON[m]} ${y}</h2><div class="rp-faz ${R.nP?'p':R.nH?'h':'o'}">${R.fazit}</div></div>
-   <div class="fw-act"><button class="btn primary" data-act="rpt-pdf">Als PDF speichern</button><button class="btn icon ghost" data-act="rpt-close" aria-label="Schließen">✕</button></div></div>
+   <div class="fw-act"><button class="btn" data-act="zn-pdf" data-y="${y}" data-m="${m}" hidden>Zeitnachweis anzeigen</button><button class="btn primary" data-act="rpt-pdf">Als PDF speichern</button><button class="btn icon ghost" data-act="rpt-close" aria-label="Schließen">✕</button></div></div>
    <div class="fw-scroll"><table class="fw-t rp-t"><tbody>${R.items.map(i=>`<tr class="rp-${i.lvl}"><td class="rp-b"><span>${RLV[i.lvl][0]}</span></td><td><b>${esc(i.title)}</b><div>${esc(i.detail)}</div>${i.expl?`<small>${esc(i.expl)}</small>`:''}</td></tr>`).join('')}</tbody></table></div>
    <div class="hint-line">Nachgerechnet aus den Tageszeilen des Zeitnachweises mit den Regeln des Zeitkompass. Verbindlich ist der Zeitnachweis. Alle Angaben ohne Gewähr. Unklare Punkte vor der Freigabe mit dem Personalbetreuer klären.</div>`;
   $('#rptwin').hidden=false}
@@ -2119,7 +2126,7 @@ document.addEventListener('click',ev=>{
     case'plan-one':{if(UI.plan){const p=UI.plan.props[+b.dataset.i];if(p)askConfirm([{k:p.k,t13:!!p.fix}],`Vorschlag: ${fd(p.k)} als ${p.fix?'13.T':'JÜP'} setzen.`,true)}break}
     case'fair-add':{const id='m'+Date.now().toString(36);ST.fairs.push({id,k:'NEU',name:'Neue Messe'});save();renderSettings();break}
     case'fair-del':{const id=b.dataset.id,used=Object.values(ST.years).some(Y=>Object.values(Y.entries).some(e=>e.f===id));if(used&&!confirm('Diese Messe ist Tagen zugeordnet. Trotzdem entfernen? Die Tage behalten ihre Tagesart.'))break;ST.fairs=ST.fairs.filter(f=>f.id!==id);Object.values(ST.years).forEach(Y=>Object.values(Y.entries).forEach(e=>{if(e.f===id)delete e.f}));invalidate();save();renderSettings();render();break}
-    case'export-json':download('zeitkompass-backup-'+todayK+'.json',JSON.stringify(ST,null,1),'application/json');ST.settings.lastBackup=todayK;save();renderToday();if(!$('#settings').hidden)renderSettings();break;
+    case'export-json':(async()=>{let o=ST;try{const P=window.zkPdfAll?await zkPdfAll():null;if(P&&Object.keys(P).length)o=Object.assign({},ST,{pdfs:P})}catch(e){}download('zeitkompass-backup-'+todayK+'.json',JSON.stringify(o,null,1),'application/json')})();ST.settings.lastBackup=todayK;save();renderToday();if(!$('#settings').hidden)renderSettings();break;
     case'export-ics':download('zeitkompass-'+UI.year+'.ics',ics(UI.year),'text/calendar');break;
     case'review':openReview(+b.dataset.y||UI.year);break;
     case'rv-close':$('#revwin').hidden=true;break;
@@ -2134,7 +2141,7 @@ document.addEventListener('click',ev=>{
 });
 $('#importFile').addEventListener('change',ev=>{
   const f=ev.target.files[0];if(!f)return;const r=new FileReader();
-  r.onload=()=>{try{const s=JSON.parse(r.result);if(!s.years||!s.settings)throw 0;ST=normalize(s);invalidate();save();applyTheme();renderSettings();render()}catch(e){alert('Die Datei ist kein gültiges Backup des Zeitkompass.')}};
+  r.onload=()=>{try{const s=JSON.parse(r.result);if(!s.years||!s.settings)throw 0;const P=s.pdfs;delete s.pdfs;ST=normalize(s);delete ST.pdfs;if(P&&window.zkPdfPutAll)zkPdfPutAll(P);invalidate();save();applyTheme();renderSettings();render()}catch(e){alert('Die Datei ist kein gültiges Backup des Zeitkompass.')}};
   r.readAsText(f);ev.target.value='';
 });
 
@@ -2197,6 +2204,7 @@ window.addEventListener('resize',()=>{if(DP)dpClose()});
 /* Zeitnachweis-Import */
 let pdfjsP=null;
 function loadPdfJs(){if(window.pdfjsLib)return Promise.resolve(window.pdfjsLib);if(pdfjsP)return pdfjsP;pdfjsP=new Promise((res,rej)=>{const sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';sc.onload=()=>{const L=window.pdfjsLib||window['pdfjs-dist/build/pdf'];if(!L){rej(new Error('PDF-Bibliothek fehlt'));return}L.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';res(L)};sc.onerror=()=>{pdfjsP=null;rej(new Error('PDF-Bibliothek konnte nicht geladen werden'))};document.head.appendChild(sc)});return pdfjsP}
+window.zkLoadPdf=()=>loadPdfJs();
 async function pdfItems(file){const L=await loadPdfJs();const doc=await L.getDocument({data:new Uint8Array(await file.arrayBuffer())}).promise;const out=[];for(let p=1;p<=doc.numPages;p++){const pg=await doc.getPage(p);const tc=await pg.getTextContent();tc.items.forEach(it=>{if(it.str!=null)out.push({s:it.str,x:it.transform[4],y:it.transform[5],w:it.width||0,p})})}return out}
 function applyZN(z){
   const Y=yearData(z.y);Y.official=Y.official||{};Y.official[z.m]=Object.assign({},z.sum,{fz:Object.assign({},z.fz||{}),src:'pdf',at:Date.now()});
@@ -2234,7 +2242,7 @@ async function importZN(files){
   const msgs=[];let lastZ=null;const parsed=[];
   for(const f of files){try{parsed.push({f,z:parseZN(await pdfItems(f))})}catch(e){msgs.push(`<b>${esc(f.name)}:</b> ${esc(e.message||'Konnte nicht gelesen werden')}.`)}}
   parsed.sort((a,b)=>(a.z.y*12+a.z.m)-(b.z.y*12+b.z.m));
-  for(const {f,z} of parsed){try{applyZN(z);lastZ=z;const C=computeYear(z.y),M=C.months[z.m],off=z.sum.saldo,diff=off!=null?M.creditCalc-off:null;
+  for(const {f,z} of parsed){try{applyZN(z);lastZ=z;try{window.zkPdfPut&&zkPdfPut(z.y,z.m,f)}catch(e){}const C=computeYear(z.y),M=C.months[z.m],off=z.sum.saldo,diff=off!=null?M.creditCalc-off:null;
       msgs.push({z})}
     catch(e){msgs.push(`<b>${esc(f.name)}:</b> ${esc(e.message||'Konnte nicht gelesen werden')}.`)}}
   save();
@@ -2337,7 +2345,7 @@ document.querySelectorAll('.kneedle').forEach((n,i)=>{const v=V[Math.floor(Math.
 })();
 
 (function(){
-  const VER="1.4.4",NEWS=["Schulferien NRW lassen sich einblenden: Mit dem gelben Schalter „Schulferien NRW“ rechts in der Legende unter dem Jahreskalender. Ferientage bekommen dann unten einen gelben Streifen, der Name steht im Tooltip. Standardmäßig ausgeblendet.","Das Tagesfenster lässt sich mit der Maus verschieben: oben am Kopf mit dem Datum anfassen und ziehen."];
+  const VER="1.5.0",NEWS=["Hochgeladene Zeitnachweise werden jetzt als PDF auf diesem Gerät gespeichert. Im Prüfbericht und in der Auswertung öffnet der Button „Zeitnachweis“ das Original. Die PDFs sind auch im Backup enthalten. Bereits früher hochgeladene Nachweise bitte einmal neu hochladen."];
   const save=()=>{if(window.zkSave)return window.zkSave();try{localStorage.setItem('stundenkalender.v1',JSON.stringify(ST))}catch(e){}};
   const bar=document.createElement('div');bar.id='zkbar';bar.style.cssText='position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:60;max-width:min(560px,calc(100vw - 24px));padding:12px 14px;border-radius:14px;background:#16171a;color:#f4f3f0;box-shadow:0 10px 30px rgba(0,0,0,.35);font-size:14px;line-height:1.45;display:none';
   document.body.appendChild(bar);
@@ -2431,6 +2439,45 @@ document.querySelectorAll('.kneedle').forEach((n,i)=>{const v=V[Math.floor(Math.
   const tip=document.getElementById('tip');
   if(tip)new MutationObserver(()=>{if(!on||!hk||tip.hidden||tip.querySelector('.tip-sf'))return;const n=sfName(hk);if(n){const d=document.createElement('div');d.className='tip-sf';d.textContent=n+' NRW';tip.appendChild(d)}}).observe(tip,{childList:true,attributes:true,attributeFilter:['hidden']});
   deco();
+})();
+</script>
+<script>
+/* Original-Zeitnachweise (PDF) im Browser dieses Geräts ablegen und anzeigen */
+(function(){
+  const DBN='zeitkompass-pdf',ST_='zn';let dbP=null;const keys=new Set();
+  function db(){if(dbP)return dbP;dbP=new Promise((res,rej)=>{try{const r=indexedDB.open(DBN,1);r.onupgradeneeded=()=>r.result.createObjectStore(ST_);r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}catch(e){rej(e)}});return dbP}
+  function tx(mode,fn){return db().then(d=>new Promise((res,rej)=>{const t=d.transaction(ST_,mode),s=t.objectStore(ST_);let out;const r=fn(s);if(r)r.onsuccess=()=>{out=r.result};t.oncomplete=()=>res(out);t.onerror=()=>rej(t.error)}))}
+  const K=(y,m)=>y+'-'+m;
+  const b64=buf=>{let s='';const u=new Uint8Array(buf);for(let i=0;i<u.length;i+=0x8000)s+=String.fromCharCode.apply(null,u.subarray(i,i+0x8000));return btoa(s)};
+  const unb64=s=>{const b=atob(s),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u.buffer};
+  window.zkPdfPut=async function(y,m,file){const buf=await file.arrayBuffer();await tx('readwrite',s=>s.put({name:file.name,at:new Date().toISOString(),data:buf},K(y,m)));keys.add(K(y,m));refresh()};
+  window.zkPdfGet=(y,m)=>tx('readonly',s=>s.get(K(y,m)));
+  window.zkPdfAll=async function(){const out={};const ks=await tx('readonly',s=>s.getAllKeys());for(const k of ks||[]){const v=await tx('readonly',s=>s.get(k));if(v&&v.data)out[k]={name:v.name,at:v.at,b64:b64(v.data)}}return out};
+  window.zkPdfPutAll=async function(P){for(const k of Object.keys(P||{})){const v=P[k];if(!v||!v.b64)continue;try{await tx('readwrite',s=>s.put({name:v.name,at:v.at,data:unb64(v.b64)},k));keys.add(k)}catch(e){}}refresh()};
+  tx('readonly',s=>s.getAllKeys()).then(ks=>{(ks||[]).forEach(k=>keys.add(k));refresh()}).catch(()=>{});
+  function refresh(){document.querySelectorAll('[data-act="zn-pdf"]').forEach(b=>{const on=keys.has(K(b.dataset.y,b.dataset.m));if(b.hidden===on)b.hidden=!on})}
+  let q=false;new MutationObserver(()=>{if(q)return;q=true;requestAnimationFrame(()=>{q=false;refresh()})}).observe(document.body,{childList:true,subtree:true});
+  const MON=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+  let W=null,url=null;
+  function close(){if(W)W.hidden=true;if(url){URL.revokeObjectURL(url);url=null}const c=W&&W.querySelector('.pv-pages');if(c)c.innerHTML=''}
+  async function show(y,m){
+    const v=await zkPdfGet(y,m);if(!v||!v.data)return;
+    if(!W){W=document.createElement('div');W.className='modal';W.id='pdfwin';W.hidden=true;
+      W.innerHTML='<div class="sheet glass pv"><div class="fw-head"><h2 style="margin:0" class="pv-t"></h2><div class="fw-act"><a class="btn pv-dl" download>Herunterladen</a><button class="btn icon ghost pv-x" aria-label="Schließen">✕</button></div></div><div class="pv-pages"></div></div>';
+      document.body.appendChild(W);W.addEventListener('click',ev=>{if(ev.target===W||ev.target.closest('.pv-x'))close()});
+      W.querySelector('.pv-dl').addEventListener('click',async ev=>{try{if(window.claude&&window.claude.use){const dl=await window.claude.use('downloads');if(dl){ev.preventDefault();const r=await fetch(url);await dl.save({filename:W.querySelector('.pv-dl').download,data:await r.blob()})}}}catch(e){}});
+      document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&W&&!W.hidden){ev.stopImmediatePropagation();close()}},true)}
+    close();W.querySelector('.pv-t').textContent='Zeitnachweis '+MON[m]+' '+y;
+    url=URL.createObjectURL(new Blob([v.data],{type:'application/pdf'}));const a=W.querySelector('.pv-dl');a.href=url;a.download=v.name||('Zeitnachweis-'+y+'-'+String(+m+1).padStart(2,'0')+'.pdf');
+    const box=W.querySelector('.pv-pages');box.innerHTML='<p class="hint-line">Wird geladen …</p>';W.hidden=false;
+    try{const L=await window.zkLoadPdf();const doc=await L.getDocument({data:new Uint8Array(v.data.slice(0))}).promise;box.innerHTML='';
+      const wAvail=Math.max(300,box.clientWidth||900),dpr=window.devicePixelRatio||1;
+      for(let p=1;p<=doc.numPages;p++){const pg=await doc.getPage(p),v1=pg.getViewport({scale:1}),sc=wAvail/v1.width,vp=pg.getViewport({scale:sc*dpr});
+        const c=document.createElement('canvas');c.width=vp.width;c.height=vp.height;c.style.width='100%';c.className='pv-pg';box.appendChild(c);
+        await pg.render({canvasContext:c.getContext('2d'),viewport:vp}).promise}
+    }catch(e){box.innerHTML='<p class="hint-line">Das PDF konnte hier nicht angezeigt werden. Über „Herunterladen“ lässt es sich trotzdem öffnen.</p>'}
+  }
+  document.addEventListener('click',ev=>{const b=ev.target.closest&&ev.target.closest('[data-act="zn-pdf"]');if(!b)return;ev.preventDefault();ev.stopImmediatePropagation();show(+b.dataset.y,+b.dataset.m)},true);
 })();
 </script>
 <script>
