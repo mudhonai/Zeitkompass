@@ -835,7 +835,7 @@ html[data-bg="xtropen"] .bgl,html[data-bg="xtropen"] .bgprev{background-image:va
   <section class="today glass" id="today" aria-label="Heute"></section>
   <section class="pegel glass" id="pegel" aria-label="Stundenkonto"></section>
   <main id="main"></main>
-  <p class="copy">© 2026 Marc Simon · <a href="#" data-disc="open" style="color:inherit">Hinweis</a></p>
+  <p class="copy">© 2026 Marc Simon · <a href="#" data-disc="open" style="color:inherit">Hinweis</a> · <a href="#" data-news="open" style="color:inherit">Version 24.11.2026</a></p>
 </div>
 <aside class="drawer glass" id="drawer" aria-hidden="true" aria-label="Tag bearbeiten"></aside>
 <div class="rangebar glass" id="rangebar" hidden></div>
@@ -1109,6 +1109,7 @@ function parseZN(items){
       else if(/Zuschl\S*ge f\S*r Nacht/.test(t))sum.na=v;
       else if(/Rufbereitschaft/.test(t))sum.ruf=v;
       else if(/^Saldo\s+-?\d/.test(t))sum.saldo=v;
+      else if(/^Saldo Vormonat/.test(t))sum.svm=v;
       else if(/Pauschale Vormonat/.test(t))sum.pvm=v;
       else if(/Pauschale Anpassung/.test(t))sum.pan=v;
       else if(/Pauschale Vortrag/.test(t))sum.pvf=v;
@@ -2170,7 +2171,7 @@ let pdfjsP=null;
 function loadPdfJs(){if(window.pdfjsLib)return Promise.resolve(window.pdfjsLib);if(pdfjsP)return pdfjsP;pdfjsP=new Promise((res,rej)=>{const sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';sc.onload=()=>{const L=window.pdfjsLib||window['pdfjs-dist/build/pdf'];if(!L){rej(new Error('PDF-Bibliothek fehlt'));return}L.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';res(L)};sc.onerror=()=>{pdfjsP=null;rej(new Error('PDF-Bibliothek konnte nicht geladen werden'))};document.head.appendChild(sc)});return pdfjsP}
 async function pdfItems(file){const L=await loadPdfJs();const doc=await L.getDocument({data:new Uint8Array(await file.arrayBuffer())}).promise;const out=[];for(let p=1;p<=doc.numPages;p++){const pg=await doc.getPage(p);const tc=await pg.getTextContent();tc.items.forEach(it=>{if(it.str!=null)out.push({s:it.str,x:it.transform[4],y:it.transform[5],w:it.width||0,p})})}return out}
 function applyZN(z){
-  const Y=yearData(z.y);Y.official=Y.official||{};Y.official[z.m]=Object.assign({},z.sum,{src:'pdf',at:Date.now()});
+  const Y=yearData(z.y);Y.official=Y.official||{};Y.official[z.m]=Object.assign({},z.sum,{fz:Object.assign({},z.fz||{}),src:'pdf',at:Date.now()});
   for(const d in z.days){const x=z.days[d],k=K(z.y,z.m,+d);if(+k.slice(5,7)-1!==z.m)continue;const prev=stored(k)||{t:defType(k)},txt=x.text.join(' ');let e;
     if(/Krank|Kur\b|Reha/i.test(txt))e={t:'krank'};
     else if(/Urlaub/i.test(txt))e={t:'urlaub'};
@@ -2180,12 +2181,33 @@ function applyZN(z){
     if(prev.n)e.n=prev.n;e.ist=1;{const oi=x.segs.length?x.ist:x.absIst;if(oi!=null)e.oi=oi}Y.entries[k]=e;}
   invalidate();
 }
+function znExplain(z,C){
+  const M=C.months[z.m],off=z.sum.saldo;if(off==null)return 'kein Saldo gefunden';
+  const diff=M.creditCalc-off;if(Math.abs(diff)<3/60)return 'stimmt';
+  const parts=[];let rest=diff,fza=0;
+  for(const k in C.days)if(k.startsWith(z.y+'-'+pad(z.m+1)))fza+=C.days[k].fza||0;
+  const avail=Math.max(0,M.konto+M.fromKonto-M.toKonto),unc=Math.max(0,fza-avail);
+  if(unc>0.05&&rest>0.05){const u=Math.min(unc,rest);parts.push(avail<0.05?`${fhm(u)} h JÜP ohne Deckung: Du hast ${fhm(fza)} h JÜP genommen, hattest aber keinen Freizeitanspruch mehr. Der Nachweis zählt diese Stunden als Minus`:`${fhm(u)} h JÜP ohne Deckung: Du hast ${fhm(fza)} h JÜP genommen, hattest aber nur ${fhm(avail)} h Freizeitanspruch. Den Rest zählt der Nachweis als Minusstunden`);rest-=u}
+  const svm=z.sum.svm,mzD=M.mz-(z.sum.mz||0);
+  if(svm!=null&&svm<0&&mzD>0.05&&rest>0.05){const d=Math.min(mzD,rest);parts.push(`${fhm(d)} h Mehrarbeitszuschlag entfallen, weil zuerst das Minus aus ${MON[(z.m+11)%12]} (${fhm(-svm)} h) ausgeglichen wird`);rest-=d}
+  if(Math.abs(rest)>=3/60)parts.push(`${fhm(Math.abs(rest))} h ${rest>0?'weniger':'mehr'} im Nachweis ohne eindeutige Ursache. Welche Tage abweichen, steht im Prüfbericht. Nur bei größeren Beträgen beim Personalbetreuer nachfragen`);
+  return `Unterschied ${fhm(Math.abs(diff))} h. ${parts.length===1&&Math.abs(rest)<3/60?'Grund':'Gründe'}: ${parts.join('; ')}. Das ist ${Math.abs(rest)<3/60?'korrekt so':'meist kein Fehler'}, der Zeitkompass rechnet mit dem Nachweis weiter`;
+}
+function znKontoCheck(z){
+  const O=((ST.years[z.y]||{}).official||{})[z.m];if(!O)return '';
+  const lots=Object.values(O.fz||z.fz||{}),offS=sum(lots.map(parseH)),appK=computeYear(z.y).months[z.m].konto,d=appK-offS;
+  if(Math.abs(d)<0.1)return `<b>Freizeitkonto stimmt</b> mit dem Nachweis ${MON[z.m]} überein: ${fhm(offS)} h.`;
+  return `<b>Freizeitkonto weicht ab:</b> laut Nachweis ${MON[z.m]} ${fhm(offS)} h, im Zeitkompass ${fhm(appK)} h (Unterschied ${fhm(Math.abs(d))} h). Das passiert, wenn im Zeiterfassungssystem nachträglich korrigiert wurde, wenn der Startstand aus dem Vorjahr fehlt oder wenn der Nachweis eines Monats fehlt. Mit „Stand übernehmen“ rechnet der Zeitkompass ab ${MON[z.m]} mit dem Wert aus dem Nachweis weiter. <button class="btn sm" data-act="zn-adopt" data-y="${z.y}" data-m="${z.m}">Stand übernehmen</button>`;
+}
+document.addEventListener('click',ev=>{const b=ev.target.closest&&ev.target.closest('[data-act="zn-adopt"]');if(!b)return;const y=+b.dataset.y,m=+b.dataset.m,O=((ST.years[y]||{}).official||{})[m];if(!O)return;const S=ST.settings;
+  S.carryLots=Object.entries(O.fz||{}).map(([mm,hh])=>({m:mm,h:hh}));S.carryAsOf=y+'-'+pad(m+1);S.carryPool=O.pvf!=null?Math.max(0,Math.round((+S.pool-Math.abs(O.pvf))*100)/100):+S.pool;S.carryNote='Stand Zeitnachweis '+pad(dim(y,m))+'.'+pad(m+1)+'.'+y;invalidate();save();
+  UI.znMsg={cls:'g',html:`Stand aus dem Nachweis ${MON[m]} ${y} übernommen: Freizeitkonto ${fhm(sum(S.carryLots.map(l=>parseH(l.h))))} h. Ab hier rechnet der Zeitkompass mit diesem Wert weiter.`};render()});
 async function importZN(files){
   const msgs=[];let lastZ=null;const parsed=[];
   for(const f of files){try{parsed.push({f,z:parseZN(await pdfItems(f))})}catch(e){msgs.push(`<b>${esc(f.name)}:</b> ${esc(e.message||'Konnte nicht gelesen werden')}.`)}}
   parsed.sort((a,b)=>(a.z.y*12+a.z.m)-(b.z.y*12+b.z.m));
   for(const {f,z} of parsed){try{applyZN(z);lastZ=z;const C=computeYear(z.y),M=C.months[z.m],off=z.sum.saldo,diff=off!=null?M.creditCalc-off:null;
-      msgs.push(`<b>${MON[z.m]} ${z.y} importiert.</b> <button class="btn sm" data-act="rpt-open" data-y="${z.y}" data-m="${z.m}">Prüfbericht</button> Kalender ${fhm(M.creditCalc)}, Zeitnachweis ${fhm(off)}: ${diff==null?'kein Saldo gefunden':Math.abs(diff)<3/60?'stimmt':'Abweichung '+(diff>0?'+':'')+fhm(diff)+', es gilt der Zeitnachweis'}.`)}
+      msgs.push({z})}
     catch(e){msgs.push(`<b>${esc(f.name)}:</b> ${esc(e.message||'Konnte nicht gelesen werden')}.`)}}
   save();
   if(lastZ){UI.year=lastZ.y;UI.view='auswertung';
@@ -2197,7 +2219,9 @@ async function importZN(files){
         S.carryLots=l0;S.carryAsOf=fz0.y+'-'+pad(fz0.m+1);S.carryPool=Math.round(done*100)/100;S.carryNote='Stand Zeitnachweis '+pad(dim(fz0.y,fz0.m))+'.'+pad(fz0.m+1)+'.'+fz0.y;invalidate();save();
         msgs.push(`Startstand übernommen: Freizeitanspruch ${fh(sm)}, Pauschale erbracht ${fh(done)} (Stand ${MON[fz0.m]} ${fz0.y}).`)}}
     else if(lastZ.y===S.startYear-1&&Object.keys(lastZ.fz||{}).length&&confirm(`Freizeitanspruch aus ${MON[lastZ.m]} ${lastZ.y} als Übertrag ins Jahr ${S.startYear} übernehmen?`)){S.carryLots=lots;S.carryAsOf=lastZ.y+'-'+pad(lastZ.m+1);S.carryNote='Stand Zeitnachweis '+pad(dim(lastZ.y,lastZ.m))+'.'+pad(lastZ.m+1)+'.'+lastZ.y;invalidate();save();msgs.push('Übertrag für '+S.startYear+' aktualisiert: '+lots.map(l=>l.m.slice(5)+'/'+l.m.slice(0,4)+' '+l.h).join(', ')+'.')}}
-  UI.znMsg={cls:msgs.some(m=>/Abweichung|nicht/.test(m))?'w':'g',html:msgs.join('<br>')};render();
+  invalidate();for(let i=0;i<msgs.length;i++){const x=msgs[i];if(typeof x==='string')continue;const z=x.z,C=computeYear(z.y),M=C.months[z.m],off=z.sum.saldo;msgs[i]=`<b>${MON[z.m]} ${z.y} importiert.</b> <button class="btn sm" data-act="rpt-open" data-y="${z.y}" data-m="${z.m}">Prüfbericht</button> Kalender ${fhm(M.creditCalc)} h, Zeitnachweis ${fhm(off)} h: ${znExplain(z,C)}.`}
+  if(lastZ){const kc=znKontoCheck(lastZ);if(kc)msgs.push(kc)}
+  UI.znMsg={cls:msgs.some(m=>/weicht ab|ohne eindeutige|nicht/.test(m))?'w':'g',html:msgs.join('<br>')};render();
 }
 $('#znFile').addEventListener('change',ev=>{const fs=[...ev.target.files];ev.target.value='';if(fs.length){UI.znMsg={cls:'',html:'Lese Zeitnachweis …'};render();importZN(fs)}});
 document.addEventListener('change',ev=>{const sc=ev.target.closest&&ev.target.closest('[data-act-stich]');if(sc){UI.stich={y:UI.year,m:+sc.value};render();return}});
@@ -2282,6 +2306,25 @@ document.querySelectorAll('.kneedle').forEach((n,i)=>{const v=V[Math.floor(Math.
   function ensure(el){const [act,lbl]=M[el.id];if(el.querySelector(':scope>.sheet-fab')||!el.firstElementChild)return;const d=document.createElement('div');d.className='sheet-fab';d.innerHTML=`<button class="btn ghost" data-fab-top="1" aria-label="Nach oben">↑ Nach oben</button><button class="btn primary" data-act="${act}">${lbl}</button>`;el.appendChild(d);upd(el)}
   Object.keys(M).forEach(id=>{const el=document.getElementById(id);if(!el)return;new MutationObserver(()=>ensure(el)).observe(el,{childList:true});el.addEventListener('scroll',()=>upd(el),{passive:true});ensure(el)});
   document.addEventListener('click',ev=>{const t=ev.target.closest&&ev.target.closest('[data-fab-top]');if(!t)return;const el=t.closest('.sheet,.drawer');if(el)el.scrollTo({top:0,behavior:'smooth'})});
+})();
+
+(function(){
+  const VER="24.11.2026",NEWS=["Rechenkorrektur: JÜP ohne ausreichenden Freizeitanspruch wird nicht mehr doppelt abgezogen.", "Beim Hochladen der Zeitnachweise: Startstand aus dem ersten Nachweis übernehmen, Abgleich des Freizeitkontos und verständliche Erklärungen bei Unterschieden.", "Krank- und Urlaubstage aus dem Nachweis zählen mit dem dort ausgewiesenen Wert.", "Hinweis-Fenster, Fertig-Knopf in langen Fenstern, Notizen im Tooltip hervorgehoben, 20 neue Hintergründe."];
+  const save=()=>{if(window.zkSave)return window.zkSave();try{localStorage.setItem('stundenkalender.v1',JSON.stringify(ST))}catch(e){}};
+  const bar=document.createElement('div');bar.id='zkbar';bar.style.cssText='position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:60;max-width:min(560px,calc(100vw - 24px));padding:12px 14px;border-radius:14px;background:#16171a;color:#f4f3f0;box-shadow:0 10px 30px rgba(0,0,0,.35);font-size:14px;line-height:1.45;display:none';
+  document.body.appendChild(bar);
+  function show(html){bar.innerHTML=html;bar.style.display='block'}
+  function news(){show(`<b>Neu in Version ${VER}</b><ul style="margin:6px 0 10px 18px;padding:0">${NEWS.map(n=>'<li>'+n+'</li>').join('')}</ul><div style="text-align:right"><button class="btn sm" data-zkbar="ok" style="background:#e85d04;color:#fff;border:0">OK</button></div>`)}
+  bar.addEventListener('click',ev=>{const b=ev.target.closest('[data-zkbar]');if(!b)return;if(b.dataset.zkbar==='reload'){location.reload();return}bar.style.display='none';if(ST.settings.seenVer!==VER){ST.settings.seenVer=VER;save()}});
+  document.addEventListener('click',ev=>{const a=ev.target.closest&&ev.target.closest('[data-news]');if(!a)return;ev.preventDefault();news()});
+  const isNew=!Object.keys(ST.years||{}).some(y=>Object.keys((ST.years[y]||{}).entries||{}).length);
+  if(ST.settings.seenVer!==VER){if(isNew){ST.settings.seenVer=VER;save()}else setTimeout(()=>{if(ST.settings.discOk)news();else{const t=setInterval(()=>{if(ST.settings.discOk){clearInterval(t);news()}},800)}},1200)}
+  if(/^https?:$/.test(location.protocol)&&!/claude\.ai|claudeusercontent/.test(location.host)){
+    let last=Date.now();
+    async function check(){try{const r=await fetch(location.pathname+'?v='+Date.now(),{cache:'no-store'});const t=await r.text();const m=t.match(/const VER="([^"]+)"/);if(m&&m[1]!==VER)show(`Eine neue Version des Zeitkompass ist verfügbar. <button class="btn sm" data-zkbar="reload" style="background:#e85d04;color:#fff;border:0;margin-left:8px">Neu laden</button> <button class="btn sm ghost" data-zkbar="ok" style="color:#f4f3f0">Später</button>`)}catch(e){}}
+    document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&Date.now()-last>10*60*1000){last=Date.now();check()}});
+    setTimeout(check,15000);
+  }
 })();
 </script>
 <script>
