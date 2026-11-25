@@ -819,8 +819,8 @@ html[data-bg="xtropen"] .bgl,html[data-bg="xtropen"] .bgprev{background-image:va
 .drawer .dh button,.drawer .dh a,.drawer .dh input,.drawer .dh select{cursor:pointer}
 </style>
 <style id="schulferien">
-.sfb{position:absolute;left:2px;right:2px;top:0;height:5px;border-radius:2px;background:#FFD400;box-shadow:0 0 0 .5px rgba(120,90,0,.55);pointer-events:none;z-index:1}
-.md .sfb{left:5px;right:5px;top:2px;height:6px}
+.sfb{position:absolute;left:2px;right:2px;bottom:0;height:3px;border-radius:2px;background:#FFD400;box-shadow:0 0 0 .5px rgba(120,90,0,.55);pointer-events:none}
+.md .sfb{left:5px;right:5px;bottom:2px;height:4px}
 .sw.sw-sf{background:#FFD400!important;height:4px!important;border-radius:2px;border:0;box-shadow:none;align-self:center}
 .sftog{display:inline-flex!important;align-items:center;gap:8px;cursor:pointer;user-select:none;margin-left:auto;padding:5px 12px 5px 6px;border-radius:999px;border:1.5px solid #FFD400;background:rgba(255,212,0,.10);color:#6b5200!important;font-weight:700;font-size:calc(12.5px*var(--fs,1));box-shadow:0 1px 3px rgba(0,0,0,.12)}
 .sftog:hover{background:rgba(255,212,0,.20)}
@@ -861,7 +861,7 @@ html[data-dark] .tip .tip-sf{color:#FFE066}
   <section class="today glass" id="today" aria-label="Heute"></section>
   <section class="pegel glass" id="pegel" aria-label="Stundenkonto"></section>
   <main id="main"></main>
-  <p class="copy">© 2026 Marc Simon · <a href="#" data-disc="open" style="color:inherit">Hinweis</a> · <a href="#" data-news="open" style="color:inherit">Version 1.4.3</a></p>
+  <p class="copy">© 2026 Marc Simon · <a href="#" data-disc="open" style="color:inherit">Hinweis</a> · <a href="#" data-news="open" style="color:inherit">Version 1.4.4</a></p>
 </div>
 <aside class="drawer glass" id="drawer" aria-hidden="true" aria-label="Tag bearbeiten"></aside>
 <div class="rangebar glass" id="rangebar" hidden></div>
@@ -2337,7 +2337,7 @@ document.querySelectorAll('.kneedle').forEach((n,i)=>{const v=V[Math.floor(Math.
 })();
 
 (function(){
-  const VER="1.4.3",NEWS=["Schulferien NRW lassen sich einblenden: Mit dem gelben Schalter „Schulferien NRW“ rechts in der Legende unter dem Jahreskalender. Ferientage bekommen dann oben einen gelben Streifen, der Name steht im Tooltip. Standardmäßig ausgeblendet.","Das Tagesfenster lässt sich mit der Maus verschieben: oben am Kopf mit dem Datum anfassen und ziehen."];
+  const VER="1.4.4",NEWS=["Schulferien NRW lassen sich einblenden: Mit dem gelben Schalter „Schulferien NRW“ rechts in der Legende unter dem Jahreskalender. Ferientage bekommen dann unten einen gelben Streifen, der Name steht im Tooltip. Standardmäßig ausgeblendet.","Das Tagesfenster lässt sich mit der Maus verschieben: oben am Kopf mit dem Datum anfassen und ziehen."];
   const save=()=>{if(window.zkSave)return window.zkSave();try{localStorage.setItem('stundenkalender.v1',JSON.stringify(ST))}catch(e){}};
   const bar=document.createElement('div');bar.id='zkbar';bar.style.cssText='position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:60;max-width:min(560px,calc(100vw - 24px));padding:12px 14px;border-radius:14px;background:#16171a;color:#f4f3f0;box-shadow:0 10px 30px rgba(0,0,0,.35);font-size:14px;line-height:1.45;display:none';
   document.body.appendChild(bar);
