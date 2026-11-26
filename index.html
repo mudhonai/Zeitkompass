@@ -905,6 +905,138 @@ html[data-dark] .tip .tip-note[style]{filter:brightness(1.35)}
 #zknews details li{font-size:calc(13px*var(--fs,1));color:var(--ink2)}
 #zknews .nw-btns{display:flex;justify-content:flex-end;margin-top:12px;flex:none}
 </style>
+<style id="ibstyle">
+.ib{display:inline-flex;align-items:center;justify-content:center;width:1.05em;height:1.05em;padding:0;margin-left:3px;border:0;background:none;color:inherit;cursor:pointer;vertical-align:-.12em;border-radius:50%;opacity:.75}
+.ib:hover,.ib[aria-expanded="true"]{opacity:1}
+.ib .ibk{width:100%;height:100%}
+.ib[aria-expanded="true"] .ibk{filter:drop-shadow(0 0 2px rgba(232,93,4,.6))}
+.gauge{position:relative}.gauge .gs .ib{vertical-align:-.15em}
+.ibox{position:absolute;top:26px;left:0;z-index:35;max-height:min(70vh,520px);overflow:auto;width:min(340px,calc(100vw - 24px));padding:11px 13px;border-radius:10px;background:var(--panel,#fff);box-shadow:0 14px 34px -12px rgba(0,0,0,.45),0 0 0 1px rgba(0,0,0,.08);border-left:3px solid #E85D04;font-size:calc(12px*var(--fs,1));line-height:1.5;color:var(--ink);text-transform:none;letter-spacing:0;font-family:var(--font-u,inherit);font-weight:400}
+.ibox b{font-weight:700}
+.ibt{width:100%;border-collapse:collapse;margin:0 0 6px;font-size:inherit}
+.ibt td{padding:2px 0!important;text-align:left;white-space:normal}.ibt td:last-child{text-align:right;white-space:nowrap;padding-left:10px!important;font-weight:600}
+.ibt tr.ibs td{border-top:1px solid rgba(127,127,127,.35);padding-top:4px!important;font-weight:700}
+</style>
+<style id="ipstyle">
+#iptab{position:fixed;right:0;top:50%;transform:translateY(-50%);z-index:54;display:flex;flex-direction:column;align-items:center;gap:7px;padding:11px 10px 11px 12px;min-width:60px;border-radius:14px 0 0 14px;background:#16171a;color:#fff;border:0;cursor:pointer;box-shadow:-4px 6px 18px -6px rgba(0,0,0,.45);font:600 10px/1 var(--vmono,ui-monospace);letter-spacing:.12em;text-transform:uppercase}
+#iptab svg{width:36px;height:36px}
+#iptab span{font-size:11px;letter-spacing:.14em}
+#iptab:hover{background:#2a2c31}
+#ippanel{position:fixed;top:0;right:0;bottom:0;width:min(460px,100vw);z-index:56;background:var(--panel,#fff);color:var(--ink);box-shadow:-18px 0 40px -18px rgba(0,0,0,.45);transform:translateX(105%);transition:transform .28s cubic-bezier(.2,.8,.2,1);display:flex;flex-direction:column}
+#ippanel.open{transform:none}
+#ippanel .ip-h{display:flex;align-items:center;gap:12px;padding:16px 18px 10px}
+#ippanel .ip-h svg{width:40px;height:40px;flex:none;border-radius:10px}
+#ippanel .ip-k{font:600 10.5px/1 var(--vmono,ui-monospace);letter-spacing:.14em;text-transform:uppercase;color:#E85D04}
+#ippanel h3{margin:3px 0 0;font:800 calc(20px*var(--fs,1))/1.1 var(--vdisp,var(--font-d));color:var(--ink)}
+#ippanel .ip-x{margin-left:auto}
+#ippanel .ip-s{margin:0 18px 10px;padding:8px 10px;border-radius:9px;border:1px solid rgba(127,127,127,.35);background:transparent;color:var(--ink);width:auto}
+#ippanel .ip-b{flex:1;overflow:auto;padding:0 18px 24px}
+#ippanel details{border-bottom:1px solid rgba(127,127,127,.22)}
+#ippanel summary{cursor:pointer;padding:11px 0;font-weight:700;font-size:calc(14px*var(--fs,1));list-style:none;display:flex;align-items:center;gap:8px}
+#ippanel summary::-webkit-details-marker{display:none}
+#ippanel summary::before{content:"›";display:inline-block;width:12px;color:#E85D04;font-weight:800;transition:transform .15s}
+#ippanel details[open] summary::before{transform:rotate(90deg)}
+#ippanel .ip-c{padding:0 0 12px 20px;font-size:calc(13px*var(--fs,1));line-height:1.55}
+#ippanel .ip-c p{margin:0 0 8px}
+#ippanel .ip-c ul{margin:0 0 8px;padding-left:18px}#ippanel .ip-c li{margin:0 0 4px}
+#ippanel .ip-n{display:block;margin-top:6px;padding:7px 9px;border-radius:8px;background:rgba(232,93,4,.09);font-size:calc(12.5px*var(--fs,1))}
+#ippanel mark{background:#ffe08a;color:inherit;border-radius:2px}
+@media print{#iptab,#ippanel{display:none!important}}
+</style>
+<style id="e1style">
+#zkUndo,#zkRedo{width:30px;height:30px;font-size:16px;padding:0}
+#zkUndo:disabled,#zkRedo:disabled{opacity:.3;cursor:default}
+#zktoast{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:70;background:#16171a;color:#fff;padding:9px 14px;border-radius:10px;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.35);display:none}
+.snaprow{display:flex;gap:8px;align-items:center;flex-wrap:wrap}.snaprow select{width:auto}
+</style>
+<style id="e2style">
+.tdbar{display:block;width:100%;max-width:170px;height:4px;border-radius:3px;background:rgba(127,127,127,.22);margin-top:5px;overflow:hidden}
+.tdbar>i{display:block;height:100%;background:#E85D04;border-radius:3px}
+#zkSim{font-size:11.5px;padding:5px 10px}
+body.zk-sim{box-shadow:inset 0 0 0 4px #E85D04}
+body.zk-sim #zkUndo,body.zk-sim #zkRedo{display:none}
+#simbar{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);z-index:65;display:none;align-items:center;gap:12px;flex-wrap:wrap;max-width:calc(100vw - 24px);padding:9px 12px 9px 16px;border-radius:12px;background:#E85D04;color:#fff;box-shadow:0 10px 28px -8px rgba(0,0,0,.45);font-size:13px}
+body.zk-sim #simbar{display:flex}
+#simbar b{font-weight:800}#simbar .sb-t{font-weight:800;letter-spacing:.06em;text-transform:uppercase;font-size:11px}
+#simbar button{border:0;border-radius:8px;padding:6px 11px;font-weight:700;cursor:pointer}
+#simbar .sb-ok{background:#fff;color:#16171a}#simbar .sb-no{background:rgba(0,0,0,.25);color:#fff}
+#bridges{margin-top:18px}#bridges h2{margin-bottom:6px}
+#bridges table td{text-align:left!important;white-space:normal!important}
+#bridges .muted{color:var(--ink3);font-size:12px}
+</style>
+<style id="e3style">
+.jw-hint{margin-top:8px}
+#jwwin .jw,#rbwin .rb{max-width:560px}
+#jwwin h3,#rbwin h3{margin:4px 0 0;font:800 calc(21px*var(--fs,1))/1.15 var(--vdisp,var(--font-d));color:var(--ink)}
+.zk-top{display:flex;align-items:center;gap:14px;margin-bottom:12px}.zk-top svg{width:46px;height:46px;flex:none;border-radius:11px}
+.zk-k{font:600 10.5px/1 var(--vmono,ui-monospace);letter-spacing:.14em;text-transform:uppercase;color:#E85D04}
+.jw-l{list-style:none;margin:0 0 14px;padding:0}.jw-l li{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid rgba(127,127,127,.2);font-size:13.5px;line-height:1.5}
+.jw-l li>i{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:800;color:#fff;font-size:12px}
+.jw-ok{background:#3c8c3c}.jw-w{background:#c99400}.jw-i{background:#8a909a}
+.zk-btns{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+.rb-card{border-radius:16px;padding:18px 18px 14px;background:linear-gradient(150deg,#16171a,#2b2d33);color:#fff;margin-bottom:14px}
+.rb-card .rb-y{font:800 34px/1 var(--vdisp,var(--font-d));letter-spacing:-.02em}
+.rb-g{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:14px}
+.rb-g div{background:rgba(255,255,255,.07);border-radius:11px;padding:10px 12px}
+.rb-g b{display:block;font:800 22px/1.15 var(--vdisp,var(--font-d));color:#fff}.rb-g span{font-size:12px;opacity:.75}
+.rb-g div.o b{color:#ff8a3d}
+#zkconf{position:fixed;inset:0;pointer-events:none;z-index:80}
+#zkconfmsg{position:fixed;left:50%;top:38%;transform:translate(-50%,-50%);z-index:81;background:#16171a;color:#fff;padding:16px 22px;border-radius:16px;font:800 22px/1.2 var(--vdisp,var(--font-d));box-shadow:0 18px 40px rgba(0,0,0,.4);display:flex;align-items:center;gap:12px}
+#zkconfmsg svg{width:40px;height:40px}
+</style>
+<style id="e4style">
+.vlogo .kmood{transform-box:view-box;transform-origin:33px 33px;transition:transform .9s cubic-bezier(.3,1.6,.5,1)}
+.vlogo.mood-y .kmood{transform:rotate(28deg)}.vlogo.mood-r .kmood{transform:rotate(62deg)}
+.vlogo.mood-r svg>circle{stroke:#d32f2f}
+.vlogo{cursor:help}
+#zkFind{font-size:11.5px;padding:5px 10px;display:inline-flex;align-items:center;white-space:nowrap}
+.hmtog{display:inline-flex!important;align-items:center;gap:8px;cursor:pointer;user-select:none;padding:5px 12px 5px 6px;border-radius:999px;border:1.5px solid #E85D04;background:rgba(232,93,4,.08);color:#8a3500!important;font-weight:700;font-size:calc(12.5px*var(--fs,1));margin-left:8px}
+.hmtog input{-webkit-appearance:none;appearance:none;margin:0;width:32px;height:18px;border-radius:999px;background:#f0c9ad;position:relative;cursor:pointer;flex:none;border:0;padding:0}
+.hmtog input::after{content:"";position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.3);transition:left .15s}
+.hmtog input:checked{background:#E85D04}.hmtog input:checked::after{left:16px}
+body.zk-heat .d[data-k]{background:var(--hm,#f1f1f1)!important;background-image:none!important;color:var(--hmi,#16171a)!important;border-color:rgba(0,0,0,.06)!important}
+body.zk-heat .d[data-k]>i.hz,body.zk-heat .d[data-k]>i.wb{display:none!important}
+body.zk-heat .d[data-k] *{color:inherit!important}
+.hm-scale{display:inline-flex;align-items:center;gap:6px;font-size:11.5px;margin-left:8px}.hm-scale i{display:inline-block;width:70px;height:9px;border-radius:5px;background:linear-gradient(90deg,#f1f1f1,#ffd7b8,#ff9a4d,#E85D04,#8a3000)}
+#nswin .ns,#kbwin .kb{max-width:600px;width:min(600px,calc(100vw - 32px))}
+#nsq{width:100%;font-size:16px;padding:10px 12px;border-radius:10px;border:1.5px solid rgba(127,127,127,.35);margin:6px 0 10px;background:var(--card,#fff);color:var(--ink)}
+.ns-l{max-height:56vh;overflow:auto;margin:0;padding:0;list-style:none}
+.ns-l li{padding:8px 10px;border-radius:9px;cursor:pointer;display:flex;gap:12px;align-items:baseline}
+.ns-l li:hover,.ns-l li.on{background:rgba(232,93,4,.1)}
+.ns-l .ns-d{flex:none;font:600 12px/1.4 var(--vmono,ui-monospace);width:96px;opacity:.8}
+.ns-l mark{background:#FFD400;color:#16171a;border-radius:3px;padding:0 2px}
+.kb-t{width:100%;border-collapse:collapse;font-size:13.5px}.kb-t td{padding:6px 4px;border-bottom:1px solid rgba(127,127,127,.18)}
+.kb-t kbd{display:inline-block;min-width:22px;text-align:center;padding:2px 6px;border-radius:6px;border:1px solid rgba(127,127,127,.4);border-bottom-width:2px;font:600 12px/1.3 var(--vmono,ui-monospace);margin-right:3px}
+.cpbtn{font-size:12px!important;padding:4px 9px!important}
+#zktoast4{position:fixed;left:50%;bottom:22px;transform:translateX(-50%);z-index:90;background:#16171a;color:#fff;padding:10px 14px;border-radius:12px;font-size:13.5px;display:flex;gap:10px;align-items:center;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+#zktoast4 button{border:0;border-radius:8px;padding:6px 11px;font-weight:700;cursor:pointer}#zktoast4 .y{background:#E85D04;color:#fff}#zktoast4 .n{background:rgba(255,255,255,.15);color:#fff}
+</style>
+<style id="e5style">
+#icswin .ic,#shwin .sh{max-width:560px;width:min(560px,calc(100vw - 32px))}
+.ic-r{display:flex;flex-wrap:wrap;gap:8px;margin:6px 0 12px}.ic-r label{display:inline-flex;align-items:center;gap:6px;padding:6px 11px;border-radius:999px;border:1.5px solid rgba(127,127,127,.3);cursor:pointer;font-size:13.5px}
+.ic-r label:has(input:checked){border-color:#E85D04;background:rgba(232,93,4,.08)}
+.ic-h{font:600 10.5px/1 var(--vmono,ui-monospace);letter-spacing:.12em;text-transform:uppercase;opacity:.7;margin-top:6px}
+.ic-d{display:flex;gap:8px;align-items:center;margin:-4px 0 12px;font-size:13.5px}.ic-d input{padding:6px 8px;border-radius:8px;border:1.5px solid rgba(127,127,127,.35);background:var(--card,#fff);color:var(--ink)}
+.ic-n{font-size:12.5px;opacity:.75;line-height:1.5;margin:4px 0 12px}
+#shcode{width:100%;min-height:90px;font:12px/1.4 var(--vmono,ui-monospace);padding:8px;border-radius:9px;border:1.5px solid rgba(127,127,127,.35);background:var(--card,#fff);color:var(--ink);word-break:break-all}
+.sh-g{list-style:none;padding:0;margin:6px 0 12px}.sh-g li{padding:7px 0;border-bottom:1px solid rgba(127,127,127,.18);font-size:13.5px}.sh-g label{display:flex;gap:9px;align-items:flex-start;cursor:pointer}.sh-g small{display:block;opacity:.7;font-size:12px}
+.sh-btns{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap}
+</style>
+<style id="sdstyle">
+.sgrid>.sbox{order:4}.sgrid>.sbox:nth-child(-n+2){order:0}.sgrid>.sbox:nth-child(3),.sgrid>.sbox:nth-child(4){order:2}.sgrid>.sbox.steil{order:3}.sgrid>.sbox.sdata{order:1;border:2px solid #E85D04!important;box-shadow:0 0 0 4px rgba(232,93,4,.12)!important}
+.sdata h3{display:flex;align-items:center;gap:8px}.sdata .sd-ic{width:22px;height:22px;flex:none;border-radius:6px}
+@media (max-width:1100px){.sgrid>.sbox.sdata{order:-2}.sgrid>.sbox.steil{order:-1}}
+.steil .st-sub{margin:0 0 6px;font-size:13px}
+</style>
+<style id="e6style">
+.pb{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:999px;font:700 9.5px/1.5 var(--vmono,ui-monospace);letter-spacing:.06em;text-transform:uppercase;vertical-align:1px;white-space:nowrap}
+.pb.p{background:#E85D04;color:#fff}.pbw{display:inline}.pb.m{background:rgba(127,127,127,.18);color:var(--ink3,#666)}
+.pers-hint{margin:0 0 14px;padding:10px 14px;border-radius:12px;border:2px solid #E85D04;background:rgba(232,93,4,.07);font-size:13.5px;line-height:1.5;display:flex;gap:10px;align-items:flex-start}
+.pers-hint svg{width:26px;height:26px;flex:none;border-radius:7px}
+#fswin .fs{max-width:580px;width:min(580px,calc(100vw - 32px))}
+.fs-l{list-style:none;margin:10px 0 14px;padding:0}.fs-l li{display:flex;gap:10px;padding:8px 0;border-bottom:1px solid rgba(127,127,127,.2);font-size:13.5px;line-height:1.5}
+.fs-l li>i{flex:none;width:22px;height:22px;border-radius:50%;background:#E85D04;color:#fff;font-style:normal;font-weight:800;font-size:12px;display:grid;place-items:center}
+</style>
 </head>
 <body>
 <div class="aurora" aria-hidden="true"></div>
@@ -930,7 +1062,7 @@ html[data-dark] .tip .tip-note[style]{filter:brightness(1.35)}
   <section class="today glass" id="today" aria-label="Heute"></section>
   <section class="pegel glass" id="pegel" aria-label="Stundenkonto"></section>
   <main id="main"></main>
-  <p class="copy">© 2026 Marc Simon · <a href="#" data-disc="open" style="color:inherit">Hinweis</a> · <a href="#" data-news="open" style="color:inherit">Version 1.10.1</a></p>
+  <p class="copy">© 2026 Marc Simon · <a href="#" data-disc="open" style="color:inherit">Hinweis</a> · <a href="#" data-news="open" style="color:inherit">Version 1.18.0</a></p>
 </div>
 <aside class="drawer glass" id="drawer" aria-hidden="true" aria-label="Tag bearbeiten"></aside>
 <div class="rangebar glass" id="rangebar" hidden></div>
@@ -1174,7 +1306,7 @@ function computeYear(y){
   const jSM=ty<y?0:ty>y?12:tmo,jSK=jSM>=12?null:K(y,jSM,1);let jAfter=0;if(jSK)for(const k in days){const dc=days[k];if(k>=jSK&&dc.e.t==='fza'&&dc.soll>0)jAfter+=dc.fza||0}
   const jNow=avail-jAfter,jFut=sum(months.slice(jSM).map(M=>M.toKonto||0));let jDone=0,jPlan=jFut;
   if(ty===y&&jSM<12){const M0=months[jSM];let fc=0;for(const k in days){if(k>TK&&+k.slice(5,7)-1===jSM){const dc=days[k];fc+=(dc.ist||0)-(dc.soll||0)+(dc.zSum||0)}}const fcur=Math.min(M0.toKonto||0,Math.max(0,fc));jDone=(M0.toKonto||0)-fcur;jPlan=fcur+sum(months.slice(jSM+1).map(M=>M.toKonto||0))}
-  return MEMO[y]={jNow,jFut,jSM,jDone,jPlan,halbK:Object.keys(days).filter(k=>days[k].halbOffen),poolDay,pool0,konto0,we,y,months,days,pool,konto:kEnd,lotsEnd:lots,expTot,vac,series,streak,fairs,pm,jup,avail,availLbl,availFree,freeFrom,longD,restD};
+  return MEMO[y]={jNow,jFut,jSM,jDone,jPlan,jAfter,halbK:Object.keys(days).filter(k=>days[k].halbOffen),poolDay,pool0,konto0,we,y,months,days,pool,konto:kEnd,lotsEnd:lots,expTot,vac,series,streak,fairs,pm,jup,avail,availLbl,availFree,freeFrom,longD,restD};
 }
 function parseH(v){v=String(v==null?'':v).trim();if(!v)return 0;if(v.includes(':')){const neg=v.startsWith('-'),a=v.replace('-','').split(':');const h=(+a[0]||0)+(+a[1]||0)/60;return neg?-h:h}return parseFloat(v.replace(',','.'))||0}
 /*PARSER-START*/
@@ -1252,7 +1384,7 @@ if(hasDOM){
 const $=s=>document.querySelector(s);
 const UI={view:'jahr',year:new Date().getFullYear(),month:new Date().getMonth(),sel:new Set(),anchor:null,drag:false,moved:false,drawer:null};
 const todayK=(()=>{const d=new Date();return K(d.getFullYear(),d.getMonth(),d.getDate())})();
-function applyTheme(){applyBg();document.documentElement.setAttribute('data-design',ST.settings.design==='glas'?'glas':'vis');document.documentElement.toggleAttribute('data-dark',ST.settings.design==='dunkel');let t=ST.settings.theme;if(t==='auto')t=matchMedia('(prefers-color-scheme: dark)').matches?'dunkel':'hell';document.documentElement.setAttribute('data-theme',t==='dunkel'?'dark':'light')}
+function applyTheme(){applyBg();let dz=ST.settings.design;if(dz==='auto')dz=matchMedia('(prefers-color-scheme: dark)').matches?'dunkel':'vis';document.documentElement.setAttribute('data-design',dz==='glas'?'glas':'vis');document.documentElement.toggleAttribute('data-dark',dz==='dunkel');let t=ST.settings.theme;if(t==='auto')t=matchMedia('(prefers-color-scheme: dark)').matches?'dunkel':'hell';document.documentElement.setAttribute('data-theme',t==='dunkel'?'dark':'light')}
 
 /* Speichern: Browser sofort, Konto-Sync verzögert */
 let saveT=null,dbRef=null,dbBusy=Promise.resolve(),sumRef=null;
@@ -1266,8 +1398,13 @@ function mkSummary(){
 window.__zkSum=()=>mkSummary();
 function pushSummary(){if(sumRef)try{sumRef.set(mkSummary()).catch(()=>{})}catch(e){}}
 window.zkSave=()=>save();
+window.zkST=()=>ST;
+window.zkSimEnd=keep=>{window._zkSim=false;if(keep){save()}};
+window.zkRestore=(s,hist)=>{window._zkNoHist=!hist;try{ST=normalize(JSON.parse(s));invalidate();save();render()}finally{window._zkNoHist=false}};
 function save(){
   ST.updatedAt=Date.now();
+  if(window._zkSim)return;
+  try{if(!window._zkNoHist&&window.zkHist)window.zkHist()}catch(e){}
   try{localStorage.setItem(STORE,JSON.stringify(ST))}catch(e){}
   if(dbRef){clearTimeout(saveT);saveT=setTimeout(()=>{const body={state:JSON.stringify(ST),updatedAt:ST.updatedAt};dbBusy=dbBusy.then(()=>dbRef.set(body)).then(()=>{setSync(true,'Mit deinem Konto synchronisiert');pushSummary()}).catch(()=>setSync(false,'Sync fehlgeschlagen, lokal gespeichert'))},1200)}
 }
@@ -1311,10 +1448,17 @@ const serId=s=>'ser:'+s.a+':'+s.b+':'+s.n;
 const hashS=t=>{let h=0;for(let i=0;i<t.length;i++)h=(h*31+t.charCodeAt(i))|0;return(h>>>0).toString(36)};
 const isDis=id=>(ST.settings.dismissed||[]).includes(id);
 
+function expWarn(C){
+  if(+todayK.slice(0,4)!==C.y)return null;const cand=[];C.months.forEach((M,mi)=>{if((M.expired||0)>0.05)cand.push({h:M.expired,exp:C.y*12+mi-1})});(C.lotsEnd||[]).forEach(l=>{if(l.h>0.05)cand.push({h:l.h,exp:l.exp})});
+  const ekOf=A=>{const y=Math.floor(A/12),m=A%12;return K(y,m,dim(y,m))};const soon=cand.map(c=>Object.assign(c,{ek:ekOf(c.exp)})).filter(c=>c.ek>=todayK).sort((a,b)=>a.exp-b.exp)[0];if(!soon)return null;
+  const ek=soon.ek,days=Math.round((P(ek)-P(todayK))/864e5);if(days>62)return null;
+  const free=[];let k=addDays(todayK,1);while(k<=ek&&free.length<8){const dc=dayOf(k);if(dc&&!dc.i.we&&!dc.i.ft&&!dc.i.frei&&(!dc.e.t||dc.e.t==='gleitzeit')&&!dc.e.f)free.push(k);k=addDays(k,1)}
+  return{h:soon.h,ds:ek.slice(8)+'.'+ek.slice(5,7)+'.'+ek.slice(0,4),id:'exp:'+ek+':'+Math.round(soon.h*10),free}}
 function limitAlerts(C){
   const S=ST.settings,out=[],lst=a=>a.slice(0,6).map(fd).join(', ')+(a.length>6?' und '+(a.length-6)+' weitere':'');
   if(C.longD.length){const id='max:'+C.longD.length+':'+C.longD[0];if(!isDis(id))out.push(`<div class="alert w" data-grp="long"><span><b>${C.longD.length} ${C.longD.length===1?'Tag':'Tage'} über ${fmt(+S.maxDaily,0)} Stunden</b>: ${lst(C.longD).replace(/\.?$/,'.')} Nach MTV § 8 sind bis 10 Stunden erlaubt, mit Betriebsvereinbarung bis 12.</span><button class="btn" data-act="goto-day" data-k="${C.longD[0]}">Zum ${fd(C.longD[0]).slice(4)}</button><button class="x" data-act="dismiss" data-id="${id}" aria-label="Schließen">✕</button></div>`)}
   if(C.restD.length){const ks=C.restD.map(r=>r.k),id='rest:'+ks.length+':'+ks[0];if(!isDis(id))out.push(`<div class="alert" data-grp="rest"><span><b>Ruhezeit unter ${fmt(+S.minRest,0)} Stunden</b> vor ${lst(ks).replace(/\.?$/,'.')} Kürzeste Pause zwischen zwei Diensten: ${fhm(Math.min(...C.restD.map(r=>r.gap)))} Stunden.</span><button class="btn" data-act="goto-day" data-k="${ks[0]}">Zum ${fd(ks[0]).slice(4)}</button><button class="x" data-act="dismiss" data-id="${id}" aria-label="Schließen">✕</button></div>`)}
+  {const ex=expWarn(computeYear(UI.year));if(ex&&!isDis(ex.id))out.push(`<div class="alert w" data-grp="exp"><span><b>${fh(ex.h)} verfallen am ${ex.ds}</b>, wenn du sie bis dahin nicht als JÜP nimmst. Freie Arbeitstage davor: ${ex.free.length?ex.free.map(k=>`<button class="linkbtn" data-act="goto-day" data-k="${k}">${fd(k)}</button>`).join(', '):'keine gefunden'} (eintragen musst du selbst)</span><button class="x" data-act="dismiss" data-id="${ex.id}" aria-label="Schließen">✕</button></div>`)}
   {const hk=C.halbK||[],id='halb:'+(hk[0]||'').slice(0,4);if(hk.length&&!isDis(id))out.push(`<div class="alert" data-grp="halb"><span><b>Halber Tag offen</b>: ${hk.map(fd).join(' und ').replace(/\.?$/,'.')} Ein halber Tag ist frei, die andere Hälfte bitte als Urlaub oder JÜP eintragen. Bis dahin wird sie nicht als Minus gerechnet.</span><button class="btn" data-act="goto-day" data-k="${hk[0]}">Zum ${fd(hk[0]).slice(4)}</button><button class="x" data-act="dismiss" data-id="${id}" aria-label="Schließen">✕</button></div>`)}
   if(C.mobOver&&C.mobOver.length){const L=+S.mobilMax||50;out.push(`<div class="alert" data-grp="mob"><span><b>Mobiles Arbeiten über ${fmt(L,0)} %</b>: ${C.mobOver.map(x=>MON[x.m]+' '+fmt(x.mobQ,0)+' %').join(', ')}. Erlaubt sind höchstens ${fmt(L,0)} % der Arbeitszeit im Monat.</span></div>`)}
   return out.length?`<div class="alerts">${out.join('')}</div>`:'';
@@ -1344,7 +1488,7 @@ function renderToday(){
   else{for(let i=1;i<=400;i++){const x=addDays(k,i),xd=dayOf(x);if(xd&&xd.e.t==='urlaub'&&xd.soll>0){cd=`<div><span>Nächster Urlaub</span><b>ab ${fd(x).slice(4)}</b><span>${i===1?'morgen':'noch '+i+' Tage'}</span></div>`;break}}}
   const tzn=zn+bk+rv;
   el.innerHTML=`<div class="td-main"><div class="td-date">Heute, ${WDL[dc.i.dow]}, ${d.getDate()}. ${MON[d.getMonth()]}</div><div class="td-what"><b>${TYPES[e.t].label}${f?' '+esc(f.name):''}${phase}</b>${dc.work&&!running&&!e.e?' · '+dc.times[0]+'–'+dc.times[1]:''}${dc.i.name?' · '+esc(dc.i.name):''}</div></div>
-   <div class="td-facts">${stk?`<div><span>Arbeitstag am Stück</span><b class="${stk>ST.settings.maxSeries?'neg':''}">${stk} von ${ST.settings.maxSeries}</b><span>${stk>=ST.settings.maxSeries?'<b class="neg">13.T fällig</b>':'freier Tag spätestens '+fd(addDays(k,ST.settings.maxSeries-stk+1))}</span></div>`:`<div><span>Ruhetag</span><b>heute frei</b></div>`}${free?`<div><span>Nächster freier Tag</span><b>${fd(free.k)}</b><span>${free.i===1?'morgen':'in '+free.i+' Tagen'}</span></div>`:''}${nf?`<div><span>Nächste Messe</span><b>${esc(nf.f?nf.f.name:'?')}</b><span>${TYPES[nf.t].label} ab ${fd(nf.k)}${nf.k.slice(0,4)!==k.slice(0,4)?nf.k.slice(0,4):''}, in ${nf.i} Tagen</span></div>`:''}${cd}</div>
+   <div class="td-facts">${stk?`<div><span>Arbeitstag am Stück</span><b class="${stk>ST.settings.maxSeries?'neg':''}">${stk} von ${ST.settings.maxSeries}</b><span>${stk>=ST.settings.maxSeries?'<b class="neg">13.T fällig</b>':'freier Tag spätestens '+fd(addDays(k,ST.settings.maxSeries-stk+1))}</span></div>`:`<div><span>Ruhetag</span><b>heute frei</b></div>`}${free?`<div><span>Nächster freier Tag</span><b>${fd(free.k)}</b><span>${free.i===1?'morgen':'in '+free.i+' Tagen'}</span></div>`:''}${e.f&&fairById(e.f)&&TYPES[e.t]&&TYPES[e.t].work?(()=>{const ks=fairDays(e.f),ix=ks.indexOf(k);return ix>=0?`<div><span>Aktuelle Messe</span><b>${esc(fairById(e.f).name)}</b><span>${TYPES[e.t].label} · Tag ${ix+1} von ${ks.length}</span><i class="tdbar"><i style="width:${Math.round((ix+1)/ks.length*100)}%"></i></i></div>`:''})():''}${nf?`<div><span>Nächste Messe</span><b>${esc(nf.f?nf.f.name:'?')}</b><span>${TYPES[nf.t].label} ab ${fd(nf.k)}${nf.k.slice(0,4)!==k.slice(0,4)?nf.k.slice(0,4):''}, in ${nf.i} ${nf.i===1?'Tag':'Tagen'}</span>${nf.i<=65?`<i class="tdbar" title="Countdown"><i style="width:${Math.round((65-nf.i)/65*100)}%"></i></i>`:''}</div>`:''}${cd}</div>
    <div class="td-clock">${clock}</div>${tzn?`<div class="td-zn">${tzn}</div>`:''}${weekCard(k)}`;
 }
 function weekCard(k){
@@ -1429,51 +1573,61 @@ function renderPegel(){
       <span>Pauschale noch <b>${fmt(Math.max(0,S.pool-pool))} h</b></span><span>JÜP verfügbar <b>${fmt((mv?C.freeFrom(UI.month):C.availFree)/daily(),1)} Tage</b></span><span>JÜP geplant <b>${fmt(V.jup.days-V.jup.daysT,1)} Tage</b></span><span>Freizeitkonto <b>${fmt(konto)} h</b></span><span>Mobil ${MON[mi]} <b class="${mo?'neg':''}">${fmt(MM.mobQ,0)} %</b></span>${V.mobOver.length||V.series.some(x=>x.n>S.maxSeries)||V.restD.length?'<span class="hchip r">Hinweise offen</span>':''}
       <span class="sl-sp"></span><button class="tgb pegtg" data-act="tg-peg" aria-expanded="false">Aufklappen<i class="tgi">▾</i></button></div>`;
     return}
+  const KOI='<svg class="ibk" viewBox="0 0 66 66" aria-hidden="true"><circle cx="33" cy="33" r="25" fill="none" stroke="currentColor" stroke-width="8"/><polygon points="33,12 40,33 26,33" fill="#E85D04"/><polygon points="33,54 40,33 26,33" fill="currentColor" opacity=".55"/></svg>';
+  const IBO=window._zkIb,IB=k=>`<button type="button" class="ib" data-ib="${k}" aria-label="Erklärung" aria-expanded="${IBO===k}">${KOI}</button>`,IBX=(k,html)=>`<div class="ibox" data-ibx="${k}" ${IBO===k?'':'hidden'}>${html}</div>`;
+  const D1=x=>fmt(x/daily(),1)+' Tage <small style="font-weight:400;opacity:.7">'+fhm(x)+' h</small>',jByM=past=>{const a=Array(12).fill(0);for(const k in C.days){const dc=C.days[k];if(dc.e.t==='fza'&&dc.soll>0&&((k<=todayK)===past))a[+k.slice(5,7)-1]+=(dc.e.half||dc.i.halb)?.5:1}return a.map((n,i)=>n?`${MONS[i]} ${fmt(n,1)}`:'').filter(Boolean).join(' · ')||'keine'};
   $('#pegel').innerHTML=`
    <div class="stich">${mv?`Stand Ende ${MON[UI.month]} ${UI.year}<span style="display:none">`:''}Stand <select data-act-stich aria-label="Stichtag"><option value="-1" ${sm<0?'selected':''}>Jahresbeginn ${UI.year}</option>${isCur?`<option value="99" ${sm===99?'selected':''}>heute, ${fd(todayK)}</option>`:''}${MON.map((n,i)=>`<option value="${i}" ${i===sm?'selected':''}>Ende ${n} ${UI.year}</option>`).join('')}</select>${mv?'</span>':''}${!mv&&sm!==autoM?'<button class="linkbtn" data-act="stich-reset">zurück auf '+(autoM===11?'Jahresende':autoM<0?'Jahresbeginn':'heute')+'</button>':''}<span>Gutschrift ${mv?'im Monat <b>'+fh(C.months[UI.month].credit)+'</b>, bis Monatsende':'bis dahin'} <b class="${chg('gut',gut)}">${fh(gut)}</b>, im ganzen Jahr <b class="${chg('gutJ',gutJ)}">${fh(gutJ)}</b></span><button class="tgb pegtg" data-act="tg-peg" aria-expanded="true">Einklappen<i class="tgi">▴</i></button></div>
    <div class="gauge">
-     <div class="gl"><b>Pauschale noch zu leisten</b><span><strong class="${chg('pool',pool)}">${fmt(Math.min(S.pool,Math.max(0,S.pool-pool)))}</strong> von ${fmt(S.pool,0)} h</span></div>
+     <div class="gl"><b>Pauschale noch zu leisten ${IB('pool')}</b><span><strong class="${chg('pool',pool)}">${fmt(Math.min(S.pool,Math.max(0,S.pool-pool)))}</strong> von ${fmt(S.pool,0)} h</span></div>
+     ${IBX('pool',`Die Pauschale von ${fmt(S.pool,0)} h ist mit dem Gehalt abgegolten. Stunden über dem Soll und Zuschläge füllen zuerst die Pauschale, erst danach geht etwas aufs Freizeitkonto.<br>Geleistet: <b>${fh(Math.max(0,Math.min(S.pool,pool)))}</b> · offen: <b>${fh(Math.max(0,S.pool-pool))}</b>`)}
      <div class="tube"><div class="fill pool" style="width:${Math.max(0,Math.min(1,(S.pool-pool)/S.pool))*100}%"></div></div>
      <div class="gs">${pool<0?`<span class="w">dazu ${fh(-pool)} Minus</span>`:`<span>${fh(Math.max(0,pool))} geleistet</span>`}${C.poolDay?`<span class="${(prev.pd||'')!==C.poolDay&&prev.pd!=null?'chg':''}">laut Planung erledigt am ${fd(C.poolDay)}</span>`:C.poolDay===''?'<span>schon erledigt</span>':`<span class="w">laut Planung bis 31.12. nicht erreicht</span>`}</div>
    </div>
    <div class="gauge">
-     ${(()=>{UI._av=mv?(UI.month===0?C.konto0:C.months[UI.month-1].konto):C.avail;UI._avl=mv?'Stand Anfang '+MON[UI.month]:C.availLbl;return''})()}${(()=>{UI._fr=mv?C.freeFrom(UI.month):C.availFree;return''})()}<div class="gl"><b>JÜP verfügbar</b><span><strong class="${UI._fr<0?'neg':''}">${fmt(UI._fr/daily(),1)}</strong> Tage</span></div>
+     ${(()=>{UI._av=mv?(UI.month===0?C.konto0:C.months[UI.month-1].konto):C.avail;UI._avl=mv?'Stand Anfang '+MON[UI.month]:C.availLbl;return''})()}${(()=>{UI._fr=mv?C.freeFrom(UI.month):C.availFree;return''})()}<div class="gl"><b>JÜP verfügbar ${IB('frei')}</b><span><strong class="${UI._fr<0?'neg':''}">${fmt(UI._fr/daily(),1)}</strong> Tage</span></div>
+     ${IBX('frei',`<table class="ibt"><tr><td>${C.jSM===0?'Übertrag aus '+(C.y-1):'Konto '+C.availLbl.replace(/^Stand /,'')+(C.jSM>0&&C.jSM<12?' (letzter Zeitnachweis)':'')}</td><td>${D1(C.avail)}</td></tr>${C.jDone>0.05?`<tr><td>+ seitdem erarbeitet, noch ohne Zeitnachweis</td><td>${D1(C.jDone)}</td></tr>`:''}${C.jPlan>0.05&&C.jSM<12?`<tr><td>+ ${C.jSM===0?'im Jahr':'noch'} geplant erarbeitet</td><td>${D1(C.jPlan)}</td></tr>`:''}${C.jAfter>0.05?`<tr><td>− JÜP${C.jSM>0&&C.jSM<12?' ab '+MON[C.jSM]+', genommen und geplant':' im Jahr'}</td><td>${D1(C.jAfter)}</td></tr>`:''}${C.expTot>0.05?`<tr><td>− verfallen</td><td>${D1(C.expTot)}</td></tr>`:''}<tr class="ibs"><td>= Konto am 31.12.</td><td>${D1(C.konto)}</td></tr></table>${C.availFree<C.konto-0.05?`Frei verplanbar sind nur <b>${D1(C.availFree)}</b>: So tief sinkt das Konto im Jahresverlauf, bevor spätere Einsätze es wieder auffüllen.`:`Frei verplanbar: <b>${D1(C.availFree)}</b>, ohne dass das Konto irgendwann im Jahr ins Minus rutscht.`}`)}
      <div class="tube"><div class="fill konto" style="width:${Math.max(0,Math.min(100,UI._fr/Math.max(UI._av,kmax)*100))}%"></div></div>
      <div class="gs"><span class="jh${UI._fr<0?' neg':''}">${fhm(UI._fr)} h</span><span>${fmt(UI._fr/weekSoll(),1)} Wochen</span></div>
      <div class="gs"><span>noch frei verplanbar: nach allen geplanten JÜP und Einsätzen rutscht das Konto bis 31.12. nicht ins Minus.</span></div>
      ${C.jSM<12&&C.jSM>0&&C.jDone>0.05?`<div class="gs"><span>seit Ende ${MON[C.jSM-1]} erarbeitet, noch ohne Zeitnachweis: <b class="jh">+${fmt(C.jDone/daily(),1)} Tage</b> (${fhm(C.jDone)} h)</span></div>`:''}
      ${C.jSM<12&&C.jSM>0&&C.jPlan>0.05?`<div class="gs"><span>noch geplant bis 31.12.: <b class="jh">+${fmt(C.jPlan/daily(),1)} Tage</b> (${fhm(C.jPlan)} h)</span></div>`:''}
-     ${(()=>{const G=sum(C.months.map(M=>M.toKonto||0)),MZ=sum(C.months.map(M=>(M.ist||0)-(M.soll||0))),ZS=sum(C.months.map(M=>M.zs||0)),TP=sum(C.months.map(M=>M.toPool||0));const tt=`Alle Stunden, die ${C.y} laut deinen Einträgen über die Pauschale hinaus aufs Freizeitkonto gehen, inklusive geplanter Tage bis 31.12.&#10;Mehrzeit (Ist über Soll): ${fh(MZ)}&#10;Zuschläge (Wochenende, Feiertag, Mehrarbeit): ${fh(ZS)}&#10;Davon zuerst in die Pauschale: ${fh(TP)}&#10;Aufs Freizeitkonto: ${fh(G)}`;return`<div class="gs" title="${tt}" style="cursor:help"><span>im ganzen Jahr erarbeitet laut Plan: <b class="jh${G<0?' neg':''}">${fmt(G/daily(),1)} Tage</b> (${fhm(G)} h) ⓘ</span></div>`})()}
+     ${(()=>{const G=sum(C.months.map(M=>M.toKonto||0)),MZ=sum(C.months.map(M=>(M.ist||0)-(M.soll||0))),ZS=sum(C.months.map(M=>M.zs||0)),TP=sum(C.months.map(M=>M.toPool||0));let PF=0,RF=0,DF=0;C.months.forEach(M=>{const tp=M.toPool||0;if((M.credit||0)<0&&tp<=0)DF+=-(M.credit||0);else if(tp<0)DF+=-tp;else if(DF>0){const r=Math.min(DF,tp);RF+=r;DF-=r;PF+=tp-r}else PF+=tp});const tt=`Alle Stunden, die ${C.y} laut deinen Einträgen über die Pauschale hinaus aufs Freizeitkonto gehen, inklusive geplanter Tage bis 31.12.&#10;Mehrzeit (Ist über Soll): ${fh(MZ)}&#10;Zuschläge (Wochenende, Feiertag, Mehrarbeit): ${fh(ZS)}&#10;Davon in die Pauschale: ${fh(PF)}${RF>0.004?`&#10;Minus aus Vormonaten ausgeglichen: ${fh(RF)}`:''}${DF>0.004?`&#10;Noch offenes Minus: ${fh(DF)}`:''}&#10;Aufs Freizeitkonto: ${fh(G)}`;return`<div class="gs"><span>im ganzen Jahr erarbeitet laut Plan: <b class="jh${G<0?' neg':''}">${fmt(G/daily(),1)} Tage</b> (${fhm(G)} h) ${IB('erarb')}</span></div>${IBX('erarb',tt.replace(/&#10;/g,'<br>'))}`})()}
      
    </div>
    <div class="gauge">
-     <div class="gl"><b>JÜP genommen</b><span><strong>${fmt(V.jup.daysT,1)}</strong> Tage</span></div>
+     <div class="gl"><b>JÜP genommen ${IB('jupT')}</b><span><strong>${fmt(V.jup.daysT,1)}</strong> Tage</span></div>
+     ${IBX('jupT',`JÜP-Tage bis heute, nach Monaten:<br><b>${jByM(true)}</b><br>Zusammen ${fmt(V.jup.daysT,1)} Tage bzw. ${fh(V.jup.hT)}. Sie werden vom Freizeitkonto abgezogen.`)}
      <div class="tube"><div class="fill jup" style="width:${V.jup.days>0?V.jup.daysT/V.jup.days*100:0}%"></div></div>
      <div class="gs"><span class="jh">${fh(V.jup.hT)}</span><span>bis heute</span></div>
    </div>
    <div class="gauge">
-     <div class="gl"><b>JÜP geplant</b><span><strong>${fmt(V.jup.days-V.jup.daysT,1)}</strong> Tage</span></div>
+     <div class="gl"><b>JÜP geplant ${IB('jupP')}</b><span><strong>${fmt(V.jup.days-V.jup.daysT,1)}</strong> Tage</span></div>
+     ${IBX('jupP',`Eingeplante JÜP-Tage ab morgen, nach Monaten:<br><b>${jByM(false)}</b><br>Zusammen ${fmt(V.jup.days-V.jup.daysT,1)} Tage bzw. ${fh(V.jup.h-V.jup.hT)}. Sie sind in „JÜP verfügbar“ schon abgezogen.`)}
      <div class="tube"><div class="fill plan" style="width:${V.jup.days>0?(V.jup.days-V.jup.daysT)/V.jup.days*100:0}%"></div></div>
      <div class="gs"><span class="jh">${fh(V.jup.h-V.jup.hT)}</span><span>${V.jup.days>0?'von '+fmt(V.jup.days,1)+' Tagen im '+(mv?'Monat':'Jahr'):'Keine JÜP-Tage geplant'}</span></div>
    </div>
    <div class="gauge">
-     <div class="gl"><b>Freizeitkonto</b><span><strong class="${chg('konto',konto)}">${fmt(konto)}</strong> h</span></div>
+     <div class="gl"><b>Freizeitkonto ${IB('konto')}</b><span><strong class="${chg('konto',konto)}">${fmt(konto)}</strong> h</span></div>
+     ${IBX('konto',`<b>1. Zuerst die Pauschale:</b> Die ersten ${fmt(S.pool,0)} h Mehrarbeit im Jahr sind mit dem Gehalt abgegolten. Bis dahin kommt nichts aufs Konto.<br><b>2. Alles darüber:</b> Jede Stunde über dem Soll geht aufs Freizeitkonto, dazu alle Zuschläge für Samstag, Sonntag, Feiertag und Mehrarbeit.<br><b>3. JÜP-Tage:</b> Ein JÜP-Tag kostet so viele Stunden, wie an dem Tag Soll gewesen wäre.<br><b>4. Verfall:</b> Stunden gelten ${fmt(+S.expiryMonths||6,0)} Monate nach dem Monat, in dem sie entstanden sind. Die ältesten werden zuerst verbraucht, Reste verfallen zum Monatsende.<br><b>5. Minusmonat:</b> Ein Minus wird in den nächsten Monat übertragen und mit dem Plus verrechnet.<br><span style="display:block;margin-top:6px;padding-top:6px;border-top:1px solid rgba(127,127,127,.3)">Stand jetzt: <b>${fh(konto)}</b> · Prognose 31.12.: <b>${fh(C.konto)}</b> (${conv(C.konto)})${soon?`<br>Nächster Verfall: ${fh(soon.h)} am ${monthEnd(soon.exp)}`:''}<br>JÜP verfügbar zeigt davon, was nach allen geplanten JÜP noch frei ist.</span>`)}
      <div class="tube"><div class="fill konto" style="width:${kp*100}%"></div></div>
      <div class="gs">${soon?`<span class="w">Nächster Verfall laut Planung: ${fh(soon.h)} ${soon.src<0?'aus dem Vorjahr':'aus '+MON[soon.src%12]}, am ${monthEnd(soon.exp)}</span>`:'<span>Nichts läuft ab</span>'}${C.expTot>0.004?`<span>${fh(C.expTot)} schon verfallen</span>`:''}</div>
      <div class="gs"><span>Prognose 31.12.: ${fh(C.konto)}, ${conv(C.konto)}</span></div>
    </div>
    ${(()=>{let tk=0,pl=0;Object.values(C.days).forEach(dc=>{if(dc.vac){if(dc.k<=todayK)tk+=dc.vac;else pl+=dc.vac}});const rest=S.vacation-tk-pl;let zk=null;const O=(ST.years[UI.year]||{}).official||{};for(let m=11;m>=0;m--)if(O[m]&&O[m].urlK){zk={m,...O[m].urlK};break}
-     return `<div class="gauge"><div class="gl"><b>Urlaub</b><span><strong class="${rest<0?'neg':''}">${fmt(rest,1)}</strong> Tage frei</span></div>
+     return `<div class="gauge"><div class="gl"><b>Urlaub ${IB('url')}</b><span><strong class="${rest<0?'neg':''}">${fmt(rest,1)}</strong> Tage frei</span></div>
+     ${IBX('url',`Anspruch ${fmt(S.vacation,1)} Tage (Einstellungen).<br>Genommen bis heute: <b>${fmt(tk,1)}</b> · geplant: <b>${fmt(pl,1)}</b> · noch frei: <b>${fmt(rest,1)}</b>${zk?`<br>Laut Zeitnachweis ${MON[zk.m]}: ${fmt(zk.verbr,1)} von ${fmt(zk.tage,1)} verplant, Rest ${fmt(zk.rest,1)}.`:''}<br>Urlaubstage zählen wie ein Arbeitstag mit Soll, sie verändern das Freizeitkonto nicht.`)}
      <div class="tube"><div class="fill konto" style="width:${S.vacation?Math.min(100,(tk+pl)/S.vacation*100):0}%"></div></div>
      <div class="gs"><span>${fmt(tk,1)} genommen</span><span>${fmt(pl,1)} geplant, Anspruch ${fmt(S.vacation,1)}</span></div>
      ${zk?`<div class="gs"><span>Zeitnachweis ${MON[zk.m]}: ${fmt(zk.verbr,1)} von ${fmt(zk.tage,1)} verplant, Rest ${fmt(zk.rest,1)}</span></div>`:''}</div>`})()}
    ${(()=>{const mi=mv?UI.month:sm===99?TD.getMonth():sm<0?0:sm,M=C.months[mi],q=M.mobQ,over=q>mL+1e-6,rest=M.mobB*mL/100-M.mob;
-     return `<div class="gauge"><div class="gl"><b>Mobiles Arbeiten</b><span><strong class="${over?'neg':''}">${fmt(q,0)} %</strong> von ${fmt(mL,0)} %</span></div>
+     return `<div class="gauge"><div class="gl"><b>Mobiles Arbeiten ${IB('mob')}</b><span><strong class="${over?'neg':''}">${fmt(q,0)} %</strong> von ${fmt(mL,0)} %</span></div>
+     ${IBX('mob',`Mobiles Arbeiten darf höchstens ${fmt(mL,0)} % der Sollstunden eines Monats betragen.<br>${MON[mi]}: Basis ${fh(M.mobB)}, also höchstens <b>${fh(M.mobB*mL/100)}</b>. Eingetragen: <b>${fh(M.mob)}</b>${over?`, also ${fh(-rest)} zu viel.`:`, noch möglich: <b>${fh(rest)}</b> (ca. ${fmt(rest/daily(),1)} Tage).`}`)}
      <div class="tube"><div class="fill mob ${over?'over':''}" style="width:${Math.min(100,q/mL*100)}%"></div></div>
      <div class="gs"><span>${fh(M.mob)} von ${fh(M.mobB)}</span><span>${MON[mi]}${M.mobO?', Zeitnachweis':''}</span></div>
      <div class="gs">${over?`<span class="w">${fh(-rest)} über der Grenze</span>`:`<span>noch möglich ${fh(rest)}, ca. ${fmt(rest/daily(),1)} Tage</span>`}</div></div>`})()}
-   ${(()=>{const D=x=>!isDis(serId(x)),ov=V.series.filter(x=>x.n>S.maxSeries&&D(x)).length,lm=V.series.filter(x=>x.n===S.maxSeries&&D(x)).length,ld=V.longD.length&&!isDis('max:'+C.longD.length+':'+C.longD[0])?V.longD.length:0,rs=V.restD.length&&!isDis('rest:'+C.restD.length+':'+(C.restD[0]||{}).k)?V.restD.length:0,hb=(V.halbK||[]).length&&!isDis('halb:'+UI.year)?V.halbK.length:0,tot=ov+lm+(ld?1:0)+(rs?1:0)+(V.mobOver.length?1:0)+(hb?1:0);
-     const ch=[];if(ov)ch.push(`<span class="hchip r" data-grp="over">${ov} ${ov===1?'Serie':'Serien'} über ${S.maxSeries} Tage</span>`);if(lm)ch.push(`<span class="hchip y" data-grp="limit">${lm}× Grenze erreicht</span>`);if(ld)ch.push(`<span class="hchip y" data-grp="long">${ld} ${ld===1?'Tag':'Tage'} über ${fmt(+S.maxDaily,0)} h</span>`);if(rs)ch.push(`<span class="hchip r" data-grp="rest">${rs}× Ruhezeit zu kurz</span>`);if(hb)ch.push(`<span class="hchip y" data-grp="halb">${hb}× halber Tag offen</span>`);if(V.mobOver.length)ch.push(`<span class="hchip r" data-grp="mob">Mobil über ${fmt(mL,0)} %${mv?'':' in '+V.mobOver.length+(V.mobOver.length===1?' Monat':' Monaten')}</span>`);
+   ${(()=>{const D=x=>!isDis(serId(x)),ov=V.series.filter(x=>x.n>S.maxSeries&&D(x)).length,lm=V.series.filter(x=>x.n===S.maxSeries&&D(x)).length,ld=V.longD.length&&!isDis('max:'+C.longD.length+':'+C.longD[0])?V.longD.length:0,rs=V.restD.length&&!isDis('rest:'+C.restD.length+':'+(C.restD[0]||{}).k)?V.restD.length:0,hb=(V.halbK||[]).length&&!isDis('halb:'+UI.year)?V.halbK.length:0,EX=(()=>{const e=expWarn(C);return e&&!isDis(e.id)?e:null})(),tot=ov+lm+(ld?1:0)+(rs?1:0)+(V.mobOver.length?1:0)+(hb?1:0)+(EX?1:0);
+     const ch=[];if(EX)ch.push(`<span class="hchip y" data-grp="exp">${fh(EX.h)} verfallen am ${EX.ds.slice(0,6)}</span>`);if(ov)ch.push(`<span class="hchip r" data-grp="over">${ov} ${ov===1?'Serie':'Serien'} über ${S.maxSeries} Tage</span>`);if(lm)ch.push(`<span class="hchip y" data-grp="limit">${lm}× Grenze erreicht</span>`);if(ld)ch.push(`<span class="hchip y" data-grp="long">${ld} ${ld===1?'Tag':'Tage'} über ${fmt(+S.maxDaily,0)} h</span>`);if(rs)ch.push(`<span class="hchip r" data-grp="rest">${rs}× Ruhezeit zu kurz</span>`);if(hb)ch.push(`<span class="hchip y" data-grp="halb">${hb}× halber Tag offen</span>`);if(V.mobOver.length)ch.push(`<span class="hchip r" data-grp="mob">Mobil über ${fmt(mL,0)} %${mv?'':' in '+V.mobOver.length+(V.mobOver.length===1?' Monat':' Monaten')}</span>`);
      return `<div class="sumline"><span class="sl-lbl">Hinweise</span>${ch.length?ch.map(c=>c.replace('<span class="hchip','<span data-act="go-alert" role="button" tabindex="0" title="Zum Hinweis" class="hchip clk')).join(''):'<span class="hchip g">alles im Rahmen</span>'}<span class="sl-sp"></span>${tot?`<button class="tgb ${UI.showAlerts?'on':''} ${ov||rs?'warn':''}" data-act="tg-alerts" aria-expanded="${!!UI.showAlerts}"><span class="tgc">${tot}</span>${UI.showAlerts?'Hinweise ausblenden':'Hinweise anzeigen'}<i class="tgi">▾</i></button>`:''}<button class="tgb ${UI.showFacts?'on':''}" data-act="tg-facts" aria-expanded="${!!UI.showFacts}">${UI.showFacts?'Kennzahlen ausblenden':'Kennzahlen anzeigen'}<i class="tgi">▾</i></button></div>`})()}
    <div class="pfull ${UI.showFacts?'':'hidebox'}">
    <div class="facts">
@@ -2016,7 +2170,7 @@ function renderSettings(){
      </section>
    <section class="sbox span2"><h3>Darstellung</h3>
      <label class="ck zrck"><input type="checkbox" data-set="split" ${S.split!==false?'checked':''}> Tageszellen geteilt: Datum auf Weiß, Rest in der Ereignisfarbe</label>
-     <label>Design<select data-set="design"><option value="vis" ${S.design!=='glas'&&S.design!=='dunkel'?'selected':''}>Hell</option><option value="dunkel" ${S.design==='dunkel'?'selected':''}>Dunkel</option><option value="glas" ${S.design==='glas'?'selected':''}>Glaskacheln Anthrazit</option></select></label>
+     <label>Design<select data-set="design"><option value="vis" ${S.design!=='glas'&&S.design!=='dunkel'&&S.design!=='auto'?'selected':''}>Hell</option><option value="dunkel" ${S.design==='dunkel'?'selected':''}>Dunkel</option><option value="glas" ${S.design==='glas'?'selected':''}>Glaskacheln Anthrazit</option><option value="auto" ${S.design==='auto'?'selected':''}>Automatisch (wie Gerät)</option></select></label>
      <label>Hintergrund<select data-set="bg"><optgroup label="Grafiken"><option value="motiv" ${(S.bg||'motiv')==='motiv'?'selected':''}>Motiv Traversen</option><option value="buehne" ${S.bg==='buehne'?'selected':''}>Bühnenlicht</option><option value="blau" ${S.bg==='blau'?'selected':''}>Blaupause</option><option value="abend" ${S.bg==='abend'?'selected':''}>Abendhimmel</option><option value="halle" ${S.bg==='halle'?'selected':''}>Messehalle</option><option value="holz" ${S.bg==='holz'?'selected':''}>Helles Holz</option><option value="tropfen" ${S.bg==='tropfen'?'selected':''}>Wassertropfen</option><option value="gruen" ${S.bg==='gruen'?'selected':''}>Koelnmesse-Grün</option></optgroup><optgroup label="Bilder hell"><option value="xhallebunt" ${S.bg==='xhallebunt'?'selected':''}>Messehalle bunt</option><option value="xkraft" ${S.bg==='xkraft'?'selected':''}>Kraftpapier mit Blättern</option><option value="xglas" ${S.bg==='xglas'?'selected':''}>Glaswellen</option><option value="xwasser" ${S.bg==='xwasser'?'selected':''}>Wasser und Blatt</option><option value="xaquarell" ${S.bg==='xaquarell'?'selected':''}>Aquarell Pastell</option><option value="xholzspot" ${S.bg==='xholzspot'?'selected':''}>Holzwand mit Spots</option><option value="xzeichnung" ${S.bg==='xzeichnung'?'selected':''}>Technische Zeichnung</option><option value="xberg" ${S.bg==='xberg'?'selected':''}>Bergnebel</option><option value="xpapier" ${S.bg==='xpapier'?'selected':''}>Papierwellen Pastell</option><option value="xbeton" ${S.bg==='xbeton'?'selected':''}>Sichtbeton</option><option value="xmarmor" ${S.bg==='xmarmor'?'selected':''}>Marmor Gold</option><option value="xtraverse" ${S.bg==='xtraverse'?'selected':''}>Messehalle Traversen</option><option value="xtropen" ${S.bg==='xtropen'?'selected':''}>Tropische Blätter</option></optgroup><optgroup label="Bilder dunkel"><option value="xnetz" ${S.bg==='xnetz'?'selected':''}>Netzwerk Blau</option><option value="xplatine" ${S.bg==='xplatine'?'selected':''}>Platine</option><option value="xindustrie" ${S.bg==='xindustrie'?'selected':''}>Industriehalle</option><option value="xneuron" ${S.bg==='xneuron'?'selected':''}>Neuronen</option><option value="xall" ${S.bg==='xall'?'selected':''}>Weltall</option><option value="xgold" ${S.bg==='xgold'?'selected':''}>Nachtblau Gold</option><option value="xhex" ${S.bg==='xhex'?'selected':''}>Hexagon Neon</option></optgroup><option value="foto" ${S.bg==='foto'?'selected':''}>Eigenes Foto</option><option value="aus" ${S.bg==='aus'?'selected':''}>Kein Bild</option></select></label>${['xnetz','xplatine','xindustrie','xneuron','xall','xgold','xhex'].includes(S.bg)?'<p style="font-size:12px;opacity:.75;margin:4px 0 0">Bei diesem dunklen Bild werden die Kästen fast deckend, damit die Schrift lesbar bleibt. Passt auch gut zum Design Dunkel.</p>':''}
      <div class="bgprev"></div><div class="bgrow"><button class="btn" data-act="bg-pick">Foto wählen</button>${BGIMG?'<button class="btn ghost" data-act="bg-del">Foto entfernen</button>':''}<span style="font-size:calc(12px*var(--fs,1));color:var(--ink2)" id="bgMsg"></span></div>
      <label class="full">Schriftgröße<span class="rng"><input type="range" min="80" max="140" step="5" data-set="fontS" value="${S.fontS||100}" aria-label="Schriftgröße in Prozent"><b id="fsv">${S.fontS||100} %</b></span></label>
@@ -2029,14 +2183,14 @@ function renderSettings(){
    <section class="sbox fairs span2"><h3>Messen</h3>
      ${ST.fairs.map(f=>`<div class="fr"><input type="text" data-fair="${esc(f.id)}" data-k="name" value="${esc(f.name)}" aria-label="Name"><input type="text" data-fair="${esc(f.id)}" data-k="k" value="${esc(f.k)}" aria-label="Kürzel"><button data-act="fair-del" data-id="${esc(f.id)}" aria-label="${esc(f.name)} entfernen">✕</button></div>`).join('')}
      <button class="btn" data-act="fair-add">Messe hinzufügen</button></section>
-   <section class="sbox"><h3>Daten</h3>
-     <div class="btnrow"><button class="btn" data-act="export-json">Backup speichern</button><button class="btn" data-act="import-json">Backup laden</button><button class="btn" data-act="export-csv">CSV ${UI.year}</button><button class="btn" data-act="print">Kalender als PDF</button><button class="btn" data-act="export-ics">Für Handykalender ${UI.year}</button><button class="btn" data-act="review" data-y="${UI.year}">Jahresrückblick ${UI.year}</button></div>
-     <p>Gespeichert wird im Browser und, wenn verfügbar, in deinem Konto. Ein Backup schützt zusätzlich. Letztes Backup: ${S.lastBackup?fd(S.lastBackup).slice(4)+S.lastBackup.slice(0,4):'noch keins'}.</p><label style="margin-top:8px">Backup-Erinnerung<select data-bkset>${[3,7,14,30,60,90].map(n=>`<option value="${n}" ${!S.bkOff&&(+S.bkDays||3)===n?'selected':''}>alle ${n} Tage</option>`).join('')}<option value="0" ${S.bkOff?'selected':''}>aus</option></select></label>
-     <p>„Für Handykalender“ speichert Messen, Urlaub, JÜP und 13.T als .ics-Datei. Auf dem Handy öffnen, dann übernimmt der Kalender die Termine.</p>
+   <section class="sbox sdata"><h3><svg class="sd-ic" viewBox="0 0 66 66" aria-hidden="true"><rect x="1" y="1" width="64" height="64" rx="15" fill="#16171a"/><circle cx="33" cy="33" r="21" fill="none" stroke="#fff" stroke-width="6"/><polygon points="33,15 38.5,33 27.5,33" fill="#E85D04"/><polygon points="33,51 38.5,33 27.5,33" fill="#8D9199"/></svg>Daten</h3>
+     <div class="btnrow"><button class="btn" data-act="export-json">Backup speichern</button><button class="btn" data-act="import-json">Backup laden</button><button class="btn" data-act="export-csv">CSV ${UI.year}</button><button class="btn" data-act="print">Kalender als PDF</button><button class="btn" data-act="export-ics">Für Outlook / Handy</button><button class="btn" data-act="review" data-y="${UI.year}">Jahresrückblick ${UI.year}</button></div>
+     <p>Gespeichert wird im Browser und, wenn verfügbar, in deinem Konto. Ein Backup schützt zusätzlich. Letztes Backup: ${S.lastBackup?fd(S.lastBackup).slice(4)+S.lastBackup.slice(0,4):'noch keins'}.</p><label style="margin-top:8px">Backup-Erinnerung<select data-bkset>${[3,7,14,30,60,90].map(n=>`<option value="${n}" ${!S.bkOff&&(+S.bkDays||3)===n?'selected':''}>alle ${n} Tage</option>`).join('')}<option value="0" ${S.bkOff?'selected':''}>aus</option></select></label><div data-snapui style="margin-top:10px"></div>
+     <p>„Für Outlook / Handy“ speichert JÜP, Urlaub und Messetage als .ics-Datei. Per Doppelklick in Outlook oder auf dem Handy öffnen, dann übernimmt der Kalender die Termine.</p>
      <div class="btnrow" style="margin-top:10px"><button class="btn danger" data-act="blank">Leere Vorlage für ${UI.year}</button></div><p>Setzt nur das angezeigte Jahr auf Gleitzeit und freie Wochenenden zurück. Einstellungen, Messen und andere Jahre bleiben. Vorher am besten ein Backup speichern.</p></section>
    <section class="sbox"><h3>Hinweis und Haftung</h3><p style="font-size:13px;line-height:1.5;margin:0 0 6px">Der Zeitkompass ist ein privates Hilfsmittel zur Planung und Kontrolle der eigenen Arbeitszeit. Er ist kein offizielles Werkzeug der Koelnmesse und ersetzt nicht den Zeitnachweis. Maßgeblich ist allein der offizielle Zeitnachweis. Die Berechnungen setzen die Regeln des Manteltarifvertrags um. Diese Umsetzung ist nicht von der Personalabteilung bestätigt. Alle Angaben ohne Gewähr.</p><p style="font-size:13px;line-height:1.5;margin:0">Die Nutzung ist kostenlos und freiwillig. Alle Daten bleiben auf dem eigenen Gerät.</p></section>
-   <section class="sbox"><h3>App teilen</h3>
-     <div class="qrrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" class="qr" aria-label="QR-Code zur Zeitkompass-App"><path fill="#fff" d="M0 0h33v33h-33z"/><path class="qrline" stroke="#16171a" d="M2 2.5h7m1 0h1m1 0h1m3 0h4m2 0h1m1 0h7m-29 1h1m5 0h1m6 0h2m5 0h1m1 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m1 0h5m1 0h6m2 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m3 0h1m1 0h1m1 0h1m2 0h1m2 0h1m1 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m2 0h2m1 0h5m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m1 0h1m1 0h2m5 0h2m3 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-18 1h2m1 0h1m4 0h1m-20 1h1m1 0h1m3 0h2m1 0h2m2 0h3m3 0h1m3 0h1m2 0h1m1 0h1m-28 1h1m3 0h1m1 0h1m1 0h9m1 0h1m2 0h2m3 0h2m-29 1h3m1 0h1m1 0h2m1 0h4m2 0h2m2 0h3m1 0h4m1 0h1m-27 1h2m3 0h1m1 0h1m1 0h3m6 0h4m1 0h1m-25 1h1m3 0h6m1 0h2m1 0h1m3 0h1m2 0h1m5 0h1m-26 1h2m2 0h1m3 0h1m3 0h2m2 0h1m2 0h2m3 0h2m-29 1h1m1 0h1m1 0h1m1 0h1m3 0h2m1 0h3m1 0h1m1 0h1m4 0h1m3 0h1m-27 1h1m2 0h1m1 0h2m1 0h3m1 0h1m3 0h2m1 0h2m1 0h1m-23 1h3m1 0h1m4 0h1m1 0h4m2 0h1m2 0h2m4 0h1m-27 1h2m3 0h1m1 0h1m1 0h1m1 0h4m1 0h3m1 0h2m2 0h3m-29 1h3m3 0h1m1 0h1m6 0h3m1 0h1m4 0h2m2 0h1m-24 1h1m2 0h1m1 0h4m1 0h2m2 0h1m1 0h1m1 0h1m-24 1h10m2 0h2m2 0h1m2 0h7m1 0h1m-20 1h2m1 0h2m2 0h1m1 0h1m1 0h2m3 0h3m1 0h1m-29 1h7m1 0h1m1 0h2m1 0h3m1 0h1m2 0h1m1 0h1m1 0h1m3 0h1m-29 1h1m5 0h1m7 0h1m4 0h2m3 0h1m2 0h2m-29 1h1m1 0h3m1 0h1m2 0h1m1 0h1m1 0h2m4 0h7m1 0h2m-29 1h1m1 0h3m1 0h1m3 0h1m2 0h5m1 0h1m1 0h1m2 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m2 0h1m2 0h7m3 0h1m2 0h2m-29 1h1m5 0h1m3 0h1m1 0h1m2 0h2m1 0h1m1 0h1m3 0h2m-26 1h7m1 0h3m2 0h4m3 0h4m4 0h1"/></svg><div><p>Kollegen scannen den Code mit der Handykamera und haben den Zeitkompass sofort, mit leerem Kalender. Eigene Daten werden nicht geteilt.</p><p><b>zeitkompass4250.netlify.app</b></p><div class="btnrow"><button class="btn" data-act="copy-link">Link kopieren</button></div></div></div></section>
+   <section class="sbox steil"><h3>Teilen</h3><p class="st-sub"><b>App</b></p>
+     <div class="qrrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33 33" class="qr" aria-label="QR-Code zur Zeitkompass-App"><path fill="#fff" d="M0 0h33v33h-33z"/><path class="qrline" stroke="#16171a" d="M2 2.5h7m1 0h1m1 0h1m3 0h4m2 0h1m1 0h7m-29 1h1m5 0h1m6 0h2m5 0h1m1 0h1m5 0h1m-29 1h1m1 0h3m1 0h1m1 0h5m1 0h6m2 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m3 0h1m1 0h1m1 0h1m2 0h1m2 0h1m1 0h1m1 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m2 0h2m1 0h5m1 0h1m1 0h1m1 0h1m1 0h3m1 0h1m-29 1h1m5 0h1m1 0h1m1 0h2m5 0h2m3 0h1m5 0h1m-29 1h7m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h1m1 0h7m-18 1h2m1 0h1m4 0h1m-20 1h1m1 0h1m3 0h2m1 0h2m2 0h3m3 0h1m3 0h1m2 0h1m1 0h1m-28 1h1m3 0h1m1 0h1m1 0h9m1 0h1m2 0h2m3 0h2m-29 1h3m1 0h1m1 0h2m1 0h4m2 0h2m2 0h3m1 0h4m1 0h1m-27 1h2m3 0h1m1 0h1m1 0h3m6 0h4m1 0h1m-25 1h1m3 0h6m1 0h2m1 0h1m3 0h1m2 0h1m5 0h1m-26 1h2m2 0h1m3 0h1m3 0h2m2 0h1m2 0h2m3 0h2m-29 1h1m1 0h1m1 0h1m1 0h1m3 0h2m1 0h3m1 0h1m1 0h1m4 0h1m3 0h1m-27 1h1m2 0h1m1 0h2m1 0h3m1 0h1m3 0h2m1 0h2m1 0h1m-23 1h3m1 0h1m4 0h1m1 0h4m2 0h1m2 0h2m4 0h1m-27 1h2m3 0h1m1 0h1m1 0h1m1 0h4m1 0h3m1 0h2m2 0h3m-29 1h3m3 0h1m1 0h1m6 0h3m1 0h1m4 0h2m2 0h1m-24 1h1m2 0h1m1 0h4m1 0h2m2 0h1m1 0h1m1 0h1m-24 1h10m2 0h2m2 0h1m2 0h7m1 0h1m-20 1h2m1 0h2m2 0h1m1 0h1m1 0h2m3 0h3m1 0h1m-29 1h7m1 0h1m1 0h2m1 0h3m1 0h1m2 0h1m1 0h1m1 0h1m3 0h1m-29 1h1m5 0h1m7 0h1m4 0h2m3 0h1m2 0h2m-29 1h1m1 0h3m1 0h1m2 0h1m1 0h1m1 0h2m4 0h7m1 0h2m-29 1h1m1 0h3m1 0h1m3 0h1m2 0h5m1 0h1m1 0h1m2 0h3m1 0h1m-29 1h1m1 0h3m1 0h1m1 0h1m2 0h1m2 0h7m3 0h1m2 0h2m-29 1h1m5 0h1m3 0h1m1 0h1m2 0h2m1 0h1m1 0h1m3 0h2m-26 1h7m1 0h3m2 0h4m3 0h4m4 0h1"/></svg><div><p>Kollegen scannen den Code mit der Handykamera und haben den Zeitkompass sofort, mit leerem Kalender. Eigene Daten werden nicht geteilt.</p><p><b>zeitkompass4250.netlify.app</b></p><div class="btnrow"><button class="btn" data-act="copy-link">Link kopieren</button></div></div></div><p class="st-sub" style="margin-top:14px"><b>Einstellungen</b></p><p>Messeliste, Aussehen und Regeln an Kollegen weitergeben oder von ihnen übernehmen. Einträge, Konten, Sollzeiten und Pauschale bleiben privat.</p><div class="btnrow"><button class="btn" data-share="out">Einstellungen teilen</button><button class="btn" data-share="in">Einstellungen übernehmen</button></div></section>
   </div>`;
 }
 function setPath(path,val){const p=path.split('.');let o=ST.settings;for(let i=0;i<p.length-1;i++)o=o[p[i]];o[p[p.length-1]]=val}
@@ -2474,6 +2628,7 @@ function showTip(c,ev){
 function placeTip(ev){const t=$('#tip'),w=t.offsetWidth,h=t.offsetHeight;let x=ev.clientX+14,y=ev.clientY+14;if(x+w>innerWidth-8)x=ev.clientX-w-14;if(y+h>innerHeight-8)y=ev.clientY-h-14;t.style.left=x+'px';t.style.top=y+'px'}
 function hideTip(){$('#tip').hidden=true}
 
+window.zkUI=()=>UI;window.zkRender=q=>render(q);window.zkOpenDrawer=k=>openDrawer(k);window.zkCloseDrawer=()=>closeDrawer();window.zkSetEntry=(k,p)=>setEntry(k,p);window.zkEntry=k=>entry(k);window.zkStored=k=>stored(k);window.zkTypes=()=>TYPES;window.zkApplyTheme=()=>applyTheme();window.zkApplyColors=()=>{try{applyColors()}catch(e){}};window.zkFair=id=>fairById(id);
 applyTheme();render();
 initDb();
 }
@@ -2500,7 +2655,7 @@ document.querySelectorAll('.kneedle').forEach((n,i)=>{const v=V[Math.floor(Math.
 })();
 
 (function(){
-  const VER="1.10.1",NEWS=[{"v": "1.10", "t": ["Neuerungen werden jetzt übersichtlich nach Versionen angezeigt, ältere lassen sich aufklappen.", "Die Backup-Erinnerung kommt jetzt standardmäßig alle 3 Tage. Einstellbar im Hinweisfenster oder in den Einstellungen beim Backup."]}, {"v": "1.9", "t": ["Unter JÜP verfügbar steht jetzt zusätzlich, was bis 31.12. laut Plan dazukommt und wie viele JÜP-Tage du im ganzen Jahr erarbeitest. Beim Darüberfahren siehst du die Aufteilung.", "Neue Backup-Erinnerung: Ist das letzte Backup länger her, erscheint ein Hinweisfenster. Dort lässt sich einstellen, wie oft erinnert wird, oder die Erinnerung abschalten. Die Einstellung gibt es auch in den Einstellungen beim Backup."]}, {"v": "1.8", "t": ["Notizen lassen sich jetzt farbig hervorheben: im Tagesfenster unter der Notiz Rot, Orange, Blau oder Grün wählen. Die Notiz-Ecke im Kalender, der Tooltip, die Monatsansicht und der Ausdruck zeigen die Farbe."]}, {"v": "1.7", "t": ["Einzeln angelegte Auf-, Laufzeit- und Abbautage innerhalb einer Messe werden jetzt automatisch der Messe zugeordnet. Im Messefenster erscheinen fehlende Tage als graue Zeile mit dem Knopf „Zuordnen“.", "Beim Messe-Eintragen steht jetzt das Jahr in der Überschrift und in den Datumsfeldern. Hat eine Messe Termine in einem anderen Jahr, führt ein Knopf direkt dorthin.", "Für 2027 sind die Messetermine hinterlegt (Stand November 2026): Unter Messen eine Messe auswählen, dann stehen Aufbau, Laufzeit und Abbau schon in den Feldern. Mit „Eintragen und übernehmen“ landen sie im Kalender. Neu in der Liste: gamescom Business Area."]}, {"v": "1.6", "t": ["Die Monatsansicht lässt sich jetzt drucken oder als PDF speichern: Buttons „Drucken“ und „Monat als PDF“ oben neben dem Monatsnamen. Mit Notizen, Uhrzeiten und Feiertagen. Auch der Jahreskalender hat jetzt einen Button „Drucken“."]}, {"v": "1.5", "t": ["Bei dunklen Hintergrundbildern sind die Kästen jetzt fast deckend weiß, damit die Schrift gut lesbar bleibt.", "Die Stunden unter JÜP verfügbar, JÜP genommen und JÜP geplant sind jetzt grün wie der Balken.", "Der Kalender als PDF trägt jetzt das Kompass-Logo: als „o“ im Namen und groß oben rechts.", "Das Fenster mit dem Zeitnachweis lässt sich jetzt am Kopf verschieben und an den unteren Ecken links und rechts größer oder kleiner ziehen.", "Korrektur: Bei eigenen Kachelfarben bleibt das Datum im Jahreskalender schwarz auf weißem Grund, mit Übergang zur gewählten Farbe.", "Hochgeladene Zeitnachweise werden jetzt als PDF auf diesem Gerät gespeichert. Im Prüfbericht und in der Auswertung öffnet der Button „Zeitnachweis“ das Original. Die PDFs sind auch im Backup enthalten. Bereits früher hochgeladene Nachweise bitte einmal neu hochladen."]}, {"v": "1.4", "t": ["Schulferien NRW lassen sich einblenden: mit dem gelben Schalter „Schulferien NRW“ rechts in der Legende unter dem Jahreskalender. Ferientage bekommen dann unten einen gelben Streifen, der Name steht im Tooltip. Standardmäßig ausgeblendet.", "Das Tagesfenster lässt sich mit der Maus verschieben: oben am Kopf mit dem Datum anfassen und ziehen."]}];
+  const VER="1.18.0",NEWS=[{"v":"1.18","t":["Persönliche Angaben: In den Einstellungen sind Felder, die jeder selbst anpassen muss, orange mit „persönlich“ markiert. Vorgaben aus MTV oder Gesetz sind grau markiert.","Neue Nutzer bekommen beim ersten Start einen Hinweis, Sollstunden, Gleitzeiten, Urlaub und Übertrag einzutragen, wichtig zum Beispiel bei Teilzeit."]},{"v":"1.17","t":["Für Outlook: JÜP, Urlaub, Messetage und auf Wunsch Arbeitszeiten als Kalenderdatei exportieren. Zusammenhängende Tage werden ein Termin.","Einstellungen teilen: Messeliste, Aussehen und Regeln per Link oder Code an Kollegen weitergeben. Persönliche Daten bleiben bei dir."]},{"v":"1.16","t":["Tastaturkürzel: Pfeiltasten blättern, J/M/A/S wechseln die Ansicht, H springt zu heute, ? zeigt alle Kürzel.","Tag kopieren und einfügen: im Tagesfenster oder mit Strg+C und Strg+V, auch in mehrere markierte Tage.","Notizsuche: Knopf „Notizen“ oder Taste / durchsucht alle Notizen aller Jahre.","Belastung: Schalter in der Jahresansicht färbt jeden Tag nach den gearbeiteten Stunden.","Design „Automatisch“ folgt dem Hell- oder Dunkelmodus des Geräts.","Die Kompassnadel im Logo zeigt die Lage: nach Norden ist alles im Rahmen, schräg gibt es Hinweise."]},{"v":"1.15","t":["Jahreswechsel-Assistent: Ab Dezember prüft ein Fenster Übertrag, halbe Tage, Urlaub, das neue Jahr und das Backup.","Fehlt ab dem 10. eines Monats der Zeitnachweis des Vormonats, erscheint ein Hinweis-Chip.","Jahresrückblick: ab 15. Dezember in der Auswertung, mit Karte zum Speichern als Bild.","Ist die Pauschale erreicht, gibt es einmal Konfetti."]},{"v":"1.14","t":["Testmodus: oben den Knopf „Testmodus“ drücken und JÜP oder Messen ausprobieren. Ein Balken zeigt, wie sich JÜP verfügbar und das Konto ändern. Danach übernehmen oder verwerfen.","Brückentage: In der Auswertung steht jetzt, wo wenige freie Tage viele Tage am Stück ergeben.","Im Heute-Bereich zeigt ein Balken den Countdown bis zur nächsten Messe und während einer Messe „Tag x von y“."]},{"v":"1.13","t":["Rückgängig und Wiederholen: oben neben dem Speicherstatus oder mit Strg+Z und Strg+Y. Die letzten 30 Änderungen lassen sich zurücknehmen.","Automatische Sicherungspunkte: Die App sichert einmal am Tag still den Stand, die letzten 7 Tage lassen sich in den Einstellungen beim Backup wiederherstellen.","Verfallswarnung: Läuft in den nächsten zwei Monaten Guthaben ab, erscheint ein Hinweis mit freien Arbeitstagen davor als Vorschlag."]},{"v":"1.12","t":["Neu: der Infokompass am rechten Fensterrand. Ein Klick öffnet alle Erklärungen gebündelt: Pauschale, Freizeitkonto, JÜP, Zuschläge, Urlaub, Mobiles Arbeiten, Messen, Zeitnachweise, Hinweise, Backup und Drucken. Mit Suchfeld."]},{"v":"1.11","t":["Neben Pauschale, JÜP verfügbar, JÜP genommen, JÜP geplant, Freizeitkonto, Urlaub und Mobiles Arbeiten sitzt jetzt ein kleiner Kompass. Ein Klick öffnet eine Erklärung mit deinen aktuellen Zahlen, ein zweiter schließt sie."]},{"v": "1.10", "t": ["Neuerungen werden jetzt übersichtlich nach Versionen angezeigt, ältere lassen sich aufklappen.", "Die Backup-Erinnerung kommt jetzt standardmäßig alle 3 Tage. Einstellbar im Hinweisfenster oder in den Einstellungen beim Backup."]}, {"v": "1.9", "t": ["Unter JÜP verfügbar steht jetzt zusätzlich, was bis 31.12. laut Plan dazukommt und wie viele JÜP-Tage du im ganzen Jahr erarbeitest. Beim Darüberfahren siehst du die Aufteilung.", "Neue Backup-Erinnerung: Ist das letzte Backup länger her, erscheint ein Hinweisfenster. Dort lässt sich einstellen, wie oft erinnert wird, oder die Erinnerung abschalten. Die Einstellung gibt es auch in den Einstellungen beim Backup."]}, {"v": "1.8", "t": ["Notizen lassen sich jetzt farbig hervorheben: im Tagesfenster unter der Notiz Rot, Orange, Blau oder Grün wählen. Die Notiz-Ecke im Kalender, der Tooltip, die Monatsansicht und der Ausdruck zeigen die Farbe."]}, {"v": "1.7", "t": ["Einzeln angelegte Auf-, Laufzeit- und Abbautage innerhalb einer Messe werden jetzt automatisch der Messe zugeordnet. Im Messefenster erscheinen fehlende Tage als graue Zeile mit dem Knopf „Zuordnen“.", "Beim Messe-Eintragen steht jetzt das Jahr in der Überschrift und in den Datumsfeldern. Hat eine Messe Termine in einem anderen Jahr, führt ein Knopf direkt dorthin.", "Für 2027 sind die Messetermine hinterlegt (Stand November 2026): Unter Messen eine Messe auswählen, dann stehen Aufbau, Laufzeit und Abbau schon in den Feldern. Mit „Eintragen und übernehmen“ landen sie im Kalender. Neu in der Liste: gamescom Business Area."]}, {"v": "1.6", "t": ["Die Monatsansicht lässt sich jetzt drucken oder als PDF speichern: Buttons „Drucken“ und „Monat als PDF“ oben neben dem Monatsnamen. Mit Notizen, Uhrzeiten und Feiertagen. Auch der Jahreskalender hat jetzt einen Button „Drucken“."]}, {"v": "1.5", "t": ["Bei dunklen Hintergrundbildern sind die Kästen jetzt fast deckend weiß, damit die Schrift gut lesbar bleibt.", "Die Stunden unter JÜP verfügbar, JÜP genommen und JÜP geplant sind jetzt grün wie der Balken.", "Der Kalender als PDF trägt jetzt das Kompass-Logo: als „o“ im Namen und groß oben rechts.", "Das Fenster mit dem Zeitnachweis lässt sich jetzt am Kopf verschieben und an den unteren Ecken links und rechts größer oder kleiner ziehen.", "Korrektur: Bei eigenen Kachelfarben bleibt das Datum im Jahreskalender schwarz auf weißem Grund, mit Übergang zur gewählten Farbe.", "Hochgeladene Zeitnachweise werden jetzt als PDF auf diesem Gerät gespeichert. Im Prüfbericht und in der Auswertung öffnet der Button „Zeitnachweis“ das Original. Die PDFs sind auch im Backup enthalten. Bereits früher hochgeladene Nachweise bitte einmal neu hochladen."]}, {"v": "1.4", "t": ["Schulferien NRW lassen sich einblenden: mit dem gelben Schalter „Schulferien NRW“ rechts in der Legende unter dem Jahreskalender. Ferientage bekommen dann unten einen gelben Streifen, der Name steht im Tooltip. Standardmäßig ausgeblendet.", "Das Tagesfenster lässt sich mit der Maus verschieben: oben am Kopf mit dem Datum anfassen und ziehen."]}];
   const save=()=>{if(window.zkSave)return window.zkSave();try{localStorage.setItem('stundenkalender.v1',JSON.stringify(ST))}catch(e){}};
   const bar=document.createElement('div');bar.id='zkbar';bar.style.cssText='position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:60;max-width:min(560px,calc(100vw - 24px));padding:12px 14px;border-radius:14px;background:#16171a;color:#f4f3f0;box-shadow:0 10px 30px rgba(0,0,0,.35);font-size:14px;line-height:1.45;display:none';
   document.body.appendChild(bar);
@@ -2692,6 +2847,402 @@ document.querySelectorAll('.kneedle').forEach((n,i)=>{const v=V[Math.floor(Math.
   function check(){const d=document.getElementById('discwin'),nw=document.getElementById('zknews'),zb=document.getElementById('zkbar');if((d&&!d.hidden)||(nw&&!nw.hidden)||(zb&&zb.style.display==='block')){setTimeout(check,3000);return}try{if(due())open()}catch(e){}}
   setTimeout(check,2500);
   try{if(/[?&#]zeige=backup\b/.test(location.search+location.hash))setTimeout(()=>{const d=document.getElementById('discwin');if(!d||d.hidden)open()},1500)}catch(e){}
+})();
+</script>
+<script>
+/* Info-Kompass an den Kennzahlen */
+document.addEventListener('click',function(ev){if(!window._zkIb||ev.target.closest('[data-ib],[data-ibx]'))return;window._zkIb=null;document.querySelectorAll('[data-ibx]').forEach(x=>x.hidden=true);document.querySelectorAll('[data-ib]').forEach(x=>x.setAttribute('aria-expanded','false'))});
+document.addEventListener('click',function(ev){const b=ev.target.closest&&ev.target.closest('[data-ib]');if(!b)return;ev.preventDefault();ev.stopPropagation();const k=b.dataset.ib,open=window._zkIb===k;window._zkIb=open?null:k;
+  document.querySelectorAll('[data-ibx]').forEach(x=>{x.hidden=x.dataset.ibx!==window._zkIb;x.style.left='';x.style.right='';x.style.top='';if(!x.hidden){const g=x.closest('.gauge')||x.parentElement,bt=b.getBoundingClientRect(),gr=g.getBoundingClientRect();x.style.top=(bt.bottom-gr.top+6)+'px';const r=x.getBoundingClientRect();if(r.right>innerWidth-8){x.style.left='auto';x.style.right='0'}}});document.querySelectorAll('[data-ib]').forEach(x=>x.setAttribute('aria-expanded',String(x.dataset.ib===window._zkIb)))},true);
+</script>
+<script>
+/* Infokompass: alle Erklärungen gebündelt */
+(function(){
+  const LOGO='<svg viewBox="0 0 66 66" aria-hidden="true"><rect x="1" y="1" width="64" height="64" rx="15" fill="#16171a"/><circle cx="33" cy="33" r="21" fill="none" stroke="#fff" stroke-width="6"/><polygon points="33,15 38.5,33 27.5,33" fill="#E85D04"/><polygon points="33,51 38.5,33 27.5,33" fill="#8D9199"/><circle cx="33" cy="33" r="2.8" fill="#fff"/></svg>';
+  const F=(x,d=2)=>(Math.round(x*100)/100).toLocaleString('de-DE',{minimumFractionDigits:d,maximumFractionDigits:d});
+  function live(){try{const y=new Date().getFullYear(),C=computeYear(y),S=ST.settings,d=daily(),s=a=>a.reduce((x,v)=>x+v,0);
+    return{y,S,d,C,konto:C.konto,free:C.availFree/d,jT:C.jup.daysT,jP:C.jup.days-C.jup.daysT,erarb:s(C.months.map(M=>M.toKonto||0))/d,poolDay:C.poolDay}}catch(e){return null}}
+  function content(){const L=live(),S=(L&&L.S)||{},R=S.rates||{},n=t=>L?`<span class="ip-n">${t}</span>`:'';
+    const sec=[
+    ['Grundlagen: Soll, Ist, Saldo',`<p><b>Soll</b> ist die Arbeitszeit, die an einem Tag laut Vertrag fällig ist (Wochenarbeitszeit ${F(+S.weekly||38,0)} h, aufgeteilt auf die Wochentage). <b>Ist</b> ist die tatsächlich gearbeitete Zeit nach Abzug der Pause.</p><p><b>Saldo</b> = Ist minus Soll plus Zuschläge. Positiv heißt Mehrarbeit, negativ heißt weniger gearbeitet.</p><p><b>Gleitzeit</b> ist ein normaler Arbeitstag mit den Standardzeiten. Er bringt weder Plus noch Minus, solange die Zeiten dem Soll entsprechen.</p>`],
+    ['Pauschale',`<p>Die ersten <b>${F(+S.pool||150,0)} h</b> Mehrarbeit im Jahr sind mit dem Gehalt abgegolten. Bis diese Stunden erreicht sind, kommt nichts aufs Freizeitkonto.</p><p>Ist die Pauschale voll, bleibt sie für den Rest des Jahres voll. Ein späterer Minusmonat wird nicht aus der Pauschale genommen, sondern in den nächsten Monat übertragen.</p>${L?n(L.poolDay?`Bei dir laut Planung erreicht am ${L.poolDay.slice(8)}.${L.poolDay.slice(5,7)}.`:L.poolDay===''?'Bei dir ist die Pauschale schon erreicht.':'Bei dir laut Planung bis 31.12. nicht erreicht.'):''}`],
+    ['Freizeitkonto',`<ul><li><b>Zuerst die Pauschale:</b> Bis sie erreicht ist, kommt nichts aufs Konto.</li><li><b>Alles darüber:</b> Jede Stunde über dem Soll geht aufs Konto, dazu alle Zuschläge.</li><li><b>JÜP-Tage:</b> Ein JÜP-Tag kostet so viele Stunden, wie an dem Tag Soll gewesen wäre.</li><li><b>Verfall:</b> Stunden gelten ${F(+S.expiryMonths||6,0)} Monate nach dem Monat, in dem sie entstanden sind. Die ältesten werden zuerst verbraucht, Reste verfallen zum Monatsende.</li><li><b>Minusmonat:</b> Ein Minus wird in den nächsten Monat übertragen und mit dem Plus verrechnet.</li></ul>${L?n(`Prognose 31.12.${L.y}: ${F(L.konto)} h, das sind ${F(L.konto/L.d,1)} Tage.`):''}`],
+    ['JÜP: verfügbar, genommen, geplant, erarbeitet',`<p><b>JÜP verfügbar:</b> So viele Tage kannst du noch frei verplanen, ohne dass das Konto irgendwann im Jahr ins Minus rutscht. Alle schon geplanten JÜP-Tage und Einsätze sind berücksichtigt.</p><p><b>JÜP genommen:</b> JÜP-Tage bis heute. <b>JÜP geplant:</b> eingetragene JÜP-Tage ab morgen.</p><p><b>Im ganzen Jahr erarbeitet:</b> alles, was im Jahr laut Einträgen aufs Konto geht, inklusive geplanter Einsätze. Das ist eine Information, kein zusätzliches Guthaben. Es steckt in „JÜP verfügbar“ schon drin.</p><p>Für das Folgejahr zählt der Übertrag zum 31.12. JÜP-Tage im neuen Jahr verbrauchen zuerst diesen Übertrag.</p>${L?n(`${L.y}: verfügbar ${F(L.free,1)} Tage · genommen ${F(L.jT,1)} · geplant ${F(L.jP,1)} · erarbeitet ${F(L.erarb,1)} Tage`):''}`],
+    ['Zuschläge',`<ul><li>Mehrarbeit Mo–Sa: <b>${F(+R.mehr||0,0)} %</b></li><li>Samstag: <b>${F(+R.sa||0,0)} %</b></li><li>Sonntag: <b>${F(+R.so||0,0)} %</b></li><li>Feiertag und Sondertage: <b>${F(+R.ft||0,0)} %</b></li><li>Nacht 22–6 Uhr: <b>${F(+R.na||0,0)} %</b>${S.night===false?' (ausgeschaltet)':''}</li></ul><p>Zuschläge werden als Stunden gutgeschrieben und gehen nach der Pauschale aufs Freizeitkonto. Sondertage sind zum Beispiel Heiligabend, Silvester, Oster- und Pfingstsonntag. Die Sätze stehen in den Einstellungen.</p>`],
+    ['Urlaub und Krank',`<p>Urlaubs- und Krankheitstage zählen wie ein Arbeitstag mit Soll. Sie verändern das Freizeitkonto nicht.</p><p>Der Urlaubsanspruch (${F(+S.vacation||30,1)} Tage) steht in den Einstellungen. Die Anzeige „Urlaub“ zeigt genommen, geplant und Rest. Liegt ein Zeitnachweis vor, steht der dortige Urlaubsstand dabei.</p>`],
+    ['Mobiles Arbeiten',`<p>Mobiles Arbeiten darf höchstens <b>${F(+S.mobilMax||50,0)} %</b> der Sollstunden eines Monats betragen. Die Anzeige zeigt den Anteil im gewählten Monat und wie viel noch möglich ist. Wird die Grenze überschritten, blinken die betroffenen Tage rot.</p>`],
+    ['Messen',`<p><b>Eintragen:</b> Unter „Messen“ eine Messe wählen, Aufbau ab, Laufzeit von/bis und Abbau bis eintragen, dann „Eintragen und übernehmen“. Mit dem Haken legst du fest, ob Wochenenden und Feiertage mit eingetragen werden.</p><p><b>Hinterlegte Termine:</b> Für 2027 sind die Messetermine hinterlegt (Stand November 2026). Beim Auswählen stehen die Daten schon in den Feldern. Änderungen sind möglich und müssen dann manuell angepasst werden.</p><p><b>Einzelne Tage:</b> Ein Aufbau-, Laufzeit- oder Abbautag innerhalb einer Messe wird automatisch dieser Messe zugeordnet. Im Messefenster erscheinen fehlende Tage grau mit dem Knopf „Zuordnen“.</p>`],
+    ['Zeitnachweise',`<p><b>Hochladen:</b> Die PDF-Zeitnachweise lassen sich hochladen, auch mehrere auf einmal. Die App übernimmt Zeiten, Salden und Freizeitkonto. Das PDF wird auf dem Gerät gespeichert.</p><p><b>Prüfbericht:</b> Er vergleicht deine Einträge mit dem Zeitnachweis und erklärt Abweichungen. „Zeitnachweis anzeigen“ öffnet das Original, das Fenster lässt sich verschieben und in der Größe ändern.</p><p>Bis ein Monat hochgeladen ist, rechnet die App mit deinen eigenen Einträgen.</p>`],
+    ['Hinweise und Warnungen',`<ul><li><b>Serien:</b> Mehr als ${F(+S.maxSeries||13,0)} Arbeitstage am Stück werden markiert, genau ${F(+S.maxSeries||13,0)} als Grenze erreicht.</li><li><b>Lange Tage:</b> Mehr als ${F(+S.maxDaily||10,0)} h netto.</li><li><b>Ruhezeit:</b> Weniger als ${F(+S.minRest||11,0)} h zwischen zwei Arbeitstagen.</li><li><b>Halber Tag offen:</b> An halben freien Tagen wie Heiligabend oder Silvester ist eine Hälfte frei. Die andere Hälfte bitte als Urlaub oder JÜP eintragen, bis dahin zählt sie nicht als Minus.</li></ul><p>Ein Klick auf einen Hinweis führt zur Stelle im Kalender. Hinweise lassen sich einzeln ausblenden.</p>`],
+    ['Backup und Datenspeicherung',`<p>Deine Einträge liegen im Browser auf diesem Gerät. Werden die Browserdaten gelöscht oder wechselst du Gerät oder Browser, sind sie ohne Backup weg.</p><p>„Backup speichern“ erzeugt eine Datei mit allen Einträgen, Einstellungen und Zeitnachweisen. „Backup laden“ spielt sie wieder ein. Die Erinnerung kommt standardmäßig alle 3 Tage und lässt sich in den Einstellungen ändern oder abschalten.</p>`],
+    ['Drucken und PDF',`<p><b>Jahreskalender:</b> „Drucken“ oder „Kalender als PDF“ unter dem Kalender.</p><p><b>Monat:</b> In der Monatsansicht „Drucken“ oder „Monat als PDF“, mit Notizen und Feiertagen.</p><p>Eingeblendete Schulferien und Notizfarben erscheinen auch im Ausdruck. Ist direktes Drucken nicht möglich, wird das PDF heruntergeladen.</p>`]];
+    return sec.map(([t,c],i)=>`<details data-ipt="${t.toLowerCase()}"><summary>${t}</summary><div class="ip-c">${c}</div></details>`).join('')}
+  const tab=document.createElement('button');tab.id='iptab';tab.type='button';tab.setAttribute('aria-label','Infokompass öffnen');tab.innerHTML=LOGO+'<span>Info</span>';document.body.appendChild(tab);
+  const P=document.createElement('aside');P.id='ippanel';P.setAttribute('aria-label','Infokompass');P.innerHTML=`<div class="ip-h">${LOGO}<div><div class="ip-k">Zeitkompass</div><h3>Infokompass</h3></div><button class="btn icon ghost ip-x" aria-label="Schließen">✕</button></div><input class="ip-s" type="search" placeholder="Suchen, z. B. Verfall oder Sonntag"><div class="ip-b"></div>`;document.body.appendChild(P);
+  const B=P.querySelector('.ip-b'),Q=P.querySelector('.ip-s');
+  function filt(){const q=Q.value.trim().toLowerCase();B.querySelectorAll('details').forEach(d=>{const c=d.querySelector('.ip-c');if(!c.dataset.o)c.dataset.o=c.innerHTML;c.innerHTML=c.dataset.o;if(!q){d.hidden=false;return}const hit=d.textContent.toLowerCase().includes(q);d.hidden=!hit;if(hit){d.open=true;const re=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');c.innerHTML=c.dataset.o.replace(/>([^<]+)</g,(m,t)=>'>'+t.replace(re,'<mark>$1</mark>')+'<')}})}
+  function open(){B.innerHTML=content();Q.value='';P.classList.add('open');tab.setAttribute('aria-expanded','true')}
+  function close(){P.classList.remove('open');tab.setAttribute('aria-expanded','false')}
+  tab.addEventListener('click',()=>P.classList.contains('open')?close():open());
+  P.querySelector('.ip-x').addEventListener('click',close);Q.addEventListener('input',filt);
+  document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&P.classList.contains('open')){ev.stopImmediatePropagation();close()}},true);
+  window.zkInfo=open;
+})();
+</script>
+<script>
+/* Rückgängig/Wiederholen und tägliche Sicherungspunkte */
+(function(){
+  const G=()=>window.zkST?zkST():null;const cur=()=>{const s=G();return JSON.stringify(Object.assign({},s,{updatedAt:0}))};
+  let H=[],ptr=-1,ref=null,lastT=0;const MAX=31;
+  function base(){try{ref=G();H=[cur()];ptr=0;upd()}catch(e){}}
+  window.zkHist=function(){if(!H.length)return;const c=cur();if(c===H[ptr])return;const now=Date.now();
+    if(now-lastT<700&&ptr===H.length-1&&ptr>0){H[ptr]=c}else{H=H.slice(0,ptr+1);H.push(c);if(H.length>MAX)H.shift();ptr=H.length-1}lastT=now;upd()};
+  function go(d){const np=ptr+d;if(np<0||np>=H.length)return;ptr=np;const s=JSON.parse(H[ptr]);s.updatedAt=Date.now();zkRestore(JSON.stringify(s),false);ref=G();upd();toast(d<0?'Änderung rückgängig gemacht':'Änderung wiederhergestellt')}
+  let U,R,T;
+  function upd(){if(U){U.disabled=ptr<=0;R.disabled=ptr>=H.length-1}}
+  function toast(t){if(!T){T=document.createElement('div');T.id='zktoast';document.body.appendChild(T)}T.textContent=t;T.style.display='block';clearTimeout(T._t);T._t=setTimeout(()=>T.style.display='none',1800)}
+  function mount(){const sy=document.getElementById('sync');if(!sy||document.getElementById('zkUndo'))return;
+    U=document.createElement('button');U.id='zkUndo';U.className='btn icon ghost';U.title='Rückgängig (Strg+Z)';U.setAttribute('aria-label','Rückgängig');U.textContent='↶';
+    R=document.createElement('button');R.id='zkRedo';R.className='btn icon ghost';R.title='Wiederholen (Strg+Y)';R.setAttribute('aria-label','Wiederholen');R.textContent='↷';
+    sy.parentNode.insertBefore(U,sy);sy.parentNode.insertBefore(R,sy);U.onclick=()=>go(-1);R.onclick=()=>go(1);upd()}
+  document.addEventListener('keydown',ev=>{if(!(ev.ctrlKey||ev.metaKey))return;const t=ev.target,ed=t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.isContentEditable);if(ed)return;const k=ev.key.toLowerCase();
+    if(k==='z'&&!ev.shiftKey){ev.preventDefault();go(-1)}else if(k==='y'||(k==='z'&&ev.shiftKey)){ev.preventDefault();go(1)}});
+  setTimeout(()=>{base();mount()},900);
+  setInterval(()=>{try{if(G()!==ref&&!window._zkNoHist){base()}}catch(e){}},1500);
+  /* Sicherungspunkte */
+  const DBN='zeitkompass-snap';let dbP=null;
+  const db=()=>dbP||(dbP=new Promise((res,rej)=>{try{const r=indexedDB.open(DBN,1);r.onupgradeneeded=()=>r.result.createObjectStore('s');r.onsuccess=()=>res(r.result);r.onerror=()=>rej(r.error)}catch(e){rej(e)}}));
+  const tx=(m,fn)=>db().then(d=>new Promise((res,rej)=>{const t=d.transaction('s',m),s=t.objectStore('s');let o;const r=fn(s);if(r)r.onsuccess=()=>{o=r.result};t.oncomplete=()=>res(o);t.onerror=()=>rej(t.error)}));
+  const iso=d=>d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  async function daily(){try{const s=G();if(!s)return;const n=Object.values(s.years||{}).reduce((a,Y)=>a+Object.keys((Y&&Y.entries)||{}).length,0);if(!n)return;const k=iso(new Date());const ks=(await tx('readonly',st=>st.getAllKeys()))||[];
+    if(!ks.includes(k))await tx('readwrite',st=>st.put({at:new Date().toISOString(),state:JSON.stringify(s)},k));
+    const all=((await tx('readonly',st=>st.getAllKeys()))||[]).sort();for(const old of all.slice(0,Math.max(0,all.length-7)))await tx('readwrite',st=>st.delete(old))}catch(e){}}
+  setTimeout(daily,3000);
+  async function fill(el){el.dataset.done='1';let ks=[];try{ks=((await tx('readonly',st=>st.getAllKeys()))||[]).sort().reverse()}catch(e){}
+    const f=k=>k.slice(8)+'.'+k.slice(5,7)+'.'+k.slice(0,4);
+    el.innerHTML=ks.length?`<div class="snaprow"><span>Automatische Sicherung vom</span><select data-snapk>${ks.map(k=>`<option value="${k}">${f(k)}</option>`).join('')}</select><button class="btn" data-snapgo>Stand wiederherstellen</button></div><p>Die App sichert einmal am Tag still den Stand auf diesem Gerät, die letzten 7 Tage bleiben erhalten. Eine Wiederherstellung lässt sich mit „Rückgängig“ zurücknehmen.</p>`:`<p>Automatische Sicherungen: noch keine vorhanden. Die App sichert einmal am Tag den Stand auf diesem Gerät.</p>`}
+  new MutationObserver(()=>{document.querySelectorAll('[data-snapui]:not([data-done])').forEach(fill)}).observe(document.body,{childList:true,subtree:true});
+  document.addEventListener('click',async ev=>{const b=ev.target.closest&&ev.target.closest('[data-snapgo]');if(!b)return;const k=b.parentNode.querySelector('[data-snapk]').value;
+    if(!confirm('Stand vom '+k.slice(8)+'.'+k.slice(5,7)+'.'+k.slice(0,4)+' wiederherstellen? Alle Änderungen seitdem werden ersetzt. Mit „Rückgängig“ lässt sich das zurücknehmen.'))return;
+    try{const v=await tx('readonly',st=>st.get(k));if(v&&v.state){const s=JSON.parse(v.state);s.updatedAt=Date.now();zkRestore(JSON.stringify(s),true);toast('Stand vom '+k.slice(8)+'.'+k.slice(5,7)+'. wiederhergestellt')}}catch(e){toast('Wiederherstellen fehlgeschlagen')}});
+})();
+</script>
+<script>
+/* Testmodus (Was-wäre-wenn) */
+(function(){
+  let snap=null,base=null,B=null,btn=null;
+  const num=()=>{try{const y=new Date().getFullYear(),C=computeYear(y),d=daily();return{y,free:C.availFree/d,end:C.konto}}catch(e){return null}};
+  const F=(x,d=1)=>(Math.round(x*10**d)/10**d).toLocaleString('de-DE',{minimumFractionDigits:d,maximumFractionDigits:d});
+  function bar(){if(!B){B=document.createElement('div');B.id='simbar';document.body.appendChild(B);B.addEventListener('click',ev=>{const b=ev.target.closest('button');if(!b)return;if(b.dataset.sb==='ok')end(true);else end(false)})}
+    const n=num();B.innerHTML=`<span class="sb-t">Testmodus</span><span>Änderungen werden nicht gespeichert.</span>${n&&base?`<span>JÜP verfügbar ${n.y}: <b>${F(base.free)}</b> → <b>${F(n.free)}</b> Tage</span><span>Konto 31.12.: <b>${F(base.end,2)}</b> → <b>${F(n.end,2)}</b> h</span>`:''}<button class="sb-ok" data-sb="ok">Übernehmen</button><button class="sb-no" data-sb="no">Verwerfen</button>`}
+  function start(){if(window._zkSim)return;snap=JSON.stringify(zkST());base=num();window._zkSim=true;document.body.classList.add('zk-sim');btn.textContent='Testmodus aktiv';bar();tick()}
+  function end(keep){if(!window._zkSim)return;if(keep){if(!confirm('Alle Änderungen aus dem Testmodus übernehmen und speichern?'))return;zkSimEnd(true)}else{window._zkSim=false;zkRestore(snap,false)}document.body.classList.remove('zk-sim');btn.textContent='Testmodus';snap=null}
+  let tk=null;function tick(){clearTimeout(tk);if(!window._zkSim)return;bar();tk=setTimeout(tick,900)}
+  window.addEventListener('beforeunload',ev=>{if(window._zkSim){ev.preventDefault();ev.returnValue=''}});
+  document.addEventListener('keydown',ev=>{if(window._zkSim&&(ev.ctrlKey||ev.metaKey)&&/^[zy]$/i.test(ev.key)){const t=ev.target;if(!(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'))){ev.preventDefault();ev.stopImmediatePropagation()}}},true);
+  function mount(){const u=document.getElementById('zkUndo')||document.getElementById('sync');if(!u||document.getElementById('zkSim'))return;btn=document.createElement('button');btn.id='zkSim';btn.className='btn';btn.textContent='Testmodus';btn.title='Was-wäre-wenn: Änderungen ausprobieren, ohne zu speichern';u.parentNode.insertBefore(btn,u);btn.onclick=()=>window._zkSim?end(false):start()}
+  setTimeout(mount,1200);
+})();
+/* Brückentage-Finder in der Auswertung */
+(function(){
+  const pad=n=>String(n).padStart(2,'0'),KK=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()),add=(k,n)=>{const d=new Date(k+'T12:00');d.setDate(d.getDate()+n);return KK(d)};
+  const WDn=['So','Mo','Di','Mi','Do','Fr','Sa'],fdx=k=>WDn[new Date(k+'T12:00').getDay()]+' '+k.slice(8)+'.'+k.slice(5,7)+'.';
+  function calc(y){const today=KK(new Date()),Cs={};const C=yy=>Cs[yy]||(Cs[yy]=computeYear(yy));
+    const day=k=>{const c=C(+k.slice(0,4)).days[k];return c};
+    const off=k=>{const c=day(k);if(!c)return true;const i=c.i;if(i.we||i.legal||(i.frei&&!i.halb))return true;const t=c.e.t;return t==='urlaub'||t==='fza'||t==='frei'};
+    const busy=k=>{const c=day(k);return c&&(c.e.f||['aufbau','laufzeit','abbau','arbeit','dienst','mobil','krank'].includes(c.e.t))};
+    const out=[];let k=y+'-01-01';const end=y+'-12-31';
+    while(k<=end){if(!off(k)&&k>=today){let r=[k],j=add(k,1);while(!off(j)&&r.length<3){r.push(j);j=add(j,1)}
+        if(r.length<=2&&off(add(r[0],-1))&&off(j)&&!r.some(busy)){let a=add(r[0],-1);while(off(add(a,-1)))a=add(a,-1);let b=j;while(off(add(b,1)))b=add(b,1);
+          const len=Math.round((new Date(b+'T12:00')-new Date(a+'T12:00'))/864e5)+1;const names=[];let q=a;while(q<=b){const c=day(q);if(c&&c.i.name&&(c.i.legal||c.i.frei))names.push(c.i.name);q=add(q,1)}
+          if(names.length)out.push({r,a,b,len,cost:r.length,names})}
+        k=add(r[r.length-1],1);continue}k=add(k,1)}
+    const seen=new Set();return out.filter(o=>{const id=o.r.join();if(seen.has(id))return false;seen.add(id);return true}).sort((x,z)=>z.len/z.cost-x.len/x.cost||x.a.localeCompare(z.a))}
+  function render(){const sel=document.querySelector('[data-view="auswertung"][aria-selected="true"]');if(!sel)return;const main=document.querySelector('main');if(!main||main.querySelector('#bridges'))return;
+    const y=+((document.querySelector('.yearnav span')||{}).textContent||new Date().getFullYear());let L=[];try{L=calc(y)}catch(e){return}
+    const box=document.createElement('section');box.id='bridges';box.className='panel glass';
+    box.innerHTML=`<h2 class="sec">Brückentage ${y}</h2><p class="muted">Wo wenige JÜP- oder Urlaubstage viele freie Tage am Stück ergeben. Tage mit Messe oder Dienst sind ausgenommen. Eingetragen wird nichts, ein Klick springt zum Tag.</p>${L.length?`<div class="tscroll"><table><thead><tr><th>Anlass</th><th>Nehmen</th><th>Frei am Stück</th></tr></thead><tbody>${L.map(o=>`<tr class="clk" data-act="goto-day" data-k="${o.r[0]}"><td>${o.names.filter((v,i,a)=>a.indexOf(v)===i).join(', ')}</td><td><b>${o.cost} ${o.cost===1?'Tag':'Tage'}</b>: ${o.r.map(fdx).join(', ')}</td><td><b>${o.len} Tage</b>: ${fdx(o.a)} bis ${fdx(o.b)}</td></tr>`).join('')}</tbody></table></div>`:'<p>Für den Rest des Jahres gibt es keine freien Brückentage mehr.</p>'}`;
+    main.appendChild(box)}
+  let q=false;new MutationObserver(()=>{if(q)return;q=true;requestAnimationFrame(()=>{q=false;render()})}).observe(document.body,{childList:true,subtree:true});
+})();
+</script>
+<script>
+/* Etappe 3: Jahreswechsel, fehlende Zeitnachweise, Jahresrückblick, Konfetti */
+(function(){
+  const LOGO='<svg viewBox="0 0 66 66" aria-hidden="true"><rect x="1" y="1" width="64" height="64" rx="15" fill="#16171a"/><circle cx="33" cy="33" r="21" fill="none" stroke="#fff" stroke-width="6"/><polygon points="33,15 38.5,33 27.5,33" fill="#E85D04"/><polygon points="33,51 38.5,33 27.5,33" fill="#8D9199"/><circle cx="33" cy="33" r="2.8" fill="#fff"/></svg>';
+  const pad=n=>String(n).padStart(2,'0'),KK=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()),TK=()=>KK(new Date());
+  const F=(x,d=1)=>(Math.round(x*10**d)/10**d).toLocaleString('de-DE',{minimumFractionDigits:d,maximumFractionDigits:d});
+  const FD=k=>k.slice(8)+'.'+k.slice(5,7)+'.'+k.slice(0,4);const MONN=['Januar','Februar','März','April','Mai','Juni','Juli','August','September','Oktober','November','Dezember'];
+  const S=()=>zkST().settings,sv=()=>{try{zkSave()}catch(e){}};
+  const Q=new URLSearchParams(location.search).get('zeige')||'';
+  function modal(id,cls,html){let W=document.getElementById(id);if(!W){W=document.createElement('div');W.className='modal';W.id=id;W.innerHTML=`<div class="sheet glass ${cls}" role="dialog" aria-modal="true"></div>`;document.body.appendChild(W);W.addEventListener('click',ev=>{if(ev.target===W||ev.target.closest('[data-zkclose]'))W.hidden=true})}W.firstChild.innerHTML=html;W.hidden=false;return W}
+  document.addEventListener('keydown',ev=>{if(ev.key!=='Escape')return;for(const id of ['jwwin','rbwin']){const W=document.getElementById(id);if(W&&!W.hidden){ev.stopImmediatePropagation();W.hidden=true}}},true);
+  /* ---- Jahreswechsel ---- */
+  function jw(){const y=new Date().getFullYear(),C=computeYear(y),s=S(),d=daily();const it=[];
+    const lots=(C.lotsEnd||[]).filter(l=>l.h>0.05).sort((a,b)=>a.exp-b.exp).map(l=>{const yy=Math.floor(l.exp/12),m=l.exp%12;return F(l.h,2)+' h am '+pad(new Date(yy,m+1,0).getDate())+'.'+pad(m+1)+'.'+yy});
+    it.push(['jw-ok','✓',`<b>Übertrag nach ${y+1}:</b> ${F(C.konto,2)} h, das sind ${F(C.konto/d)} Tage.${lots.length?' Davon verfallen, wenn nicht genommen: '+lots.slice(0,4).join(', ')+(lots.length>4?' …':''):''}`]);
+    const hk=C.halbK||[];it.push(hk.length?['jw-w','!',`<b>Offene halbe Tage:</b> ${hk.map(k=>`<button class="linkbtn" data-act="goto-day" data-k="${k}" data-zkclose>${FD(k)}</button>`).join(', ')}. Die andere Hälfte bitte als Urlaub oder JÜP eintragen.`]:['jw-ok','✓','<b>Halbe Tage:</b> alles eingetragen.']);
+    let tk=0,pl=0;Object.values(C.days).forEach(dc=>{if(dc.vac){if(dc.k<=TK())tk+=dc.vac;else pl+=dc.vac}});const rest=(+s.vacation||0)-tk-pl;
+    it.push([rest>0.01?'jw-w':'jw-ok',rest>0.01?'!':'✓',`<b>Urlaub ${y}:</b> ${F(tk)} genommen, ${F(pl)} geplant, Rest ${F(rest)} Tage.${rest>0.01?' Bitte klären, ob der Rest übertragen wird.':''}`]);
+    const NY=(zkST().years||{})[y+1],ne=NY?Object.keys(NY.entries||{}).length:0;let pre=false;try{pre=!!FAIR_PRESET[y+1]}catch(e){}
+    it.push([ne?'jw-ok':'jw-i',ne?'✓':'i',`<b>${y+1}:</b> ${ne?ne+' Tage schon eingetragen.':'noch keine Einträge.'}${pre?' Messetermine '+(y+1)+' sind hinterlegt.':''}`]);
+    const lb=s.lastBackup,ago=lb?Math.round((new Date(TK()+'T12:00')-new Date(lb+'T12:00'))/864e5):null;
+    it.push([lb&&ago<=7?'jw-ok':'jw-w',lb&&ago<=7?'✓':'!',`<b>Backup:</b> ${lb?'zuletzt am '+FD(lb)+(ago?' ('+ago+' Tage her)':' (heute)'):'noch keins'}. Vor dem Jahreswechsel am besten eins sichern.`]);
+    modal('jwwin','jw',`<div class="zk-top">${LOGO}<div><div class="zk-k">Zeitkompass</div><h3>Jahreswechsel ${y} → ${y+1}</h3></div></div><ul class="jw-l">${it.map(([c,s2,t])=>`<li><i class="${c}">${s2}</i><span>${t}</span></li>`).join('')}</ul><div class="zk-btns"><button class="btn" data-zkclose>Schließen</button><button class="btn" data-act="export-json">Backup jetzt sichern</button><button class="btn primary" data-jwgo="${y+1}">Zu ${y+1} wechseln</button></div>`)}
+  document.addEventListener('click',ev=>{const b=ev.target.closest&&ev.target.closest('[data-jwgo]');if(!b)return;document.getElementById('jwwin').hidden=true;const t=+b.dataset.jwgo;let n=0;const step=()=>{const sp=document.querySelector('.yearnav span');if(!sp||+sp.textContent>=t||n++>5)return;const nx=document.querySelector('[data-act="year-next"]');nx&&nx.click();setTimeout(step,60)};step()},true);
+  document.addEventListener('click',ev=>{if(ev.target.closest&&ev.target.closest('[data-jwopen]')){ev.preventDefault();jw()}});
+  /* ---- Rückblick ---- */
+  function stats(y){const C=computeYear(y),d=daily();let ist=0,wd=0,wed=0,lng={h:0,k:null},ser=0,cur=0,fd=new Set(),fds=0,vac=0;
+    const ks=Object.keys(C.days).sort();for(const k of ks){const dc=C.days[k];const w=!!dc.work&&(dc.net||0)>0.01;if(w){ist+=dc.net;wd++};
+      if(w){cur++;ser=Math.max(ser,cur);if(dc.i.we||dc.i.legal)wed++;if(dc.ist>lng.h)lng={h:dc.ist,k};if(dc.e.f){fd.add(dc.e.f);fds++}}else cur=0;if(dc.vac)vac+=dc.vac}
+    const er=C.months.reduce((a,M)=>a+(M.toKonto||0),0)/d;return{y,ist,wd,wed,lng,ser,fairs:fd.size,fds,jup:C.jup.days,vac,er,ft:fd.size?[String(fd.size),'Messen, '+fds+' Messetage']:[String(wd),'Arbeitstage']}}
+  function rb(y){const s=stats(y);
+    modal('rbwin','rb',`<div class="zk-top">${LOGO}<div><div class="zk-k">Zeitkompass</div><h3>Jahresrückblick</h3></div></div>
+      <div class="rb-card"><div class="rb-y">${s.y}</div><div style="opacity:.75;font-size:13px">laut deinen Einträgen im Zeitkompass</div><div class="rb-g">
+      <div class="o"><b>${F(s.ist,0)} h</b><span>gearbeitet</span></div><div><b>${s.ft[0]}</b><span>${s.ft[1]}</span></div>
+      <div><b>${s.wed}</b><span>Wochenend- und Feiertage im Einsatz</span></div><div><b>${s.lng.k?F(s.lng.h,2)+' h':'–'}</b><span>längster Tag${s.lng.k?', '+FD(s.lng.k):''}</span></div>
+      <div><b>${s.ser}</b><span>Tage längste Serie am Stück</span></div><div class="o"><b>${F(s.er)}</b><span>JÜP-Tage erarbeitet</span></div>
+      <div><b>${F(s.jup)}</b><span>JÜP-Tage genommen oder geplant</span></div><div><b>${F(s.vac)}</b><span>Urlaubstage</span></div></div></div>
+      <div class="zk-btns"><button class="btn" data-zkclose>Schließen</button><button class="btn primary" data-rbimg="${y}">Als Bild speichern</button></div>`)}
+  async function rbImg(y){const s=stats(y),c=document.createElement('canvas'),W=1080,H=1350;c.width=W;c.height=H;const x=c.getContext('2d');
+    const g=x.createLinearGradient(0,0,W,H);g.addColorStop(0,'#16171a');g.addColorStop(1,'#2b2d33');x.fillStyle=g;x.fillRect(0,0,W,H);
+    const lg=(cx,cy,r)=>{x.fillStyle='#16171a';x.strokeStyle='#fff';x.lineWidth=r*.18;x.beginPath();x.arc(cx,cy,r*.64,0,7);x.stroke();x.fillStyle='#E85D04';x.beginPath();x.moveTo(cx,cy-r*.55);x.lineTo(cx+r*.17,cy);x.lineTo(cx-r*.17,cy);x.fill();x.fillStyle='#8D9199';x.beginPath();x.moveTo(cx,cy+r*.55);x.lineTo(cx+r*.17,cy);x.lineTo(cx-r*.17,cy);x.fill()};
+    lg(140,140,70);x.fillStyle='#E85D04';x.font='700 30px sans-serif';x.fillText('ZEITKOMPASS',240,122);x.fillStyle='#fff';x.font='800 64px sans-serif';x.fillText('Jahresrückblick '+s.y,240,190);
+    const T=[[F(s.ist,0)+' h','gearbeitet',1],[s.ft[0],s.ft[1],0],[String(s.wed),'Wochenend- und Feiertage',0],[s.lng.k?F(s.lng.h,2)+' h':'–','längster Tag',0],[String(s.ser),'Tage längste Serie',0],[F(s.er),'JÜP-Tage erarbeitet',1],[F(s.jup),'JÜP-Tage genommen/geplant',0],[F(s.vac),'Urlaubstage',0]];
+    T.forEach(([v,l,o],i)=>{const cx=80+(i%2)*470,cy=300+Math.floor(i/2)*235;x.fillStyle='rgba(255,255,255,.07)';x.beginPath();x.roundRect?x.roundRect(cx,cy,450,210,26):x.rect(cx,cy,450,210);x.fill();x.fillStyle=o?'#ff8a3d':'#fff';x.font='800 76px sans-serif';x.fillText(v,cx+34,cy+110);x.fillStyle='rgba(255,255,255,.75)';x.font='500 30px sans-serif';x.fillText(l,cx+34,cy+165)});
+    x.fillStyle='rgba(255,255,255,.5)';x.font='500 26px sans-serif';x.fillText('Erstellt mit dem Zeitkompass',80,H-60);
+    const blob=await new Promise(r=>c.toBlob(r,'image/png')),name='zeitkompass-rueckblick-'+y+'.png';
+    try{if(window.claude&&window.claude.use){const dl=await window.claude.use('downloads');if(dl){await dl.save({filename:name,data:blob});return}}}catch(e){}
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)}
+  document.addEventListener('click',ev=>{const b=ev.target.closest&&ev.target.closest('[data-rbimg],[data-rbopen]');if(!b)return;ev.preventDefault();if(b.dataset.rbimg)rbImg(+b.dataset.rbimg);else rb(+b.dataset.rbopen)});
+  /* ---- Einhängen: Heute-Hinweis, Chip, Rückblick-Knopf ---- */
+  function hook(){const t=TK(),y=+t.slice(0,4),m=+t.slice(5,7),dd=+t.slice(8);
+    const today=document.querySelector('.today');if(today&&(m===12||Q==='jahreswechsel')&&!today.querySelector('.jw-hint')){const d=document.createElement('div');d.className='alert info jw-hint';d.style.gridColumn='1/-1';d.innerHTML=`<span><b>Jahreswechsel vorbereiten:</b> Übertrag, halbe Tage, Urlaub und Backup in einem Blick.</span><button class="btn" data-jwopen>Prüfen</button>`;today.appendChild(d)}
+    const sl=document.querySelector('#pegel .sumline');if(sl&&!sl.querySelector('.zn-chip')){try{const pm=m===1?12:m-1,py=m===1?y-1:y,O=((zkST().years||{})[py]||{}).official||{},has=Object.keys((((zkST().years||{})[py]||{}).entries)||{}).length;
+      if(dd>=10&&has&&!(O[pm-1]&&O[pm-1].saldo!=null)){const c=document.createElement('span');c.className='hchip y clk zn-chip';c.setAttribute('role','button');c.setAttribute('data-act','zn-goto');c.textContent='Zeitnachweis '+MONN[pm-1]+' fehlt';const lb=sl.querySelector('.sl-lbl');lb?lb.after(c):sl.prepend(c)}}catch(e){}}
+    const sel=document.querySelector('[data-view="auswertung"][aria-selected="true"]'),main=document.querySelector('main');
+    if(sel&&main&&!main.querySelector('#rbbox')){const yy=+((document.querySelector('.yearnav span')||{}).textContent||y);if((yy<y)||(yy===y&&(m===12&&dd>=15))||Q==='rueckblick'){const b=document.createElement('section');b.id='rbbox';b.className='panel glass';b.style.marginTop='18px';b.innerHTML=`<div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap"><h2 class="sec" style="margin:0">Jahresrückblick ${yy}</h2><button class="btn primary" data-rbopen="${yy}">Rückblick ansehen</button></div>`;main.appendChild(b)}}}
+  let q=false;new MutationObserver(()=>{if(q)return;q=true;requestAnimationFrame(()=>{q=false;try{hook()}catch(e){}})}).observe(document.body,{childList:true,subtree:true});
+  /* ---- Konfetti ---- */
+  function confetti(){const cv=document.createElement('canvas');cv.id='zkconf';document.body.appendChild(cv);const x=cv.getContext('2d');const W=cv.width=innerWidth,H=cv.height=innerHeight;const col=['#E85D04','#16171a','#8D9199','#FFD400','#3c8c3c'];
+    const P=Array.from({length:160},()=>({x:Math.random()*W,y:-20-Math.random()*H*.5,vx:(Math.random()-.5)*3,vy:2+Math.random()*4,r:Math.random()*6.28,vr:(Math.random()-.5)*.3,w:6+Math.random()*7,h:8+Math.random()*10,c:col[Math.floor(Math.random()*col.length)]}));
+    const m=document.createElement('div');m.id='zkconfmsg';m.innerHTML=LOGO+'<span>Pauschale geschafft!</span>';document.body.appendChild(m);
+    let t0=performance.now();(function fr(t){x.clearRect(0,0,W,H);P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.r+=p.vr;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.w/2,-p.h/2,p.w,p.h);x.restore()});if(t-t0<3800)requestAnimationFrame(fr);else{cv.remove();m.remove()}})(t0)}
+  setTimeout(()=>{try{if(Q==='konfetti'){confetti();return}if(Q==='jahreswechsel')jw();if(Q==='rueckblick'){const y=new Date().getFullYear();rb(y)}
+    const s=S(),y=new Date().getFullYear(),C=computeYear(y),pd=C.poolDay;if(pd&&pd<=TK()&&s.confY!==y){const ago=(new Date(TK()+'T12:00')-new Date(pd+'T12:00'))/864e5;s.confY=y;sv();if(ago<=7&&!matchMedia('(prefers-reduced-motion: reduce)').matches)confetti()}}catch(e){}},2200);
+})();
+</script>
+<script>
+/* Etappe 4: Tastaturkürzel, Kopieren/Einfügen, Notizsuche, Heatmap, Stimmungsnadel, Auto-Dunkelmodus */
+(function(){
+  const $=s=>document.querySelector(s),pad=n=>String(n).padStart(2,'0'),TK=()=>{const d=new Date();return d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())};
+  const FD=k=>k.slice(8)+'.'+k.slice(5,7)+'.'+k.slice(0,4),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const UI=()=>zkUI(),typing=()=>{const a=document.activeElement;return a&&((a.tagName==='INPUT'&&!/^(checkbox|radio|button|submit|range|color)$/.test(a.type))||/TEXTAREA|SELECT/.test(a.tagName)||a.isContentEditable)};
+  const openModal=()=>[...document.querySelectorAll('.modal')].some(m=>!m.hidden);
+  function modal(id,cls,html){let W=document.getElementById(id);if(!W){W=document.createElement('div');W.className='modal';W.id=id;W.innerHTML=`<div class="sheet glass ${cls}" role="dialog" aria-modal="true"></div>`;document.body.appendChild(W);W.addEventListener('click',ev=>{if(ev.target===W||ev.target.closest('[data-zkclose]'))W.hidden=true})}W.firstChild.innerHTML=html;W.hidden=false;return W}
+  const LOGO='<svg viewBox="0 0 66 66" aria-hidden="true" style="width:40px;height:40px;flex:none;border-radius:10px"><rect x="1" y="1" width="64" height="64" rx="15" fill="#16171a"/><circle cx="33" cy="33" r="21" fill="none" stroke="#fff" stroke-width="6"/><polygon points="33,15 38.5,33 27.5,33" fill="#E85D04"/><polygon points="33,51 38.5,33 27.5,33" fill="#8D9199"/></svg>';
+  let tT;function toast(html,btns){let t=$('#zktoast4');if(t)t.remove();t=document.createElement('div');t.id='zktoast4';t.innerHTML='<span>'+html+'</span>'+(btns||'');document.body.appendChild(t);clearTimeout(tT);if(!btns)tT=setTimeout(()=>t.remove(),2600);return t}
+  /* ---- Auto-Dunkelmodus ---- */
+  try{matchMedia('(prefers-color-scheme: dark)').addEventListener('change',()=>{if(zkST().settings.design==='auto')zkApplyTheme()})}catch(e){}
+  /* ---- Kopieren / Einfügen ---- */
+  let CLIP=null;const KEEP=['n','nc'];
+  function copyDay(k){const e=Object.assign({},zkEntry(k));KEEP.forEach(x=>delete e[x]);CLIP={from:k,e};toast('Tag '+FD(k)+' kopiert: '+((zkTypes()[e.t]||{}).label||e.t)+(e.s&&e.e?', '+e.s+'–'+e.e:'')+'. Jetzt Zieltag wählen und einfügen (Strg+V).');deco()}
+  function pasteTo(keys){if(!CLIP){toast('Erst einen Tag kopieren.');return}keys=keys.filter(k=>k!==CLIP.from);if(!keys.length)return;
+    const busy=keys.filter(k=>{const s=zkStored(k);return s&&Object.keys(s).some(x=>!KEEP.includes(x))});
+    const go=()=>{keys.forEach(k=>{const cur=zkEntry(k),p={};Object.keys(cur).forEach(x=>{if(!KEEP.includes(x))p[x]=undefined});Object.assign(p,CLIP.e);zkSetEntry(k,p)});const u=zkUI();u.sel.clear();zkRender();if(u.drawer)zkOpenDrawer(u.drawer);toast(keys.length===1?'Eingefügt in '+FD(keys[0])+'. Rückgängig mit Strg+Z.':'In '+keys.length+' Tage eingefügt. Rückgängig mit Strg+Z.')};
+    if(busy.length){const t=toast(busy.length===1?'Am '+FD(busy[0])+' ist schon etwas eingetragen. Überschreiben?':busy.length+' der '+keys.length+' Tage sind schon belegt. Überschreiben?','<button class="y">Überschreiben</button><button class="n">Abbrechen</button>');t.querySelector('.y').onclick=()=>{t.remove();go()};t.querySelector('.n').onclick=()=>t.remove()}else go()}
+  function targets(){const u=zkUI();if(u.sel&&u.sel.size)return[...u.sel];if(u.drawer)return[u.drawer];return[]}
+  document.addEventListener('click',ev=>{const b=ev.target.closest&&ev.target.closest('[data-cp]');if(!b)return;ev.preventDefault();ev.stopPropagation();const u=zkUI();if(b.dataset.cp==='copy'&&u.drawer)copyDay(u.drawer);if(b.dataset.cp==='paste')pasteTo(targets())},true);
+  /* ---- Notizsuche ---- */
+  function notes(){const R=[],Y=zkST().years||{};for(const y in Y){const E=(Y[y]||{}).entries||{};for(const k in E)if(E[k]&&E[k].n)R.push([k,E[k]])}return R.sort((a,b)=>a[0]<b[0]?1:-1)}
+  function search(){const W=modal('nswin','ns',`<div style="display:flex;align-items:center;gap:12px">${LOGO}<h3 style="margin:0">Notizen durchsuchen</h3></div><input id="nsq" type="search" placeholder="Suchbegriff, z. B. Halle 8 oder Arzt" autocomplete="off"><ul class="ns-l" id="nsl"></ul><div class="zk-btns" style="margin-top:10px;display:flex;justify-content:flex-end"><button class="btn" data-zkclose>Schließen</button></div>`);
+    const q=W.querySelector('#nsq'),L=W.querySelector('#nsl'),all=notes();let sel=0,hits=[];
+    const show=()=>{const v=q.value.trim().toLowerCase();hits=v?all.filter(([k,e])=>e.n.toLowerCase().includes(v)||FD(k).includes(v)):all.slice(0,30);sel=0;
+      const T=zkTypes();L.innerHTML=hits.length?hits.slice(0,200).map(([k,e],i)=>{let t=esc(e.n);if(v){const re=new RegExp('('+v.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig');t=t.replace(re,'<mark>$1</mark>')}return`<li data-nk="${k}" class="${i===0?'on':''}"><span class="ns-d">${FD(k)}</span><span><b style="font-weight:600;opacity:.7">${esc((T[e.t]||{}).label||'')}</b> ${t}</span></li>`}).join(''):`<li style="cursor:default;opacity:.7">${all.length?'Keine Notiz gefunden.':'Noch keine Notizen eingetragen.'}</li>`;
+      if(!v&&all.length>30)L.insertAdjacentHTML('beforeend','<li style="cursor:default;opacity:.6;font-size:12px">Die letzten 30 von '+all.length+' Notizen. Tippen zum Suchen.</li>')};
+    const pick=k=>{W.hidden=true;zkOpenDrawer(k)};
+    q.oninput=show;q.onkeydown=ev=>{const li=[...L.querySelectorAll('li[data-nk]')];if(ev.key==='ArrowDown'||ev.key==='ArrowUp'){ev.preventDefault();sel=Math.max(0,Math.min(li.length-1,sel+(ev.key==='ArrowDown'?1:-1)));li.forEach((x,i)=>x.classList.toggle('on',i===sel));li[sel]&&li[sel].scrollIntoView({block:'nearest'})}if(ev.key==='Enter'&&li[sel]){ev.preventDefault();pick(li[sel].dataset.nk)}};
+    L.onclick=ev=>{const li=ev.target.closest('li[data-nk]');if(li)pick(li.dataset.nk)};show();setTimeout(()=>q.focus(),30)}
+  /* ---- Kürzel-Übersicht ---- */
+  function keys(){modal('kbwin','kb',`<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">${LOGO}<h3 style="margin:0">Tastaturkürzel</h3></div><table class="kb-t">
+    <tr><td><kbd>←</kbd><kbd>→</kbd></td><td>Monat zurück / vor (Jahresansicht: Jahr)</td></tr><tr><td><kbd>⇧</kbd>+<kbd>←</kbd><kbd>→</kbd></td><td>Jahr zurück / vor</td></tr>
+    <tr><td><kbd>J</kbd><kbd>M</kbd><kbd>A</kbd><kbd>S</kbd></td><td>Ansicht Jahr, Monat, Auswertung, Messen</td></tr><tr><td><kbd>H</kbd></td><td>zu heute</td></tr><tr><td><kbd>/</kbd></td><td>Notizen durchsuchen</td></tr>
+    <tr><td><kbd>Strg</kbd>+<kbd>C</kbd></td><td>offenen Tag kopieren</td></tr><tr><td><kbd>Strg</kbd>+<kbd>V</kbd></td><td>in offenen Tag oder markierte Tage einfügen</td></tr>
+    <tr><td><kbd>⇧</kbd>+Klick</td><td>mehrere Tage markieren</td></tr><tr><td><kbd>Strg</kbd>+<kbd>Z</kbd> / <kbd>Y</kbd></td><td>rückgängig / wiederholen</td></tr><tr><td><kbd>Esc</kbd></td><td>Fenster schließen</td></tr><tr><td><kbd>?</kbd></td><td>diese Übersicht</td></tr></table>
+    <div style="display:flex;justify-content:flex-end;margin-top:12px"><button class="btn" data-zkclose>Schließen</button></div>`)}
+  document.addEventListener('keydown',ev=>{if(ev.key!=='Escape')return;for(const id of ['nswin','kbwin']){const W=document.getElementById(id);if(W&&!W.hidden){ev.stopImmediatePropagation();W.hidden=true}}},true);
+  /* ---- Tastaturkürzel ---- */
+  document.addEventListener('keydown',ev=>{if(typing()||ev.altKey)return;const u=zkUI(),k=ev.key,mod=ev.ctrlKey||ev.metaKey;
+    if(mod&&!ev.shiftKey&&(k==='c'||k==='C')){if(window.getSelection&&String(getSelection()))return;if(u.drawer&&!openModal()){ev.preventDefault();copyDay(u.drawer)}return}
+    if(mod&&!ev.shiftKey&&(k==='v'||k==='V')){const t=targets();if(CLIP&&t.length&&!openModal()){ev.preventDefault();pasteTo(t)}return}
+    if(mod||openModal())return;
+    const click=s=>{const b=document.querySelector(s);if(b){b.click();return true}};
+    if((k==='ArrowLeft'||k==='ArrowRight')&&!u.drawer){const n=k==='ArrowRight';if(ev.shiftKey||u.view==='jahr'){ev.preventDefault();click(n?'[data-act="year-next"]':'[data-act="year-prev"]')}else if(u.view==='monat'){ev.preventDefault();click(n?'[data-act="month-next"]':'[data-act="month-prev"]')}return}
+    if(ev.shiftKey&&k!=='?')return;const V={j:'jahr',m:'monat',a:'auswertung',s:'messen'}[k.toLowerCase()];
+    if(V){ev.preventDefault();click(`[data-view="${V}"]`);return}
+    if(k==='h'||k==='H'){ev.preventDefault();const t=TK();u.year=+t.slice(0,4);u.month=+t.slice(5,7)-1;zkRender();setTimeout(()=>{const c=document.querySelector(`#grid [data-k="${t}"]`);if(c){c.scrollIntoView({block:'center',behavior:'smooth'});c.animate([{outline:'3px solid #E85D04'},{outline:'3px solid transparent'}],{duration:1400})}},60);return}
+    if(k==='/'){ev.preventDefault();search();return}
+    if(k==='?'){ev.preventDefault();keys()}});
+  /* ---- Heatmap ---- */
+  const HK='zk.heatmap';let hm=false;try{hm=localStorage.getItem(HK)==='1'}catch(e){}
+  const ramp=[[0,[241,241,241]],[4,[255,215,184]],[7.5,[255,154,77]],[9.5,[232,93,4]],[11,[138,48,0]]];
+  function hcol(x){if(x<=0)return'rgb(241,241,241)';for(let i=1;i<ramp.length;i++){const[a,ca]=ramp[i-1],[b,cb]=ramp[i];if(x<=b){const t=(x-a)/(b-a);return'rgb('+ca.map((c,j)=>Math.round(c+(cb[j]-c)*t)).join(',')+')'}}return'rgb(138,48,0)'}
+  /* ---- Einhängen ---- */
+  function deco(){
+    document.body.classList.toggle('zk-heat',hm);
+    if(hm){const cache={};document.querySelectorAll('.d[data-k]').forEach(c=>{const k=c.dataset.k,y=+k.slice(0,4);const C=cache[y]||(cache[y]=computeYear(y)),dc=C.days[k];const x=dc&&dc.work?(dc.net||0):0;const v=hcol(x);if(c.style.getPropertyValue('--hm')!==v){c.style.setProperty('--hm',v);c.style.setProperty('--hmi',x>9?'#fff':'#16171a')}})}
+    else document.querySelectorAll('.d[data-k][style*="--hm"]').forEach(c=>{c.style.removeProperty('--hm');c.style.removeProperty('--hmi')});
+    document.querySelectorAll('.legend').forEach(L=>{if(!L.querySelector('.sw[data-t="aufbau"]'))return;let t=L.querySelector('.hmtog');if(!t){t=document.createElement('label');t.className='hmtog';t.title='Färbt jeden Tag nach den gearbeiteten Netto-Stunden';t.innerHTML='<input type="checkbox" data-hm>Belastung<span class="hm-scale" hidden>0 h<i></i>11 h</span>';const sf=L.querySelector('.sftog');sf?sf.after(t):L.appendChild(t)}const i=t.querySelector('input');if(i.checked!==hm)i.checked=hm;t.querySelector('.hm-scale').hidden=!hm});
+    const dn=document.querySelector('#drawer .dnav');if(dn&&!dn.querySelector('[data-cp]')){dn.insertAdjacentHTML('afterbegin','<button class="btn icon ghost" data-cp="copy" title="Tag kopieren (Strg+C)" aria-label="Tag kopieren"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3"/></svg></button><button class="btn icon ghost" data-cp="paste" title="Kopierten Tag hier einfügen (Strg+V)" aria-label="Kopierten Tag einfügen"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2"><rect x="5" y="5" width="14" height="16" rx="2"/><path d="M9 5V3h6v2M9 12h6M9 16h4"/></svg></button>')}
+    document.querySelectorAll('[data-cp="paste"]').forEach(b=>{b.disabled=!CLIP;b.style.opacity=CLIP?'':'.45'});
+    const rb=document.getElementById('rangebar');if(rb&&!rb.hidden&&CLIP&&!rb.querySelector('[data-cp]'))rb.insertAdjacentHTML('beforeend','<button class="btn" data-cp="paste" title="Kopierten Tag in alle markierten Tage einfügen">Kopierten Tag einfügen</button>');
+    const sim=document.getElementById('zkSim');if(sim&&!document.getElementById('zkFind')){const b=document.createElement('button');b.id='zkFind';b.className='btn';b.innerHTML='<svg viewBox="0 0 24 24" width="13" height="13" style="vertical-align:-2px;margin-right:4px" fill="none" stroke="currentColor" stroke-width="2.6"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21"/></svg>Notizen';b.title='Notizen durchsuchen (Taste /)';b.onclick=search;sim.parentNode.insertBefore(b,sim)}
+    mood()}
+  function mood(){const v=document.querySelector('.brand .vlogo');if(!v)return;const svg=v.querySelector('svg'),nd=svg&&svg.querySelector('.kneedle');if(nd&&!svg.querySelector('.kmood')){const g=document.createElementNS('http://www.w3.org/2000/svg','g');g.setAttribute('class','kmood');nd.parentNode.insertBefore(g,nd);g.appendChild(nd)}
+    const sl=document.querySelector('#pegel .sumline');if(!sl)return;const ch=[...sl.querySelectorAll('.hchip[data-grp]')];let lvl=0;const why=[];
+    ch.forEach(c=>{let l=c.classList.contains('r')?2:c.classList.contains('y')?1:0;if(c.dataset.grp==='exp'){const m=c.textContent.match(/(\d\d)\.(\d\d)\.(\d{2,4})?/);if(m){const y=m[3]?(m[3].length===2?2000+ +m[3]:+m[3]):new Date().getFullYear();const dd=(new Date(y,+m[2]-1,+m[1])-new Date(TK()+'T00:00'))/864e5;if(dd<=14)l=2}}if(l){lvl=Math.max(lvl,l);why.push(c.textContent.trim())}});
+    v.classList.toggle('mood-y',lvl===1);v.classList.toggle('mood-r',lvl===2);const t=lvl?'Kompass zeigt: '+why.join(' · '):'Kompass zeigt nach Norden: alles im Rahmen';if(v.title!==t)v.title=t}
+  document.addEventListener('change',ev=>{const i=ev.target;if(!i||!i.hasAttribute||!i.hasAttribute('data-hm'))return;ev.stopImmediatePropagation();hm=i.checked;try{localStorage.setItem(HK,hm?'1':'0')}catch(e){}deco()},true);
+  let q=false;new MutationObserver(()=>{if(q)return;q=true;requestAnimationFrame(()=>{q=false;try{deco()}catch(e){}})}).observe(document.body,{childList:true,subtree:true});
+  setTimeout(()=>{try{deco();const Q=new URLSearchParams(location.search).get('zeige');if(Q==='suche')search();if(Q==='kuerzel')keys()}catch(e){}},600);
+})();
+</script>
+<script>
+/* Etappe 5: Outlook-Export, Einstellungen teilen */
+(function(){
+  const $=s=>document.querySelector(s),pad=n=>String(n).padStart(2,'0'),KK=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()),TK=()=>KK(new Date());
+  const FD=k=>k.slice(8)+'.'+k.slice(5,7)+'.'+k.slice(0,4),add=(k,n)=>{const d=new Date(k+'T12:00');d.setDate(d.getDate()+n);return KK(d)},esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const LOGO='<svg viewBox="0 0 66 66" aria-hidden="true" style="width:40px;height:40px;flex:none;border-radius:10px"><rect x="1" y="1" width="64" height="64" rx="15" fill="#16171a"/><circle cx="33" cy="33" r="21" fill="none" stroke="#fff" stroke-width="6"/><polygon points="33,15 38.5,33 27.5,33" fill="#E85D04"/><polygon points="33,51 38.5,33 27.5,33" fill="#8D9199"/></svg>';
+  const NETLIFY='https://zeitkompass4250.netlify.app/';
+  function modal(id,cls,html){let W=document.getElementById(id);if(!W){W=document.createElement('div');W.className='modal';W.id=id;W.innerHTML=`<div class="sheet glass ${cls}" role="dialog" aria-modal="true"></div>`;document.body.appendChild(W);W.addEventListener('click',ev=>{if(ev.target===W||ev.target.closest('[data-zkclose]'))W.hidden=true})}W.firstChild.innerHTML=html;W.hidden=false;return W}
+  document.addEventListener('keydown',ev=>{if(ev.key!=='Escape')return;for(const id of ['icswin','shwin']){const W=document.getElementById(id);if(W&&!W.hidden){ev.stopImmediatePropagation();W.hidden=true}}},true);
+  async function saveFile(name,text,type){const blob=new Blob([text],{type});try{if(window.claude&&window.claude.use){const dl=await window.claude.use('downloads');if(dl){await dl.save({filename:name,data:blob});return}}}catch(e){}
+    const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},1000)}
+  function flash(b,t){if(!b)return;const o=b.textContent;b.textContent=t;setTimeout(()=>b.textContent=o,1800)}
+  async function copy(t,b){try{await navigator.clipboard.writeText(t);flash(b,'Kopiert ✓')}catch(e){const ta=$('#shcode');if(ta){ta.focus();ta.select();try{document.execCommand('copy');flash(b,'Kopiert ✓')}catch(e2){flash(b,'Bitte markieren und kopieren')}}}}
+  /* ================= Outlook / ICS ================= */
+  const MESSE=['aufbau','laufzeit','abbau'];
+  function build(a,b,o){const ev=[],T=zkTypes();let cur=null;const cache={};
+    const day=k=>{const y=+k.slice(0,4);const C=cache[y]||(cache[y]=computeYear(y));return C.days[k]};
+    const flush=()=>{if(cur){ev.push(cur);cur=null}};
+    for(let k=a;k<=b;k=add(k,1)){const dc=day(k);if(!dc){flush();continue}const e=dc.e,t=e.t,note=o.notes&&e.n?e.n:'';
+      const timed=o.work&&T[t]&&T[t].work&&e.s&&e.e;let key=null,ttl=null,busy='FREE';
+      if(!timed){
+        if(o.jup&&t==='fza'&&dc.soll>0){key='fza'+(e.t13?'13':'')+(e.half?'h':'');ttl=e.t13?'13.T (frei)':e.half?'JÜP (halber Tag)':'JÜP';busy='OOF'}
+        else if(o.vac&&t==='urlaub'&&dc.soll>0){key='urlaub';ttl='Urlaub';busy='OOF'}
+        else if(o.fair&&MESSE.includes(t)){const f=e.f&&zkFair(e.f);key='m-'+t+'-'+(e.f||'');ttl=T[t].label+(f?' '+f.name:'');busy='BUSY'}}
+      if(timed){flush();const f=e.f&&zkFair(e.f);ev.push({a:k,b:k,s:e.s,e:e.e,ttl:(MESSE.includes(t)?T[t].label+(f?' '+f.name:''):T[t].label)+' '+e.s+'–'+e.e,key:'w',busy:'BUSY',notes:note?[note]:[]});continue}
+      if(key){if(cur&&cur.key===key&&(cur.pend||cur.b)===add(k,-1)){cur.b=k;cur.pend=null;if(note)cur.notes.push(FD(k).slice(0,6)+' '+note)}else{flush();cur={a:k,b:k,ttl,key,busy,notes:note?[FD(k).slice(0,6)+' '+note]:[]}}continue}
+      /* Wochenende/Feiertag ohne Eintrag überbrückt JÜP- und Urlaubsblöcke */
+      if(cur&&(cur.key.startsWith('fza')||cur.key==='urlaub')&&!dc.work&&dc.soll===0&&!note){let n=add(k,1),ok=false;for(let i=0;i<5&&n<=b;i++,n=add(n,1)){const d2=day(n);if(!d2)break;if(d2.e.t==='fza'&&cur.key.startsWith('fza')||d2.e.t==='urlaub'&&cur.key==='urlaub'){ok=d2.soll>0;break}if(d2.work||d2.soll>0)break}if(ok){cur.pend=k;continue}}
+      flush();if(note)ev.push({a:k,b:k,ttl:'Notiz: '+note,key:'n',busy:'FREE',notes:[]})}
+    flush();
+    return ev}
+  function ics(ev,name){const D=k=>k.replace(/-/g,''),E=s=>String(s).replace(/\\/g,'\\\\').replace(/;/g,'\;').replace(/,/g,'\\,').replace(/\r?\n/g,'\\n'),now=new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z';
+    const fold=l=>{const u=new TextEncoder();if(u.encode(l).length<=74)return l;let out='',cur='';for(const ch of l){if(u.encode(cur+ch).length>73){out+=cur+'\r\n ';cur=''}cur+=ch}return out+cur};
+    const hs=s=>{let x=0;for(const c of s)x=(x*31+c.charCodeAt(0))|0;return(x>>>0).toString(36)};
+    const L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Zeitkompass//DE','CALSCALE:GREGORIAN','METHOD:PUBLISH','X-WR-CALNAME:'+E(name)];
+    ev.forEach(x=>{L.push('BEGIN:VEVENT','UID:zk-'+D(x.a)+'-'+hs(x.key)+'@zeitkompass','DTSTAMP:'+now);
+      if(x.s){L.push('DTSTART:'+D(x.a)+'T'+x.s.replace(':','')+'00','DTEND:'+D(x.a)+'T'+x.e.replace(':','')+'00')}else L.push('DTSTART;VALUE=DATE:'+D(x.a),'DTEND;VALUE=DATE:'+D(add(x.b,1)));
+      L.push('SUMMARY:'+E(x.ttl));if(x.notes&&x.notes.length)L.push('DESCRIPTION:'+E(x.notes.join('\n')));
+      L.push('TRANSP:'+(x.busy==='FREE'?'TRANSPARENT':'OPAQUE'),'X-MICROSOFT-CDO-BUSYSTATUS:'+x.busy,'X-MICROSOFT-CDO-ALLDAYEVENT:'+(x.s?'FALSE':'TRUE'),'END:VEVENT')});
+    L.push('END:VCALENDAR');return L.map(fold).join('\r\n')+'\r\n'}
+  function icsDlg(){const y=zkUI().year,t=TK();
+    const W=modal('icswin','ic',`<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">${LOGO}<h3 style="margin:0">Für Outlook exportieren</h3></div>
+      <div class="ic-h">Zeitraum</div><div class="ic-r"><label><input type="radio" name="icr" value="y" checked> Jahr ${y}</label><label><input type="radio" name="icr" value="t"> ab heute bis Ende ${new Date().getFullYear()+1}</label><label><input type="radio" name="icr" value="c"> eigener Zeitraum</label></div>
+      <div class="ic-d" id="icd" hidden>von <input type="date" id="ica" value="${t}"> bis <input type="date" id="icb" value="${y}-12-31"></div>
+      <div class="ic-h">Inhalt</div><div class="ic-r"><label><input type="checkbox" id="ic-jup" checked> JÜP</label><label><input type="checkbox" id="ic-vac" checked> Urlaub</label><label><input type="checkbox" id="ic-fair" checked> Messetage</label><label><input type="checkbox" id="ic-work"> Arbeitszeiten mit Uhrzeit</label><label><input type="checkbox" id="ic-notes"> Notizen</label></div>
+      <p class="ic-n">Zusammenhängende Tage werden zu einem Termin zusammengefasst. JÜP und Urlaub erscheinen in Outlook als abwesend. Die Datei per Doppelklick öffnen. Ein erneuter Export aktualisiert vorhandene Termine. Im Zeitkompass gelöschte Tage müssen in Outlook von Hand entfernt werden. Notizen landen in der Terminbeschreibung; Outlook-Kalender sind oft für Kollegen sichtbar.</p>
+      <p class="ic-n" id="icc" style="font-weight:700;opacity:1"></p>
+      <div class="sh-btns"><button class="btn" data-zkclose>Schließen</button><button class="btn primary" id="icgo">Datei erstellen</button></div>`);
+    const rng=()=>{const r=W.querySelector('[name=icr]:checked').value;W.querySelector('#icd').hidden=r!=='c';if(r==='y')return[y+'-01-01',y+'-12-31'];if(r==='t')return[t,(new Date().getFullYear()+1)+'-12-31'];let a=W.querySelector('#ica').value,b=W.querySelector('#icb').value;if(a>b)[a,b]=[b,a];return[a,b]};
+    const opt=()=>({jup:W.querySelector('#ic-jup').checked,vac:W.querySelector('#ic-vac').checked,fair:W.querySelector('#ic-fair').checked,work:W.querySelector('#ic-work').checked,notes:W.querySelector('#ic-notes').checked});
+    const upd=()=>{const[a,b]=rng();const n=a&&b?build(a,b,opt()).length:0;W.querySelector('#icc').textContent=n?n+' Termine von '+FD(a)+' bis '+FD(b)+'.':'Keine Termine im gewählten Zeitraum.';W.querySelector('#icgo').disabled=!n};
+    W.firstChild.onchange=upd;W.firstChild.oninput=upd;upd();
+    W.querySelector('#icgo').onclick=()=>{const[a,b]=rng();const ev=build(a,b,opt());saveFile('zeitkompass-'+a.replace(/-/g,'')+'-'+b.replace(/-/g,'')+'.ics',ics(ev,'Zeitkompass'),'text/calendar');W.hidden=true}}
+  document.addEventListener('click',ev=>{const b=ev.target.closest&&ev.target.closest('[data-act="export-ics"],[data-icsopen]');if(!b)return;ev.preventDefault();ev.stopImmediatePropagation();icsDlg()},true);
+  /* Knopf neben "Kalender als PDF" */
+  function deco(){document.querySelectorAll('[data-act="print"]').forEach(p=>{if(p.closest('#settings')||p.nextElementSibling&&p.nextElementSibling.matches('[data-icsopen],[data-act="export-ics"]'))return;const b=document.createElement('button');b.className='btn';b.setAttribute('data-icsopen','');b.textContent='Für Outlook';p.after(b)})}
+  let q=false;new MutationObserver(()=>{if(q)return;q=true;requestAnimationFrame(()=>{q=false;try{deco()}catch(e){}})}).observe(document.body,{childList:true,subtree:true});
+  /* ================= Einstellungen teilen ================= */
+  const G=[
+    {id:'fairs',t:'Messeliste',d:'Messen mit Namen und Kürzeln. Vorhandene Messen bleiben, neue kommen dazu.'},
+    {id:'look',t:'Aussehen',d:'Design, Hintergrund, Glasstärke und eigene Kachelfarben.',k:['design','bg','glassT','glassT2','colors','split']},
+    {id:'rules',t:'Regeln und Grenzwerte',d:'Zuschlagssätze, Pausenregel, Nachtzuschlag, Mobil-Grenze, Höchstarbeitszeit, Serienlänge, Ruhezeit, Verfallsfrist.',k:['rates','stack','night','mobilMax','maxSeries','maxDaily','minRest','pause','expiryMonths']},
+    {id:'bk',t:'Backup-Erinnerung',d:'Rhythmus der Erinnerung.',k:['bkDays','bkOff']}];
+  function pack(){const s=zkST().settings,o={v:1,g:{}};G.forEach(g=>{if(g.id==='fairs'){o.g.fairs=(zkST().fairs||[]).map(f=>({id:f.id,k:f.k,name:f.name}))}else{const x={};g.k.forEach(k=>{if(s[k]!==undefined)x[k]=s[k]});o.g[g.id]=x}});return o}
+  const b64=u=>{let s='';for(let i=0;i<u.length;i+=8192)s+=String.fromCharCode.apply(null,u.subarray(i,i+8192));return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')};
+  const ub64=s=>{s=s.replace(/-/g,'+').replace(/_/g,'/');while(s.length%4)s+='=';const b=atob(s),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u};
+  async function enc(o){const raw=new TextEncoder().encode(JSON.stringify(o));try{const cs=new Blob([raw]).stream().pipeThrough(new CompressionStream('deflate-raw'));return'zk1.'+b64(new Uint8Array(await new Response(cs).arrayBuffer()))}catch(e){return'zk0.'+b64(raw)}}
+  async function dec(c){c=String(c||'').trim().replace(/^.*#einst=/,'').replace(/\s+/g,'');const p=c.slice(0,4),body=ub64(c.slice(4));let raw;if(p==='zk1.'){raw=new Uint8Array(await new Response(new Blob([body]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).arrayBuffer())}else if(p==='zk0.')raw=body;else throw new Error('kein Code');const o=JSON.parse(new TextDecoder().decode(raw));if(!o||o.v!==1||!o.g)throw new Error('ungültig');return o}
+  async function shareOut(){const code=await enc(pack()),link=NETLIFY+'#einst='+code,nf=(zkST().fairs||[]).length;
+    const W=modal('shwin','sh',`<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">${LOGO}<h3 style="margin:0">Einstellungen teilen</h3></div>
+      <p class="ic-n" style="opacity:1">Enthalten: Messeliste (${nf} Messen), Aussehen, Regeln und Grenzwerte, Backup-Erinnerung.<br>Nicht enthalten: Einträge, Notizen, Zeitnachweise, Kontostände, Urlaub, Sollzeiten, Pauschale und dein Name.</p>
+      <div class="ic-h">Link für Kollegen (öffnet den Zeitkompass auf Netlify)</div>
+      <div class="sh-btns" style="justify-content:flex-start;margin:6px 0 14px"><button class="btn primary" id="shlink">Link kopieren</button></div>
+      <div class="ic-h">Oder als Code</div><textarea id="shcode" readonly>${esc(code)}</textarea>
+      <p class="ic-n">Der Code wird beim Kollegen unter Einstellungen → „Einstellungen übernehmen“ eingefügt. ${code.length} Zeichen.</p>
+      <div class="sh-btns"><button class="btn" data-zkclose>Schließen</button><button class="btn" id="shfile">Als Datei speichern</button><button class="btn" id="shcopy">Code kopieren</button></div>`);
+    W.querySelector('#shlink').onclick=ev=>copy(link,ev.currentTarget);W.querySelector('#shcopy').onclick=ev=>copy(code,ev.currentTarget);W.querySelector('#shfile').onclick=()=>saveFile('zeitkompass-einstellungen.txt','Zeitkompass – Einstellungen\r\n\r\nLink:\r\n'+link+'\r\n\r\nCode:\r\n'+code+'\r\n','text/plain')}
+  function diff(o){const s=zkST().settings,out={};G.forEach(g=>{const v=o.g[g.id];if(!v){out[g.id]=null;return}if(g.id==='fairs'){const have=new Set((zkST().fairs||[]).map(f=>f.id)),hn=new Set((zkST().fairs||[]).map(f=>String(f.name).toLowerCase()));const nw=v.filter(f=>f&&f.id&&!have.has(f.id)&&!hn.has(String(f.name).toLowerCase()));out.fairs={n:nw.length,txt:nw.length?nw.length+' neue: '+nw.slice(0,6).map(f=>f.name).join(', ')+(nw.length>6?' …':''):'keine neuen Messen',list:nw}}else{const ch=Object.keys(v).filter(k=>JSON.stringify(s[k])!==JSON.stringify(v[k]));out[g.id]={n:ch.length,txt:ch.length?(ch.length===1?'1 Wert ändert sich':ch.length+' Werte ändern sich'):'schon gleich',v}}});return out}
+  function shareIn(o,fromLink){const D=diff(o);
+    const W=modal('shwin','sh',`<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">${LOGO}<h3 style="margin:0">Einstellungen übernehmen</h3></div>
+      ${o?'':''}<p class="ic-n" style="opacity:1">${fromLink?'Ein Kollege hat dir Einstellungen geschickt. ':''}Deine Einträge, Notizen, Kontostände, Sollzeiten und die Pauschale bleiben unverändert. Was soll übernommen werden?</p>
+      <ul class="sh-g">${G.map(g=>{const d=D[g.id];if(!d)return'';return`<li><label><input type="checkbox" data-shg="${g.id}" ${d.n?'checked':'disabled'}><span><b>${g.t}</b> <small><b style="font-weight:600">${esc(d.txt)}</b><br>${g.d}</small></span></label></li>`}).join('')}</ul>
+      <p class="ic-n">Rückgängig mit Strg+Z oder über den Rückgängig-Pfeil oben.</p>
+      <div class="sh-btns"><button class="btn" data-zkclose>Abbrechen</button><button class="btn primary" id="shapply">Übernehmen</button></div>`);
+    W.querySelector('#shapply').onclick=()=>{const S=zkST(),s=S.settings;let n=0;W.querySelectorAll('[data-shg]:checked').forEach(i=>{const id=i.dataset.shg,d=D[id];if(!d)return;if(id==='fairs'){S.fairs=(S.fairs||[]).concat(d.list.map(f=>({id:f.id,k:f.k,name:f.name})));n+=d.n}else{Object.assign(s,JSON.parse(JSON.stringify(d.v)));n+=d.n}});
+      W.hidden=true;try{zkSave()}catch(e){}zkApplyTheme();zkApplyColors();zkRender();const t=document.createElement('div');t.id='zktoast4';t.innerHTML='<span>'+(n?'Einstellungen übernommen.':'Nichts geändert.')+'</span>';document.body.appendChild(t);setTimeout(()=>t.remove(),2600)}}
+  function pasteDlg(){const W=modal('shwin','sh',`<div style="display:flex;align-items:center;gap:12px;margin-bottom:8px">${LOGO}<h3 style="margin:0">Einstellungen übernehmen</h3></div>
+      <p class="ic-n" style="opacity:1">Link oder Code vom Kollegen hier einfügen.</p><textarea id="shcode" placeholder="zk1.… oder https://…#einst=…"></textarea><p class="ic-n" id="sherr" style="color:#c62828;opacity:1"></p>
+      <div class="sh-btns"><button class="btn" data-zkclose>Abbrechen</button><button class="btn primary" id="shnext">Weiter</button></div>`);
+    setTimeout(()=>W.querySelector('#shcode').focus(),30);
+    W.querySelector('#shnext').onclick=async()=>{try{shareIn(await dec(W.querySelector('#shcode').value),false)}catch(e){W.querySelector('#sherr').textContent='Das ist kein gültiger Zeitkompass-Code. Bitte vollständig kopieren.'}}}
+  document.addEventListener('click',ev=>{const b=ev.target.closest&&ev.target.closest('[data-share]');if(!b)return;ev.preventDefault();ev.stopPropagation();const st=document.getElementById('settings');if(st)st.hidden=true;if(b.dataset.share==='out')shareOut();else pasteDlg()},true);
+  /* Link beim Öffnen */
+  addEventListener('hashchange',async()=>{if(!location.hash.startsWith('#einst='))return;try{const o=await dec(location.hash);try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}shareIn(o,true)}catch(e){}});
+  setTimeout(async()=>{try{if(location.hash.startsWith('#einst=')){const o=await dec(location.hash);try{history.replaceState(null,'',location.pathname+location.search)}catch(e){}shareIn(o,true)}
+    const Q=new URLSearchParams(location.search).get('zeige');if(Q==='outlook')icsDlg();if(Q==='teilen')shareOut()}catch(e){}},1500);
+})();
+</script>
+<script>
+/* Persönliche Angaben: Erste Schritte, Erinnerung, Markierungen */
+(function(){
+  const $=s=>document.querySelector(s),S=()=>zkST().settings,sv=()=>{try{zkSave()}catch(e){}};
+  const LOGO='<svg viewBox="0 0 66 66" aria-hidden="true"><rect x="1" y="1" width="64" height="64" rx="15" fill="#16171a"/><circle cx="33" cy="33" r="21" fill="none" stroke="#fff" stroke-width="6"/><polygon points="33,15 38.5,33 27.5,33" fill="#E85D04"/><polygon points="33,51 38.5,33 27.5,33" fill="#8D9199"/></svg>';
+  const Q=new URLSearchParams(location.search).get('zeige')||'';
+  const hasEntries=()=>{const Y=zkST().years||{};return Object.values(Y).some(y=>y&&y.entries&&Object.keys(y.entries).length)};
+  const pending=()=>{const s=S();return(s.setupNew&&!s.setupOk)||Q==='start'};
+  /* neue Nutzer erkennen: keine Einträge, noch nie bestätigt */
+  setTimeout(()=>{try{const s=S();if(!s.setupOk&&!s.setupNew&&!hasEntries()){s.setupNew=1;sv()}}catch(e){}},3000);
+  const PERS=[/^sollDays\./,/^times\.gleit(Fr)?\.\d$/,/^vacation$/,/^carryAsOf$/,/^carryPool$/,/^pool$/];
+  const MTV={'rates.mehr':'MTV','rates.sa':'MTV','rates.so':'MTV','rates.ft':'MTV','rates.na':'MTV',night:'MTV',stack:'MTV',expiryMonths:'MTV',maxDaily:'Gesetz',minRest:'Gesetz','pause.mode':'Gesetz'};
+  const TP={p:'Persönliche Angabe: bitte an deinen Vertrag und deine Planung anpassen. Sonst gilt die Vorgabe.',m:'Vorgabe aus MTV oder Gesetz. Nur ändern, wenn für dich etwas anderes gilt.'};
+  function badge(el,cls,txt){const host=el.closest('label')||el.parentElement&&el.parentElement.querySelector('span')||el.parentElement;if(!host||host.querySelector('.pb'))return;
+    const b=document.createElement('span');b.className='pb '+cls;b.textContent=txt;b.title=TP[cls];
+    const tn=[...host.childNodes].find(n=>n.nodeType===3&&n.textContent.trim());if(tn){const w=document.createElement('span');w.className='pbw';tn.before(w);w.appendChild(tn);w.appendChild(b)}else if(host.tagName==='SPAN')host.appendChild(b);else host.prepend(b)}
+  function marks(){const st=document.getElementById('settings');if(!st||st.hidden)return;
+    st.querySelectorAll('[data-set]').forEach(el=>{const k=el.dataset.set;if(PERS.some(r=>r.test(k)))badge(el,'p','persönlich');else if(MTV[k])badge(el,'m',MTV[k])});
+    /* Freizeitanspruch-Monate */
+    st.querySelectorAll('.sbox').forEach(bx=>{const h=bx.querySelector('h3');if(!h||h.querySelector('.pb'))return;});
+    const fz=[...st.querySelectorAll('.sbox *')].find(n=>n.children.length===0&&/Freizeitanspruch laut letztem Zeitnachweis/.test(n.textContent));if(fz&&!fz.querySelector('.pb')){const b=document.createElement('span');b.className='pb p';b.textContent='persönlich';b.title=TP.p;fz.appendChild(b)}
+    const g=st.querySelector('.sgrid');if(g&&!st.querySelector('.pers-hint')){const d=document.createElement('div');d.className='pers-hint';d.innerHTML=LOGO+'<span><b>Persönliche Angaben prüfen.</b> Felder mit <span class="pb p" style="margin:0">persönlich</span> passt du an deinen Vertrag und deine Planung an, zum Beispiel Teilzeit, eigene Gleitzeiten, Urlaub und den Übertrag aus dem letzten Zeitnachweis. Felder mit <span class="pb m" style="margin:0">MTV</span> oder <span class="pb m" style="margin:0">Gesetz</span> sind Vorgaben und bleiben meist, wie sie sind.</span>';g.before(d)}}
+  function welcome(){const W=(()=>{let W=document.getElementById('fswin');if(!W){W=document.createElement('div');W.className='modal';W.id='fswin';W.innerHTML='<div class="sheet glass fs" role="dialog" aria-modal="true"></div>';document.body.appendChild(W)}return W})();
+    W.firstChild.innerHTML=`<div style="display:flex;align-items:center;gap:14px;margin-bottom:8px"><span style="width:46px;height:46px;display:block">${LOGO.replace('<svg','<svg style="width:46px;height:46px;border-radius:11px"')}</span><div><div style="font:600 10.5px/1 var(--vmono,ui-monospace);letter-spacing:.14em;text-transform:uppercase;color:#E85D04">Erste Schritte</div><h3 style="margin:4px 0 0">Deine persönlichen Angaben</h3></div></div>
+      <p style="line-height:1.55;margin:6px 0 0">Der Zeitkompass rechnet nach den Regeln des MTV. Deine persönlichen Angaben musst du selbst eintragen, sonst gelten die Vorgaben. Das ist besonders wichtig bei Teilzeit oder wenn du deine Zeiten anders planst.</p>
+      <ul class="fs-l"><li><i>1</i><span><b>Sollstunden pro Wochentag</b>, z. B. Teilzeit, freier Freitag oder kürzere Tage.</span></li><li><i>2</i><span><b>Deine Gleitzeiten</b>, also Beginn und Ende an normalen Tagen und am Freitag.</span></li><li><i>3</i><span><b>Urlaubsanspruch</b> in Tagen.</span></li><li><i>4</i><span><b>Übertrag aus dem letzten Zeitnachweis</b>: Freizeitanspruch nach Monaten und die bereits erbrachte Pauschale. Bei Teilzeit auch die Pauschale pro Jahr prüfen.</span></li></ul>
+      <p style="font-size:12.5px;opacity:.75;margin:0 0 14px">In den Einstellungen sind diese Felder orange mit „persönlich“ markiert.</p>
+      <div style="display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap"><button class="btn" data-fs="later">Später</button><button class="btn primary" data-fs="open">Einstellungen öffnen</button></div>`;W.hidden=false}
+  document.addEventListener('click',ev=>{const b=ev.target.closest&&ev.target.closest('[data-fs],[data-fsopen]');if(!b)return;ev.preventDefault();const W=document.getElementById('fswin');if(W)W.hidden=true;
+    if(b.dataset.fs==='later')return;const s=document.querySelector('[data-act="settings"]');s&&s.click();setTimeout(()=>{const st=document.getElementById('settings');const p=st&&st.querySelector('.pers-hint');p&&p.scrollIntoView({block:'start',behavior:'smooth'})},120)});
+  /* Fertig in den Einstellungen bestätigt */
+  document.addEventListener('click',ev=>{const b=ev.target.closest&&ev.target.closest('[data-act="close-settings"]');if(!b)return;const s=S();if(s.setupNew&&!s.setupOk){s.setupOk=1;sv();document.querySelectorAll('.fs-hint').forEach(x=>x.remove())}},true);
+  function hint(){const t=document.querySelector('.today');if(!t)return;const ex=t.querySelector('.fs-hint');if(!pending()){ex&&ex.remove();return}if(ex)return;
+    const d=document.createElement('div');d.className='alert info fs-hint';d.style.cssText='grid-column:1/-1;margin-top:8px;border:2px solid #E85D04';d.innerHTML='<span><b>Persönliche Angaben noch nicht geprüft.</b> Sollstunden, Gleitzeiten, Urlaub und Übertrag bitte in den Einstellungen eintragen, sonst gelten die Vorgaben.</span><button class="btn primary" data-fsopen>Jetzt prüfen</button>';t.appendChild(d)}
+  let q=false;new MutationObserver(()=>{if(q)return;q=true;requestAnimationFrame(()=>{q=false;try{marks();hint()}catch(e){}})}).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden']});
+  /* Willkommensfenster nach dem Haftungshinweis, einmalig */
+  let tries=0;const iv=setInterval(()=>{tries++;try{const s=S(),dw=document.getElementById('discwin');if(Q==='start'){clearInterval(iv);if(!dw||dw.hidden)welcome();return}
+    if(s.setupOk||s.setupSeen||(tries>20&&!s.setupNew)){clearInterval(iv);return}if(!s.setupNew)return;if([...document.querySelectorAll('.modal')].some(m=>!m.hidden))return;if(!s.discOk)return;clearInterval(iv);s.setupSeen=1;sv();setTimeout(welcome,400)}catch(e){}if(tries>600)clearInterval(iv)},500);
 })();
 </script>
 <script>
