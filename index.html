@@ -890,6 +890,21 @@ html[data-dark] .tip .tip-note[style]{filter:brightness(1.35)}
 @keyframes bkspin{0%{transform:rotate(0)}55%{transform:rotate(740deg)}72%{transform:rotate(705deg)}86%{transform:rotate(726deg)}100%{transform:rotate(720deg)}}
 @media (prefers-reduced-motion:reduce){#bkwin .bkneedle{animation:none}}
 </style>
+<style id="nwstyle">
+#zknews .nw{max-width:560px;max-height:min(80vh,720px);display:flex;flex-direction:column}
+#zknews .nw-top{display:flex;align-items:center;gap:14px;margin-bottom:12px;flex:none}
+#zknews .nw-top svg{flex:none;border-radius:11px}
+#zknews .nw-k{font:600 11px/1 var(--vmono,ui-monospace);letter-spacing:.14em;text-transform:uppercase;color:#E85D04}
+#zknews h3{margin:4px 0 0;font:800 calc(20px*var(--fs,1))/1.15 var(--vdisp,var(--font-d));color:var(--ink)}
+#zknews .nw-body{overflow:auto;flex:1;min-height:0;padding-right:4px}
+#zknews ul{margin:0 0 12px;padding-left:20px}
+#zknews li{margin:0 0 8px;line-height:1.5;font-size:calc(14px*var(--fs,1))}
+#zknews details{border-top:1px solid var(--line2,rgba(0,0,0,.1));padding-top:10px;margin-top:4px}
+#zknews summary{cursor:pointer;font-weight:600;color:var(--ink2);margin-bottom:8px}
+#zknews h4{margin:12px 0 6px;font:600 calc(12px*var(--fs,1))/1 var(--vmono,ui-monospace);letter-spacing:.1em;text-transform:uppercase;color:var(--ink3)}
+#zknews details li{font-size:calc(13px*var(--fs,1));color:var(--ink2)}
+#zknews .nw-btns{display:flex;justify-content:flex-end;margin-top:12px;flex:none}
+</style>
 </head>
 <body>
 <div class="aurora" aria-hidden="true"></div>
@@ -915,7 +930,7 @@ html[data-dark] .tip .tip-note[style]{filter:brightness(1.35)}
   <section class="today glass" id="today" aria-label="Heute"></section>
   <section class="pegel glass" id="pegel" aria-label="Stundenkonto"></section>
   <main id="main"></main>
-  <p class="copy">© 2026 Marc Simon · <a href="#" data-disc="open" style="color:inherit">Hinweis</a> · <a href="#" data-news="open" style="color:inherit">Version 1.9.5</a></p>
+  <p class="copy">© 2026 Marc Simon · <a href="#" data-disc="open" style="color:inherit">Hinweis</a> · <a href="#" data-news="open" style="color:inherit">Version 1.10.0</a></p>
 </div>
 <aside class="drawer glass" id="drawer" aria-hidden="true" aria-label="Tag bearbeiten"></aside>
 <div class="rangebar glass" id="rangebar" hidden></div>
@@ -2014,7 +2029,7 @@ function renderSettings(){
      <button class="btn" data-act="fair-add">Messe hinzufügen</button></section>
    <section class="sbox"><h3>Daten</h3>
      <div class="btnrow"><button class="btn" data-act="export-json">Backup speichern</button><button class="btn" data-act="import-json">Backup laden</button><button class="btn" data-act="export-csv">CSV ${UI.year}</button><button class="btn" data-act="print">Kalender als PDF</button><button class="btn" data-act="export-ics">Für Handykalender ${UI.year}</button><button class="btn" data-act="review" data-y="${UI.year}">Jahresrückblick ${UI.year}</button></div>
-     <p>Gespeichert wird im Browser und, wenn verfügbar, in deinem Konto. Ein Backup schützt zusätzlich. Letztes Backup: ${S.lastBackup?fd(S.lastBackup).slice(4)+S.lastBackup.slice(0,4):'noch keins'}.</p><label style="margin-top:8px">Backup-Erinnerung<select data-bkset>${[7,14,30,60,90].map(n=>`<option value="${n}" ${!S.bkOff&&(+S.bkDays||30)===n?'selected':''}>alle ${n} Tage</option>`).join('')}<option value="0" ${S.bkOff?'selected':''}>aus</option></select></label>
+     <p>Gespeichert wird im Browser und, wenn verfügbar, in deinem Konto. Ein Backup schützt zusätzlich. Letztes Backup: ${S.lastBackup?fd(S.lastBackup).slice(4)+S.lastBackup.slice(0,4):'noch keins'}.</p><label style="margin-top:8px">Backup-Erinnerung<select data-bkset>${[3,7,14,30,60,90].map(n=>`<option value="${n}" ${!S.bkOff&&(+S.bkDays||3)===n?'selected':''}>alle ${n} Tage</option>`).join('')}<option value="0" ${S.bkOff?'selected':''}>aus</option></select></label>
      <p>„Für Handykalender“ speichert Messen, Urlaub, JÜP und 13.T als .ics-Datei. Auf dem Handy öffnen, dann übernimmt der Kalender die Termine.</p>
      <div class="btnrow" style="margin-top:10px"><button class="btn danger" data-act="blank">Leere Vorlage für ${UI.year}</button></div><p>Setzt nur das angezeigte Jahr auf Gleitzeit und freie Wochenenden zurück. Einstellungen, Messen und andere Jahre bleiben. Vorher am besten ein Backup speichern.</p></section>
    <section class="sbox"><h3>Hinweis und Haftung</h3><p style="font-size:13px;line-height:1.5;margin:0 0 6px">Der Zeitkompass ist ein privates Hilfsmittel zur Planung und Kontrolle der eigenen Arbeitszeit. Er ist kein offizielles Werkzeug der Koelnmesse und ersetzt nicht den Zeitnachweis. Maßgeblich ist allein der offizielle Zeitnachweis. Die Berechnungen setzen die Regeln des Manteltarifvertrags um. Diese Umsetzung ist nicht von der Personalabteilung bestätigt. Alle Angaben ohne Gewähr.</p><p style="font-size:13px;line-height:1.5;margin:0">Die Nutzung ist kostenlos und freiwillig. Alle Daten bleiben auf dem eigenen Gerät.</p></section>
@@ -2483,12 +2498,20 @@ document.querySelectorAll('.kneedle').forEach((n,i)=>{const v=V[Math.floor(Math.
 })();
 
 (function(){
-  const VER="1.9.5",NEWS=["Unter JÜP verfügbar steht jetzt zusätzlich, was bis 31.12. laut Plan dazukommt und wie viele JÜP-Tage du im ganzen Jahr erarbeitest. Beim Darüberfahren siehst du die Aufteilung.","Neue Backup-Erinnerung: Ist das letzte Backup länger her, erscheint ein Hinweisfenster. Dort lässt sich einstellen, wie oft erinnert wird, oder die Erinnerung abschalten. Die Einstellung gibt es auch in den Einstellungen beim Backup.","Notizen lassen sich jetzt farbig hervorheben: im Tagesfenster unter der Notiz Rot, Orange, Blau oder Grün wählen. Die Notiz-Ecke im Kalender, der Tooltip, die Monatsansicht und der Ausdruck zeigen die Farbe.","Einzeln angelegte Auf-, Laufzeit- und Abbautage innerhalb einer Messe werden jetzt automatisch der Messe zugeordnet. Im Messefenster erscheinen fehlende Tage als graue Zeile mit dem Knopf „Zuordnen“.","Beim Messe-Eintragen steht jetzt das Jahr in der Überschrift und in den Datumsfeldern. Hat eine Messe Termine in einem anderen Jahr, führt ein Knopf direkt dorthin.","Für 2027 sind die Messetermine hinterlegt (Stand November 2026): Unter Messen eine Messe auswählen, dann stehen Aufbau, Laufzeit und Abbau schon in den Feldern. Mit „Eintragen und übernehmen“ landen sie im Kalender. Neu in der Liste: gamescom Business Area.","Die Monatsansicht lässt sich jetzt drucken oder als PDF speichern: Buttons „Drucken“ und „Monat als PDF“ oben neben dem Monatsnamen. Mit Notizen, Uhrzeiten und Feiertagen. Auch der Jahreskalender hat jetzt einen Button „Drucken“.","Bei dunklen Hintergrundbildern sind die Kästen jetzt fast deckend weiß, damit die Schrift gut lesbar bleibt.","Die Stunden unter JÜP verfügbar, JÜP genommen und JÜP geplant sind jetzt grün wie der Balken.","Der Kalender als PDF trägt jetzt das Kompass-Logo: als „o“ im Namen und groß oben rechts.","Das Fenster mit dem Zeitnachweis lässt sich jetzt am Kopf verschieben und an den unteren Ecken links und rechts größer oder kleiner ziehen.","Korrektur: Bei eigenen Kachelfarben bleibt das Datum im Jahreskalender schwarz auf weißem Grund, mit Übergang zur gewählten Farbe.","Hochgeladene Zeitnachweise werden jetzt als PDF auf diesem Gerät gespeichert. Im Prüfbericht und in der Auswertung öffnet der Button „Zeitnachweis“ das Original. Die PDFs sind auch im Backup enthalten. Bereits früher hochgeladene Nachweise bitte einmal neu hochladen.","Schulferien NRW lassen sich einblenden: mit dem gelben Schalter „Schulferien NRW“ rechts in der Legende unter dem Jahreskalender. Ferientage bekommen dann unten einen gelben Streifen, der Name steht im Tooltip. Standardmäßig ausgeblendet.","Das Tagesfenster lässt sich mit der Maus verschieben: oben am Kopf mit dem Datum anfassen und ziehen."];
+  const VER="1.10.0",NEWS=[{"v": "1.10", "t": ["Neuerungen werden jetzt übersichtlich nach Versionen angezeigt, ältere lassen sich aufklappen.", "Die Backup-Erinnerung kommt jetzt standardmäßig alle 3 Tage. Einstellbar im Hinweisfenster oder in den Einstellungen beim Backup."]}, {"v": "1.9", "t": ["Unter JÜP verfügbar steht jetzt zusätzlich, was bis 31.12. laut Plan dazukommt und wie viele JÜP-Tage du im ganzen Jahr erarbeitest. Beim Darüberfahren siehst du die Aufteilung.", "Neue Backup-Erinnerung: Ist das letzte Backup länger her, erscheint ein Hinweisfenster. Dort lässt sich einstellen, wie oft erinnert wird, oder die Erinnerung abschalten. Die Einstellung gibt es auch in den Einstellungen beim Backup."]}, {"v": "1.8", "t": ["Notizen lassen sich jetzt farbig hervorheben: im Tagesfenster unter der Notiz Rot, Orange, Blau oder Grün wählen. Die Notiz-Ecke im Kalender, der Tooltip, die Monatsansicht und der Ausdruck zeigen die Farbe."]}, {"v": "1.7", "t": ["Einzeln angelegte Auf-, Laufzeit- und Abbautage innerhalb einer Messe werden jetzt automatisch der Messe zugeordnet. Im Messefenster erscheinen fehlende Tage als graue Zeile mit dem Knopf „Zuordnen“.", "Beim Messe-Eintragen steht jetzt das Jahr in der Überschrift und in den Datumsfeldern. Hat eine Messe Termine in einem anderen Jahr, führt ein Knopf direkt dorthin.", "Für 2027 sind die Messetermine hinterlegt (Stand November 2026): Unter Messen eine Messe auswählen, dann stehen Aufbau, Laufzeit und Abbau schon in den Feldern. Mit „Eintragen und übernehmen“ landen sie im Kalender. Neu in der Liste: gamescom Business Area."]}, {"v": "1.6", "t": ["Die Monatsansicht lässt sich jetzt drucken oder als PDF speichern: Buttons „Drucken“ und „Monat als PDF“ oben neben dem Monatsnamen. Mit Notizen, Uhrzeiten und Feiertagen. Auch der Jahreskalender hat jetzt einen Button „Drucken“."]}, {"v": "1.5", "t": ["Bei dunklen Hintergrundbildern sind die Kästen jetzt fast deckend weiß, damit die Schrift gut lesbar bleibt.", "Die Stunden unter JÜP verfügbar, JÜP genommen und JÜP geplant sind jetzt grün wie der Balken.", "Der Kalender als PDF trägt jetzt das Kompass-Logo: als „o“ im Namen und groß oben rechts.", "Das Fenster mit dem Zeitnachweis lässt sich jetzt am Kopf verschieben und an den unteren Ecken links und rechts größer oder kleiner ziehen.", "Korrektur: Bei eigenen Kachelfarben bleibt das Datum im Jahreskalender schwarz auf weißem Grund, mit Übergang zur gewählten Farbe.", "Hochgeladene Zeitnachweise werden jetzt als PDF auf diesem Gerät gespeichert. Im Prüfbericht und in der Auswertung öffnet der Button „Zeitnachweis“ das Original. Die PDFs sind auch im Backup enthalten. Bereits früher hochgeladene Nachweise bitte einmal neu hochladen."]}, {"v": "1.4", "t": ["Schulferien NRW lassen sich einblenden: mit dem gelben Schalter „Schulferien NRW“ rechts in der Legende unter dem Jahreskalender. Ferientage bekommen dann unten einen gelben Streifen, der Name steht im Tooltip. Standardmäßig ausgeblendet.", "Das Tagesfenster lässt sich mit der Maus verschieben: oben am Kopf mit dem Datum anfassen und ziehen."]}];
   const save=()=>{if(window.zkSave)return window.zkSave();try{localStorage.setItem('stundenkalender.v1',JSON.stringify(ST))}catch(e){}};
   const bar=document.createElement('div');bar.id='zkbar';bar.style.cssText='position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:60;max-width:min(560px,calc(100vw - 24px));padding:12px 14px;border-radius:14px;background:#16171a;color:#f4f3f0;box-shadow:0 10px 30px rgba(0,0,0,.35);font-size:14px;line-height:1.45;display:none';
   document.body.appendChild(bar);
   function show(html){bar.innerHTML=html;bar.style.display='block'}
-  function news(){show(`<b>Neu in Version ${VER}</b><ul style="margin:6px 0 10px 18px;padding:0">${NEWS.map(n=>'<li>'+n+'</li>').join('')}</ul><div style="text-align:right"><button class="btn sm" data-zkbar="ok" style="background:#e85d04;color:#fff;border:0">OK</button></div>`)}
+  let NW=null;
+  function news(){
+    if(!NW){NW=document.createElement('div');NW.className='modal';NW.id='zknews';NW.hidden=true;NW.innerHTML='<div class="sheet glass nw" role="dialog" aria-modal="true" aria-label="Neuerungen"></div>';document.body.appendChild(NW);
+      NW.addEventListener('click',ev=>{if(ev.target===NW||ev.target.closest('[data-nw="ok"]')){NW.hidden=true;if(ST.settings.seenVer!==VER){ST.settings.seenVer=VER;save()}}})}
+    const L=a=>'<ul>'+a.map(n=>'<li>'+n+'</li>').join('')+'</ul>';
+    NW.firstChild.innerHTML=`<div class="nw-top"><svg viewBox="0 0 66 66" width="44" height="44" aria-hidden="true"><rect x="1" y="1" width="64" height="64" rx="15" fill="#16171a"/><circle cx="33" cy="33" r="21" fill="none" stroke="#fff" stroke-width="6"/><polygon points="33,15 38.5,33 27.5,33" fill="#E85D04"/><polygon points="33,51 38.5,33 27.5,33" fill="#8D9199"/><circle cx="33" cy="33" r="2.8" fill="#fff"/></svg><div><div class="nw-k">Zeitkompass</div><h3>Neu in Version ${VER}</h3></div></div>
+      <div class="nw-body">${L(NEWS[0].t)}${NEWS.length>1?`<details><summary>Frühere Neuerungen</summary>${NEWS.slice(1).map(g=>`<h4>Version ${g.v}</h4>${L(g.t)}`).join('')}</details>`:''}</div>
+      <div class="nw-btns"><button class="btn primary" data-nw="ok">OK</button></div>`;
+    NW.hidden=false}
   bar.addEventListener('click',ev=>{const b=ev.target.closest('[data-zkbar]');if(!b)return;if(b.dataset.zkbar==='reload'){location.reload();return}bar.style.display='none';if(ST.settings.seenVer!==VER){ST.settings.seenVer=VER;save()}});
   document.addEventListener('click',ev=>{const a=ev.target.closest&&ev.target.closest('[data-news]');if(!a)return;ev.preventDefault();news()});
   const isNew=!Object.keys(ST.years||{}).some(y=>Object.keys((ST.years[y]||{}).entries||{}).length);
@@ -2639,17 +2662,18 @@ document.querySelectorAll('.kneedle').forEach((n,i)=>{const v=V[Math.floor(Math.
   function nEntries(){try{return Object.values(ST.years).reduce((s,Y)=>s+Object.keys((Y&&Y.entries)||{}).length,0)}catch(e){return 0}}
   function due(){const s=S();if(s.bkOff||!s.discOk||nEntries()===0)return false;const t=td();
     if(!s.bkStart){s.bkStart=t;sv()}
+    if(s.bkKick!=='2026-11'){s.bkKick='2026-11';sv();return true}
     if(s.bkSnooze&&t<s.bkSnooze)return false;
-    const n=+s.bkDays||30,ref=s.lastBackup||s.bkStart;return days(ref,t)>=n}
+    const n=+s.bkDays||3,ref=s.lastBackup||s.bkStart;return days(ref,t)>=n}
   let W=null;
   function open(){const s=S();
     if(!W){W=document.createElement('div');W.className='modal';W.id='bkwin';W.hidden=true;W.innerHTML='<div class="sheet glass bkw" role="dialog" aria-modal="true" aria-label="Backup-Erinnerung"></div>';document.body.appendChild(W)}
-    const n=+s.bkDays||30,lb=s.lastBackup;
+    const n=+s.bkDays||3,lb=s.lastBackup;
     W.firstChild.innerHTML=`<div class="bk-top">${LOGO}<div><div class="bk-k">Zeitkompass</div><h3>Zeit für ein Backup</h3></div></div>
       <p>Deine Einträge liegen nur in diesem Browser auf diesem Gerät. Werden die Browserdaten gelöscht, wechselst du das Gerät oder den Browser, sind sie ohne Backup weg.</p>
       <p>Das Backup ist eine Datei mit allen Einträgen, Einstellungen und hochgeladenen Zeitnachweisen. Du kannst sie jederzeit über „Backup laden“ wieder einspielen.</p>
       <p class="bk-last">Letztes Backup: <b>${lb?fdt(lb)+' ('+days(lb,td())+' Tage her)':'noch keins'}</b></p>
-      <div class="bk-set"><label>Erinnern <select data-bkdays>${[7,14,30,60,90].map(x=>`<option value="${x}" ${x===n?'selected':''}>alle ${x} Tage</option>`).join('')}</select></label>
+      <div class="bk-set"><label>Erinnern <select data-bkdays>${[3,7,14,30,60,90].map(x=>`<option value="${x}" ${x===n?'selected':''}>alle ${x} Tage</option>`).join('')}</select></label>
       <label class="bk-off"><input type="checkbox" data-bkoff> Nicht mehr erinnern</label></div>
       <div class="bk-btns"><button class="btn" data-bk="later">Später</button><button class="btn primary" data-act="export-json" data-bk="now">Jetzt sichern</button></div>`;
     W.hidden=false}
@@ -2663,7 +2687,7 @@ document.querySelectorAll('.kneedle').forEach((n,i)=>{const v=V[Math.floor(Math.
     else if(e.matches('[data-bkset]')){ev.stopImmediatePropagation();const v=+e.value;if(v){s.bkOff=false;s.bkDays=v}else s.bkOff=true;sv()}},true);
   document.addEventListener('keydown',ev=>{if(ev.key==='Escape'&&W&&!W.hidden){ev.stopImmediatePropagation();S().bkSnooze=addD(td(),3);sv();close()}},true);
   window.zkBackupReminder=open;
-  function check(){const d=document.getElementById('discwin');if(d&&!d.hidden){setTimeout(check,4000);return}try{if(due())open()}catch(e){}}
+  function check(){const d=document.getElementById('discwin'),nw=document.getElementById('zknews'),zb=document.getElementById('zkbar');if((d&&!d.hidden)||(nw&&!nw.hidden)||(zb&&zb.style.display==='block')){setTimeout(check,3000);return}try{if(due())open()}catch(e){}}
   setTimeout(check,2500);
   try{if(/[?&#]zeige=backup\b/.test(location.search+location.hash))setTimeout(()=>{const d=document.getElementById('discwin');if(!d||d.hidden)open()},1500)}catch(e){}
 })();
