@@ -863,6 +863,17 @@ html[data-design="vis"]:not([data-dark]):is([data-bg="xnetz"],[data-bg="xplatine
 html[data-design="vis"]:not([data-dark]):is([data-bg="xnetz"],[data-bg="xplatine"],[data-bg="xindustrie"],[data-bg="xneuron"],[data-bg="xall"],[data-bg="xgold"],[data-bg="xhex"]) .copy{color:#fff;opacity:.8;text-shadow:0 1px 2px rgba(0,0,0,.6)}
 </style>
 <style id="fwgap">.fw-t tr.fw-gap td{color:var(--ink3);font-style:italic;background:repeating-linear-gradient(135deg,rgba(127,127,127,.06) 0 6px,transparent 6px 12px)}.fw-t tr.fw-gap td b{font-style:normal}.fw-t tr.fw-gap .btn{font-style:normal}</style>
+<style id="notecol">
+.ncrow{display:flex;align-items:center;gap:8px;margin:-6px 0 14px;font-size:calc(12px*var(--fs,1));color:var(--ink2)}
+.ncrow span{margin-right:4px}
+.ncb{width:22px;height:22px;border-radius:50%;border:2px solid rgba(255,255,255,.9);background:var(--c);box-shadow:0 0 0 1px rgba(0,0,0,.18);cursor:pointer;padding:0}
+.ncb.on{box-shadow:0 0 0 2px var(--c),0 0 0 4px rgba(0,0,0,.12)}
+.d.has-n.nc-r::after,.md.has-n.nc-r::after{border-color:transparent transparent #d23440 transparent}
+.d.has-n.nc-o::after,.md.has-n.nc-o::after{border-color:transparent transparent #e07b00 transparent}
+.d.has-n.nc-b::after,.md.has-n.nc-b::after{border-color:transparent transparent #2f6fd6 transparent}
+.d.has-n.nc-g::after,.md.has-n.nc-g::after{border-color:transparent transparent #2e8b3a transparent}
+html[data-dark] .tip .tip-note[style]{filter:brightness(1.35)}
+</style>
 </head>
 <body>
 <div class="aurora" aria-hidden="true"></div>
@@ -888,7 +899,7 @@ html[data-design="vis"]:not([data-dark]):is([data-bg="xnetz"],[data-bg="xplatine
   <section class="today glass" id="today" aria-label="Heute"></section>
   <section class="pegel glass" id="pegel" aria-label="Stundenkonto"></section>
   <main id="main"></main>
-  <p class="copy">© 2026 Marc Simon · <a href="#" data-disc="open" style="color:inherit">Hinweis</a> · <a href="#" data-news="open" style="color:inherit">Version 1.7.3</a></p>
+  <p class="copy">© 2026 Marc Simon · <a href="#" data-disc="open" style="color:inherit">Hinweis</a> · <a href="#" data-news="open" style="color:inherit">Version 1.8.0</a></p>
 </div>
 <aside class="drawer glass" id="drawer" aria-hidden="true" aria-label="Tag bearbeiten"></aside>
 <div class="rangebar glass" id="rangebar" hidden></div>
@@ -998,6 +1009,7 @@ function stored(k){const y=ST.years[+k.slice(0,4)];return y&&y.entries[k]||null}
 function defType(k){const i=info(k);return(soll(k,i)>0&&!i.halb)?'gleitzeit':'frei'}
 function entry(k){const e=stored(k);if(!e)return{t:defType(k)};if((e.t==='fza'||e.t==='urlaub')&&soll(k)===0){const c=Object.assign({},e,{t:'frei'});delete c.t13;return c}return e}
 const fairById=id=>ST.fairs.find(f=>f.id===id);
+const NC={r:'#d23440',o:'#e07b00',b:'#2f6fd6',g:'#2e8b3a'};
 
 let MEMO={};
 let FFC=null;
@@ -1460,7 +1472,7 @@ function cellCls(dc){
   if(dc.zt)c.push('zt');
   if(UI.sel.has(dc.k))c.push('sel');
   if(dc.k===todayK)c.push('is-today');
-  if(dc.e.n)c.push('has-n');
+  if(dc.e.n){c.push('has-n');if(dc.e.nc&&NC[dc.e.nc])c.push('nc-'+dc.e.nc)}
   if(dc.e.t==='mobil'){const C=computeYear(+dc.k.slice(0,4)),M=C&&C.months[+dc.k.slice(5,7)-1];if(M&&M.mobQ>(+ST.settings.mobilMax||50)+1e-6)c.push('mobover')}
   return c.join(' ');
 }
@@ -1500,7 +1512,7 @@ function renderMonth(){
       ${dc.zt?`<span class="phase" style="background:${chipColor(e.t)}"></span>`:''}
       ${(e.t==='frei'&&!stored(k))?'':`<div class="ty">${TYPES[e.t].label}${f?' '+esc(f.k):''}${e.t13?' 13.T':''}</div>`}
       ${dc.work?`<div class="tm">${dc.times[0]}–${dc.times[1]}</div>`:''}
-      ${e.n?`<div class="tm">${esc(e.n)}</div>`:''}
+      ${e.n?`<div class="tm" ${e.nc&&NC[e.nc]?`style="color:${NC[e.nc]};font-weight:700;opacity:1"`:''}>${esc(e.n)}</div>`:''}
       ${(dc.work||dc.soll>0)?`<div class="nt"><span>${dc.work?fh(dc.net):'Soll '+fh(dc.soll)}</span><em>${Math.abs(bal)>0.004?fhs(bal):''}</em></div>`:''}
     </div>`;
   }
@@ -1841,7 +1853,7 @@ function renderFairWin(){
      <td><input type="text" inputmode="numeric" autocomplete="off" maxlength="8" placeholder="hh:mm" data-tm data-fwk="${k}" data-fwf="s" value="${dc.times[0]||''}" ${dc.work?'':'disabled'}></td><td><input type="text" inputmode="numeric" autocomplete="off" maxlength="8" placeholder="hh:mm" data-tm data-fwk="${k}" data-fwf="e" value="${dc.times[1]||''}" ${dc.work?'':'disabled'}></td>
      <td><input type="number" min="0" step="5" data-fwk="${k}" data-fwf="p" value="${e.p!=null&&e.p!==''?e.p:''}" placeholder="${Math.round(dc.pause*60)}" style="width:62px" title="Pause in Minuten, leer = gesetzlich"></td>
      <td>${fh(dc.net)}</td><td>${dc.zSum?'+'+fh(dc.zSum):''}</td><td class="${bal<0?'neg':'pos'}">${fhs(bal)}</td>
-     <td><input type="text" data-fwk="${k}" data-fwf="n" value="${esc(e.n||'')}" placeholder="Notiz" style="width:100%;min-width:110px"></td></tr>`});
+     <td><input type="text" data-fwk="${k}" data-fwf="n" value="${esc(e.n||'')}" placeholder="Notiz" style="width:100%;min-width:110px;${e.nc&&NC[e.nc]?'color:'+NC[e.nc]+';font-weight:700':''}"></td></tr>`});
   $('#fwsheet').innerHTML=`<div class="fw-head"><div class="fw-name"><input type="text" data-fwn="name" value="${esc(f.name)}" aria-label="Name der Messe"><input type="text" data-fwn="k" value="${esc(f.k)}" aria-label="Kürzel" style="width:80px"></div>
      <div class="fw-act"><button class="btn" data-act="fw-add" data-w="pre">+ Tag davor</button><button class="btn" data-act="fw-add" data-w="post">+ Tag danach</button><button class="btn" data-act="fair-goto" data-id="${esc(id)}">Im Kalender zeigen</button><button class="btn" data-act="fw-copy">In ${UI.year+1} übernehmen</button><button class="btn icon ghost" data-act="fw-close" aria-label="Schließen">✕</button></div></div>
    <div class="fw-stats"><div><span>Tage</span><b>${st.days}</b></div><div><span>Sa/So</span><b>${st.we}</b></div><div><span>Feiertage</span><b>${st.ft}</b></div><div><span>Netto</span><b>${fh(st.net)}</b></div><div><span>Zuschläge</span><b>${fh(st.z)}</b></div><div><span>Guthaben</span><b class="pos">${fhs(st.over)}</b></div></div>
@@ -1880,7 +1892,7 @@ function renderDrawer(){
     <div class="field"><span class="fl">Pause</span><div class="pauserow"><select data-f="pm"><option value="auto" ${manual?'':'selected'}>${ST.settings.pause.mode==='fixed'?'Feste Pause':'Gesetzlich'} (${autoP} Min.)</option><option value="manual" ${manual?'selected':''}>Manuell</option></select>${manual?`<input type="number" min="0" step="5" data-f="p" value="${+e.p}" aria-label="Pause in Minuten">`:'<span></span>'}</div></div>`;
   }
   if(e.t==='fza')h+=`<label class="chk"><input type="checkbox" data-f="t13" ${e.t13?'checked':''}> Pflichtfrei nach 13 Tagen (13.T)</label>${dc.soll>0&&!dc.i.halb?`<label class="chk"><input type="checkbox" data-f="half" ${e.half?'checked':''}> Halber JÜP-Tag (${fh(dc.soll/2)} JÜP, Rest wird gearbeitet)</label>`:''}`;
-  h+=`<label class="field"><span class="fl">Notiz</span><textarea data-f="n" placeholder="Optional">${esc(e.n||'')}</textarea></label>`;
+  h+=`<label class="field"><span class="fl">Notiz</span><textarea data-f="n" placeholder="Optional" style="${e.nc&&NC[e.nc]?'color:'+NC[e.nc]+';font-weight:600':''}">${esc(e.n||'')}</textarea></label><div class="ncrow"><span>Farbe der Notiz</span>${[['','Standard'],['r','Rot'],['o','Orange'],['b','Blau'],['g','Grün']].map(([c,l])=>`<button type="button" class="ncb${(e.nc||'')===c?' on':''}" data-act="set-nc" data-c="${c}" title="${l}" aria-label="Notizfarbe ${l}" style="--c:${c?NC[c]:'#16171a'}"></button>`).join('')}</div>`;
   const R=ST.settings.rates,bal=dc.ist-dc.soll+dc.zSum;
   h+=`<div class="calc"><dl class="kv">
     ${dc.work?`<dt>Anwesenheit</dt><dd>${fh(dc.gross)}</dd><dt>Pause</dt><dd>−${fmt(dc.pause)} h</dd><dt>Netto</dt><dd>${fh(dc.net)}</dd>`:`<dt>Angerechnet</dt><dd>${fh(dc.ist)}</dd>`}
@@ -2104,8 +2116,8 @@ async function monPdf(pr){
       let ty=yy+BH+3.4;const tx=x+1.6,tw=cw-3.2,maxY=yy+rh-1.2;
       if(dc.i.name){doc.setFont('helvetica','bold');doc.setFontSize(6.5);doc.setTextColor(184,132,0);const ln=doc.splitTextToSize(dc.i.name,tw);for(const s of ln){if(ty>maxY)break;doc.text(s,tx,ty);ty+=2.8}}
       if(dc.work){doc.setFont('helvetica','normal');doc.setFontSize(7);doc.setTextColor(60,68,82);if(ty<=maxY){doc.text(dc.times[0]+'–'+dc.times[1],tx,ty);ty+=3.1}}
-      if(e.n){doc.setFont('helvetica','normal');doc.setFontSize(6.6);doc.setTextColor(28,36,51);let ln=doc.splitTextToSize(String(e.n),tw);const cap=Math.max(0,Math.floor((maxY-ty)/2.75)+1);if(ln.length>cap){ln=ln.slice(0,cap);if(cap>0){let s=ln[cap-1];while(s.length>1&&doc.getTextWidth(s+'…')>tw)s=s.slice(0,-1);ln[cap-1]=s+'…'}}
-        if(ln.length){doc.setFillColor(255,198,26);doc.rect(x,ty-2.2,.7,Math.min(ln.length*2.75,maxY-ty+2.6),'F')}for(const s of ln){doc.text(s,tx,ty);ty+=2.75}}
+      if(e.n){const ncol=e.nc&&NC[e.nc]?rgb(NC[e.nc]):null;doc.setFont('helvetica',ncol?'bold':'normal');doc.setFontSize(6.6);doc.setTextColor(...(ncol||[28,36,51]));let ln=doc.splitTextToSize(String(e.n),tw);const cap=Math.max(0,Math.floor((maxY-ty)/2.75)+1);if(ln.length>cap){ln=ln.slice(0,cap);if(cap>0){let s=ln[cap-1];while(s.length>1&&doc.getTextWidth(s+'…')>tw)s=s.slice(0,-1);ln[cap-1]=s+'…'}}
+        if(ln.length){doc.setFillColor(...(ncol||[255,198,26]));doc.rect(x,ty-2.2,.7,Math.min(ln.length*2.75,maxY-ty+2.6),'F')}for(const s of ln){doc.text(s,tx,ty);ty+=2.75}}
       if(SFON()&&window.zkSchulferien&&zkSchulferien(k)){doc.setFillColor(255,212,0);doc.rect(x+.6,yy+rh-1.1,cw-1.2,.9,'F')}
     }
     const LG=[['aufbau','Aufbau und Abbau'],['laufzeit','Laufzeit'],['arbeit','Gearbeitet'],['mobil','Mobiles Arbeiten'],['dienst','Sonstiger Dienst'],['zt','Wochenende/Feiertag'],['urlaub','Urlaub'],['fza','JÜP, auch 13.T'],['krank','Krank'],['plain','Gleitzeit'],['we','Freies Wochenende']];
@@ -2167,7 +2179,7 @@ document.addEventListener('click',ev=>{
     case'close-drawer':closeDrawer();render();break;
     case'day-prev':UI.drawer=addDays(k,-1);renderDrawer();render(true);break;
     case'day-next':UI.drawer=addDays(k,1);renderDrawer();render(true);break;
-    case'set-type':{const t=b.dataset.t,cur=entry(k);setEntry(k,{t,s:undefined,e:undefined,p:undefined,f:TYPES[t].work?(cur.f||(['aufbau','laufzeit','abbau'].includes(t)?guessFair(k):undefined)):undefined});renderDrawer();render(true);break}
+    case'set-nc':{setEntry(k,{nc:b.dataset.c||undefined});renderDrawer();render(true);break}case'set-type':{const t=b.dataset.t,cur=entry(k);setEntry(k,{t,s:undefined,e:undefined,p:undefined,f:TYPES[t].work?(cur.f||(['aufbau','laufzeit','abbau'].includes(t)?guessFair(k):undefined)):undefined});renderDrawer();render(true);break}
     case'reset-times':setEntry(k,{s:undefined,e:undefined});renderDrawer();render(true);break;
     case'reset-day':resetEntry(k);renderDrawer();render(true);break;
     case'range-apply':{const t=$('#rT').value,f=$('#rF').value;UI.sel.forEach(x=>setEntry(x,{t,f:TYPES[t].work?(f||undefined):undefined,s:undefined,e:undefined,p:undefined,t13:undefined}));UI.sel.clear();renderRange();render();break}
@@ -2417,7 +2429,7 @@ function markSel(){document.querySelectorAll('#grid [data-k]').forEach(c=>c.clas
 function showTip(c,ev){
   const k=c.dataset.k,dc=computeYear(+k.slice(0,4)).days[k];if(!dc)return;const e=dc.e,f=e.f&&fairById(e.f),t=$('#tip');
   const bal=dc.ist-dc.soll+dc.zSum;
-  t.innerHTML=`<b>${fd(k)}</b>${dc.i.name?`<div class="tip-hol">${dc.i.legal?'Feiertag':'Sondertag'}: ${esc(dc.i.name)}${dc.i.frei?', dienstfrei':''}${dc.i.halb?', halber Tag':''}${dc.i.ft?', Zuschlag '+ST.settings.rates.ft+' %':''}</div>`:''}<div>${TYPES[e.t].label}${f?', '+esc(f.name):''}${e.t13?', 13.T':''}</div>${dc.work?`<div>${dc.times[0]}–${dc.times[1]}, netto ${fh(dc.net)}</div>`:''}${dc.zSum>0?`<div>Zuschläge ${fh(dc.zSum)}</div>`:''}${Math.abs(bal)>0.004?`<div>Tagesbilanz ${fhs(bal)}</div>`:''}${e.n?`<div class="tip-note">${esc(e.n)}</div>`:''}${e.ist?'<div>Echte Zeiten aus Zeitnachweis</div>':''}`;
+  t.innerHTML=`<b>${fd(k)}</b>${dc.i.name?`<div class="tip-hol">${dc.i.legal?'Feiertag':'Sondertag'}: ${esc(dc.i.name)}${dc.i.frei?', dienstfrei':''}${dc.i.halb?', halber Tag':''}${dc.i.ft?', Zuschlag '+ST.settings.rates.ft+' %':''}</div>`:''}<div>${TYPES[e.t].label}${f?', '+esc(f.name):''}${e.t13?', 13.T':''}</div>${dc.work?`<div>${dc.times[0]}–${dc.times[1]}, netto ${fh(dc.net)}</div>`:''}${dc.zSum>0?`<div>Zuschläge ${fh(dc.zSum)}</div>`:''}${Math.abs(bal)>0.004?`<div>Tagesbilanz ${fhs(bal)}</div>`:''}${e.n?`<div class="tip-note" ${e.nc&&NC[e.nc]?`style="color:${NC[e.nc]}"`:''}>${esc(e.n)}</div>`:''}${e.ist?'<div>Echte Zeiten aus Zeitnachweis</div>':''}`;
   t.hidden=false;placeTip(ev);
 }
 function placeTip(ev){const t=$('#tip'),w=t.offsetWidth,h=t.offsetHeight;let x=ev.clientX+14,y=ev.clientY+14;if(x+w>innerWidth-8)x=ev.clientX-w-14;if(y+h>innerHeight-8)y=ev.clientY-h-14;t.style.left=x+'px';t.style.top=y+'px'}
@@ -2449,7 +2461,7 @@ document.querySelectorAll('.kneedle').forEach((n,i)=>{const v=V[Math.floor(Math.
 })();
 
 (function(){
-  const VER="1.7.3",NEWS=["Einzeln angelegte Auf-, Laufzeit- und Abbautage innerhalb einer Messe werden jetzt automatisch der Messe zugeordnet. Im Messefenster erscheinen fehlende Tage als graue Zeile mit dem Knopf „Zuordnen“.","Beim Messe-Eintragen steht jetzt das Jahr in der Überschrift und in den Datumsfeldern. Hat eine Messe Termine in einem anderen Jahr, führt ein Knopf direkt dorthin.","Für 2027 sind die Messetermine hinterlegt (Stand November 2026): Unter Messen eine Messe auswählen, dann stehen Aufbau, Laufzeit und Abbau schon in den Feldern. Mit „Eintragen und übernehmen“ landen sie im Kalender. Neu in der Liste: gamescom Business Area.","Die Monatsansicht lässt sich jetzt drucken oder als PDF speichern: Buttons „Drucken“ und „Monat als PDF“ oben neben dem Monatsnamen. Mit Notizen, Uhrzeiten und Feiertagen. Auch der Jahreskalender hat jetzt einen Button „Drucken“.","Bei dunklen Hintergrundbildern sind die Kästen jetzt fast deckend weiß, damit die Schrift gut lesbar bleibt.","Die Stunden unter JÜP verfügbar, JÜP genommen und JÜP geplant sind jetzt grün wie der Balken.","Der Kalender als PDF trägt jetzt das Kompass-Logo: als „o“ im Namen und groß oben rechts.","Das Fenster mit dem Zeitnachweis lässt sich jetzt am Kopf verschieben und an den unteren Ecken links und rechts größer oder kleiner ziehen.","Korrektur: Bei eigenen Kachelfarben bleibt das Datum im Jahreskalender schwarz auf weißem Grund, mit Übergang zur gewählten Farbe.","Hochgeladene Zeitnachweise werden jetzt als PDF auf diesem Gerät gespeichert. Im Prüfbericht und in der Auswertung öffnet der Button „Zeitnachweis“ das Original. Die PDFs sind auch im Backup enthalten. Bereits früher hochgeladene Nachweise bitte einmal neu hochladen.","Schulferien NRW lassen sich einblenden: mit dem gelben Schalter „Schulferien NRW“ rechts in der Legende unter dem Jahreskalender. Ferientage bekommen dann unten einen gelben Streifen, der Name steht im Tooltip. Standardmäßig ausgeblendet.","Das Tagesfenster lässt sich mit der Maus verschieben: oben am Kopf mit dem Datum anfassen und ziehen."];
+  const VER="1.8.0",NEWS=["Notizen lassen sich jetzt farbig hervorheben: im Tagesfenster unter der Notiz Rot, Orange, Blau oder Grün wählen. Die Notiz-Ecke im Kalender, der Tooltip, die Monatsansicht und der Ausdruck zeigen die Farbe.","Einzeln angelegte Auf-, Laufzeit- und Abbautage innerhalb einer Messe werden jetzt automatisch der Messe zugeordnet. Im Messefenster erscheinen fehlende Tage als graue Zeile mit dem Knopf „Zuordnen“.","Beim Messe-Eintragen steht jetzt das Jahr in der Überschrift und in den Datumsfeldern. Hat eine Messe Termine in einem anderen Jahr, führt ein Knopf direkt dorthin.","Für 2027 sind die Messetermine hinterlegt (Stand November 2026): Unter Messen eine Messe auswählen, dann stehen Aufbau, Laufzeit und Abbau schon in den Feldern. Mit „Eintragen und übernehmen“ landen sie im Kalender. Neu in der Liste: gamescom Business Area.","Die Monatsansicht lässt sich jetzt drucken oder als PDF speichern: Buttons „Drucken“ und „Monat als PDF“ oben neben dem Monatsnamen. Mit Notizen, Uhrzeiten und Feiertagen. Auch der Jahreskalender hat jetzt einen Button „Drucken“.","Bei dunklen Hintergrundbildern sind die Kästen jetzt fast deckend weiß, damit die Schrift gut lesbar bleibt.","Die Stunden unter JÜP verfügbar, JÜP genommen und JÜP geplant sind jetzt grün wie der Balken.","Der Kalender als PDF trägt jetzt das Kompass-Logo: als „o“ im Namen und groß oben rechts.","Das Fenster mit dem Zeitnachweis lässt sich jetzt am Kopf verschieben und an den unteren Ecken links und rechts größer oder kleiner ziehen.","Korrektur: Bei eigenen Kachelfarben bleibt das Datum im Jahreskalender schwarz auf weißem Grund, mit Übergang zur gewählten Farbe.","Hochgeladene Zeitnachweise werden jetzt als PDF auf diesem Gerät gespeichert. Im Prüfbericht und in der Auswertung öffnet der Button „Zeitnachweis“ das Original. Die PDFs sind auch im Backup enthalten. Bereits früher hochgeladene Nachweise bitte einmal neu hochladen.","Schulferien NRW lassen sich einblenden: mit dem gelben Schalter „Schulferien NRW“ rechts in der Legende unter dem Jahreskalender. Ferientage bekommen dann unten einen gelben Streifen, der Name steht im Tooltip. Standardmäßig ausgeblendet.","Das Tagesfenster lässt sich mit der Maus verschieben: oben am Kopf mit dem Datum anfassen und ziehen."];
   const save=()=>{if(window.zkSave)return window.zkSave();try{localStorage.setItem('stundenkalender.v1',JSON.stringify(ST))}catch(e){}};
   const bar=document.createElement('div');bar.id='zkbar';bar.style.cssText='position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:60;max-width:min(560px,calc(100vw - 24px));padding:12px 14px;border-radius:14px;background:#16171a;color:#f4f3f0;box-shadow:0 10px 30px rgba(0,0,0,.35);font-size:14px;line-height:1.45;display:none';
   document.body.appendChild(bar);
