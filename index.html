@@ -1049,6 +1049,30 @@ body.zk-heat .d[data-k]:has(.hmw) .lab{visibility:hidden}
 #fzbox .muted{color:var(--ink3);font-size:12px}
 #zkconfirm .cf{max-width:460px}
 </style>
+<style id="tourstyle">
+#zkt-block{position:fixed;inset:0;z-index:95;background:transparent}
+.tlist{margin-top:10px}.tlist .tl-h{font:600 10.5px/1 var(--vmono,ui-monospace);letter-spacing:.12em;text-transform:uppercase;opacity:.7;margin:4px 0 6px}
+.tlist .tl-b{display:flex;justify-content:space-between;align-items:center;width:100%;padding:8px 10px;margin-bottom:5px;border-radius:9px;border:1px solid rgba(127,127,127,.25);background:transparent;color:inherit;font:600 13.5px/1.3 inherit;cursor:pointer;text-align:left}
+.tlist .tl-b:hover{border-color:#E85D04;background:rgba(232,93,4,.06)}.tlist .tl-b i{font-style:normal;color:#3c8c3c;font-weight:800}
+.zk-dot{position:absolute;top:-5px;right:-5px;width:13px;height:13px;border-radius:50%;background:#E85D04;border:2px solid #fff;z-index:5;cursor:pointer;animation:zkdot 1.8s infinite;padding:0}
+@keyframes zkdot{0%{box-shadow:0 0 0 0 rgba(232,93,4,.55)}70%{box-shadow:0 0 0 10px rgba(232,93,4,0)}100%{box-shadow:0 0 0 0 rgba(232,93,4,0)}}
+#zkdotpop{position:fixed;z-index:90;width:min(290px,calc(100vw - 24px));background:#16171a;color:#fff;border-radius:12px;padding:12px 14px;font-size:13.5px;line-height:1.5;box-shadow:0 12px 34px rgba(0,0,0,.4)}
+#zkdotpop b{display:block;margin-bottom:3px;color:#ff8a3d}#zkdotpop button{margin-top:8px;border:0;border-radius:8px;padding:5px 12px;background:#E85D04;color:#fff;font-weight:700;cursor:pointer}
+#zkt-spot{position:fixed;z-index:96;border-radius:14px;box-shadow:0 0 0 3px #E85D04,0 0 0 9999px rgba(10,11,14,.62);pointer-events:none;transition:all .35s cubic-bezier(.3,.9,.3,1)}
+#zkt-spot.none{box-shadow:0 0 0 9999px rgba(10,11,14,.62);width:0!important;height:0!important;left:50%!important;top:40%!important}
+#zkt-spot.task{animation:zktp 1.6s infinite}#zkt-spot.hit{pointer-events:auto;cursor:pointer}
+body.zkt-hit #simbar{visibility:hidden}@keyframes zktp{50%{box-shadow:0 0 0 6px #E85D04,0 0 0 9999px rgba(10,11,14,.55)}}
+#zkt-bub{position:fixed;z-index:97;width:min(370px,calc(100vw - 24px));background:#16171a;color:#fff;border-radius:16px;padding:16px 16px 12px;box-shadow:0 18px 50px rgba(0,0,0,.45);transition:left .35s,top .35s;font-size:14px;line-height:1.55}
+#zkt-bub .tk{display:flex;align-items:center;gap:10px;margin-bottom:6px}#zkt-bub .tk svg{width:30px;height:30px;flex:none;border-radius:8px}
+#zkt-bub .tk b{font:800 16px/1.2 var(--vdisp,var(--font-d))}#zkt-bub .tk small{display:block;font:600 10px/1 var(--vmono,ui-monospace);letter-spacing:.12em;text-transform:uppercase;color:#ff8a3d;margin-bottom:3px}
+#zkt-bub p{margin:0 0 12px;color:rgba(255,255,255,.88)}#zkt-bub p.task{background:rgba(232,93,4,.18);border-left:3px solid #E85D04;padding:7px 10px;border-radius:6px;color:#fff}
+#zkt-bub .tb{display:flex;align-items:center;gap:8px;flex-wrap:wrap}#zkt-bub .tb .dots{flex-basis:100%;margin-bottom:4px}
+body.zk-tour:not(.zkt-ip) #iptab{visibility:hidden}#zkt-bub .tb .sp{flex:1}
+#zkt-bub button{border:0;border-radius:9px;padding:7px 13px;font-weight:700;cursor:pointer;font-size:13px}
+#zkt-bub .go{background:#E85D04;color:#fff}#zkt-bub .bk{background:rgba(255,255,255,.12);color:#fff}#zkt-bub .sk{background:none;color:rgba(255,255,255,.6);padding:7px 4px}
+#zkt-bub .dots{display:flex;gap:4px}#zkt-bub .dots i{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.25)}#zkt-bub .dots i.on{background:#E85D04}
+@media (max-width:700px){#zkt-bub{left:12px!important;right:12px;top:auto!important;bottom:76px;width:auto}}
+</style>
 </head>
 <body>
 <div class="aurora" aria-hidden="true"></div>
@@ -1074,7 +1098,7 @@ body.zk-heat .d[data-k]:has(.hmw) .lab{visibility:hidden}
   <section class="today glass" id="today" aria-label="Heute"></section>
   <section class="pegel glass" id="pegel" aria-label="Stundenkonto"></section>
   <main id="main"></main>
-  <p class="copy">© 2026 Marc Simon · <a href="#" data-disc="open" style="color:inherit">Hinweis</a> · <a href="#" data-news="open" style="color:inherit">Version 1.18.4</a></p>
+  <p class="copy">© 2026 Marc Simon · <a href="#" data-disc="open" style="color:inherit">Hinweis</a> · <a href="#" data-news="open" style="color:inherit">Version 1.20.3</a></p>
 </div>
 <aside class="drawer glass" id="drawer" aria-hidden="true" aria-label="Tag bearbeiten"></aside>
 <div class="rangebar glass" id="rangebar" hidden></div>
@@ -1531,7 +1555,7 @@ function bridges(C){
 }
 function renderBridges(C){
   const L=bridges(C);
-  return `<div class="panel glass" style="margin-top:14px"><h2 class="sec">Brückentage-Finder</h2>${L.length?`<div class="tscroll"><table><thead><tr><th>JÜP am</th><th>Kostet</th><th style="text-align:left">Ergibt frei am Stück</th><th></th></tr></thead><tbody>${L.map(x=>`<tr><td>${fd(x.k)}</td><td>${fhm(x.h)} h</td><td style="text-align:left"><b>${x.n} Tage</b>, ${fd(x.a)} bis ${fd(x.b)}</td><td><button class="btn" data-act="bridge" data-k="${x.k}" data-n="${x.n}" data-a="${x.a}" data-b="${x.b}">Vorschlag prüfen</button></td></tr>`).join('')}</tbody></table></div>`:'<div class="note">In diesem Jahr gibt es keine Brückentage mehr, die mit einem einzelnen JÜP-Tag 4 oder mehr freie Tage ergeben.</div>'}<div class="hint-line">Gleitzeittage, bei denen ein einzelner JÜP-Tag mindestens 4 freie Tage am Stück ergibt, meist rund um Feiertage. Für ein normales langes Wochenende reicht jeder Gleitzeit-Freitag, der kostet nur ${fhm(sollOf(5))} Stunden.</div></div>`;
+  return `<div class="panel glass" id="bfind" style="margin-top:14px"><h2 class="sec">Brückentage-Finder</h2>${L.length?`<div class="tscroll"><table><thead><tr><th>JÜP am</th><th>Kostet</th><th style="text-align:left">Ergibt frei am Stück</th><th></th></tr></thead><tbody>${L.map(x=>`<tr><td>${fd(x.k)}</td><td>${fhm(x.h)} h</td><td style="text-align:left"><b>${x.n} Tage</b>, ${fd(x.a)} bis ${fd(x.b)}</td><td><button class="btn" data-act="bridge" data-k="${x.k}" data-n="${x.n}" data-a="${x.a}" data-b="${x.b}">Vorschlag prüfen</button></td></tr>`).join('')}</tbody></table></div>`:'<div class="note">In diesem Jahr gibt es keine Brückentage mehr, die mit einem einzelnen JÜP-Tag 4 oder mehr freie Tage ergeben.</div>'}<div class="hint-line">Gleitzeittage, bei denen ein einzelner JÜP-Tag mindestens 4 freie Tage am Stück ergibt, meist rund um Feiertage. Für ein normales langes Wochenende reicht jeder Gleitzeit-Freitag, der kostet nur ${fhm(sollOf(5))} Stunden.</div></div>`;
 }
 /* Belastung pro Woche */
 function isoWeek(k){const d=P(k);d.setHours(0,0,0,0);d.setDate(d.getDate()+3-(d.getDay()+6)%7);const w1=new Date(d.getFullYear(),0,4);return{y:d.getFullYear(),w:1+Math.round(((d-w1)/864e5-3+(w1.getDay()+6)%7)/7)}}
@@ -2668,7 +2692,7 @@ document.querySelectorAll('.kneedle').forEach((n,i)=>{const v=V[Math.floor(Math.
 })();
 
 (function(){
-  const VER="1.18.4",NEWS=[{"v":"1.18","t":["Persönliche Angaben: In den Einstellungen sind Felder, die jeder selbst anpassen muss, orange mit „persönlich“ markiert. Vorgaben aus MTV oder Gesetz sind grau markiert.","Neue Nutzer bekommen beim ersten Start einen Hinweis, Sollstunden, Gleitzeiten, Urlaub und Übertrag einzutragen, wichtig zum Beispiel bei Teilzeit."]},{"v":"1.17","t":["Für Outlook: JÜP, Urlaub, Messetage und auf Wunsch Arbeitszeiten als Kalenderdatei exportieren. Zusammenhängende Tage werden ein Termin.","Einstellungen teilen: Messeliste, Aussehen und Regeln per Link oder Code an Kollegen weitergeben. Persönliche Daten bleiben bei dir."]},{"v":"1.16","t":["Tastaturkürzel: Pfeiltasten blättern, J/M/A/S wechseln die Ansicht, H springt zu heute, ? zeigt alle Kürzel.","Tag kopieren und einfügen: im Tagesfenster oder mit Strg+C und Strg+V, auch in mehrere markierte Tage.","Notizsuche: Knopf „Notizen“ oder Taste / durchsucht alle Notizen aller Jahre.","Belastung: Schalter in der Jahresansicht färbt jeden Tag nach den gearbeiteten Stunden.","Design „Automatisch“ folgt dem Hell- oder Dunkelmodus des Geräts.","Die Kompassnadel im Logo zeigt die Lage: nach Norden ist alles im Rahmen, schräg gibt es Hinweise."]},{"v":"1.15","t":["Jahreswechsel-Assistent: Ab Dezember prüft ein Fenster Übertrag, halbe Tage, Urlaub, das neue Jahr und das Backup.","Fehlt ab dem 10. eines Monats der Zeitnachweis des Vormonats, erscheint ein Hinweis-Chip.","Jahresrückblick: ab 15. Dezember in der Auswertung, mit Karte zum Speichern als Bild.","Ist die Pauschale erreicht, gibt es einmal Konfetti."]},{"v":"1.14","t":["Testmodus: oben den Knopf „Testmodus“ drücken und JÜP oder Messen ausprobieren. Ein Balken zeigt, wie sich JÜP verfügbar und das Konto ändern. Danach übernehmen oder verwerfen.","Brückentage: In der Auswertung steht jetzt, wo wenige freie Tage viele Tage am Stück ergeben.","Im Heute-Bereich zeigt ein Balken den Countdown bis zur nächsten Messe und während einer Messe „Tag x von y“."]},{"v":"1.13","t":["Rückgängig und Wiederholen: oben neben dem Speicherstatus oder mit Strg+Z und Strg+Y. Die letzten 30 Änderungen lassen sich zurücknehmen.","Automatische Sicherungspunkte: Die App sichert einmal am Tag still den Stand, die letzten 7 Tage lassen sich in den Einstellungen beim Backup wiederherstellen.","Verfallswarnung: Läuft in den nächsten zwei Monaten Guthaben ab, erscheint ein Hinweis mit freien Arbeitstagen davor als Vorschlag."]},{"v":"1.12","t":["Neu: der Infokompass am rechten Fensterrand. Ein Klick öffnet alle Erklärungen gebündelt: Pauschale, Freizeitkonto, JÜP, Zuschläge, Urlaub, Mobiles Arbeiten, Messen, Zeitnachweise, Hinweise, Backup und Drucken. Mit Suchfeld."]},{"v":"1.11","t":["Neben Pauschale, JÜP verfügbar, JÜP genommen, JÜP geplant, Freizeitkonto, Urlaub und Mobiles Arbeiten sitzt jetzt ein kleiner Kompass. Ein Klick öffnet eine Erklärung mit deinen aktuellen Zahlen, ein zweiter schließt sie."]},{"v": "1.10", "t": ["Neuerungen werden jetzt übersichtlich nach Versionen angezeigt, ältere lassen sich aufklappen.", "Die Backup-Erinnerung kommt jetzt standardmäßig alle 3 Tage. Einstellbar im Hinweisfenster oder in den Einstellungen beim Backup."]}, {"v": "1.9", "t": ["Unter JÜP verfügbar steht jetzt zusätzlich, was bis 31.12. laut Plan dazukommt und wie viele JÜP-Tage du im ganzen Jahr erarbeitest. Beim Darüberfahren siehst du die Aufteilung.", "Neue Backup-Erinnerung: Ist das letzte Backup länger her, erscheint ein Hinweisfenster. Dort lässt sich einstellen, wie oft erinnert wird, oder die Erinnerung abschalten. Die Einstellung gibt es auch in den Einstellungen beim Backup."]}, {"v": "1.8", "t": ["Notizen lassen sich jetzt farbig hervorheben: im Tagesfenster unter der Notiz Rot, Orange, Blau oder Grün wählen. Die Notiz-Ecke im Kalender, der Tooltip, die Monatsansicht und der Ausdruck zeigen die Farbe."]}, {"v": "1.7", "t": ["Einzeln angelegte Auf-, Laufzeit- und Abbautage innerhalb einer Messe werden jetzt automatisch der Messe zugeordnet. Im Messefenster erscheinen fehlende Tage als graue Zeile mit dem Knopf „Zuordnen“.", "Beim Messe-Eintragen steht jetzt das Jahr in der Überschrift und in den Datumsfeldern. Hat eine Messe Termine in einem anderen Jahr, führt ein Knopf direkt dorthin.", "Für 2027 sind die Messetermine hinterlegt (Stand November 2026): Unter Messen eine Messe auswählen, dann stehen Aufbau, Laufzeit und Abbau schon in den Feldern. Mit „Eintragen und übernehmen“ landen sie im Kalender. Neu in der Liste: gamescom Business Area."]}, {"v": "1.6", "t": ["Die Monatsansicht lässt sich jetzt drucken oder als PDF speichern: Buttons „Drucken“ und „Monat als PDF“ oben neben dem Monatsnamen. Mit Notizen, Uhrzeiten und Feiertagen. Auch der Jahreskalender hat jetzt einen Button „Drucken“."]}, {"v": "1.5", "t": ["Bei dunklen Hintergrundbildern sind die Kästen jetzt fast deckend weiß, damit die Schrift gut lesbar bleibt.", "Die Stunden unter JÜP verfügbar, JÜP genommen und JÜP geplant sind jetzt grün wie der Balken.", "Der Kalender als PDF trägt jetzt das Kompass-Logo: als „o“ im Namen und groß oben rechts.", "Das Fenster mit dem Zeitnachweis lässt sich jetzt am Kopf verschieben und an den unteren Ecken links und rechts größer oder kleiner ziehen.", "Korrektur: Bei eigenen Kachelfarben bleibt das Datum im Jahreskalender schwarz auf weißem Grund, mit Übergang zur gewählten Farbe.", "Hochgeladene Zeitnachweise werden jetzt als PDF auf diesem Gerät gespeichert. Im Prüfbericht und in der Auswertung öffnet der Button „Zeitnachweis“ das Original. Die PDFs sind auch im Backup enthalten. Bereits früher hochgeladene Nachweise bitte einmal neu hochladen."]}, {"v": "1.4", "t": ["Schulferien NRW lassen sich einblenden: mit dem gelben Schalter „Schulferien NRW“ rechts in der Legende unter dem Jahreskalender. Ferientage bekommen dann unten einen gelben Streifen, der Name steht im Tooltip. Standardmäßig ausgeblendet.", "Das Tagesfenster lässt sich mit der Maus verschieben: oben am Kopf mit dem Datum anfassen und ziehen."]}];
+  const VER="1.20.3",NEWS=[{"v":"1.20","t":["Themen-Touren im Infokompass: JÜP planen, Messe eintragen, Zeitnachweis abgleichen, Backup und Gerätewechsel, Teilzeit einrichten.","Neu-Punkte: Ein kleiner oranger Punkt markiert neue Funktionen. Ein Klick erklärt sie kurz."]},{"v":"1.19","t":["Tour: Eine kurze Führung zeigt in drei Minuten das Wichtigste, mit kleinen Übungen im Testmodus. Start jederzeit im Infokompass."]},{"v":"1.18","t":["Persönliche Angaben: In den Einstellungen sind Felder, die jeder selbst anpassen muss, orange mit „persönlich“ markiert. Vorgaben aus MTV oder Gesetz sind grau markiert.","Neue Nutzer bekommen beim ersten Start einen Hinweis, Sollstunden, Gleitzeiten, Urlaub und Übertrag einzutragen, wichtig zum Beispiel bei Teilzeit."]},{"v":"1.17","t":["Für Outlook: JÜP, Urlaub, Messetage und auf Wunsch Arbeitszeiten als Kalenderdatei exportieren. Zusammenhängende Tage werden ein Termin.","Einstellungen teilen: Messeliste, Aussehen und Regeln per Link oder Code an Kollegen weitergeben. Persönliche Daten bleiben bei dir."]},{"v":"1.16","t":["Tastaturkürzel: Pfeiltasten blättern, J/M/A/S wechseln die Ansicht, H springt zu heute, ? zeigt alle Kürzel.","Tag kopieren und einfügen: im Tagesfenster oder mit Strg+C und Strg+V, auch in mehrere markierte Tage.","Notizsuche: Knopf „Notizen“ oder Taste / durchsucht alle Notizen aller Jahre.","Belastung: Schalter in der Jahresansicht färbt jeden Tag nach den gearbeiteten Stunden.","Design „Automatisch“ folgt dem Hell- oder Dunkelmodus des Geräts.","Die Kompassnadel im Logo zeigt die Lage: nach Norden ist alles im Rahmen, schräg gibt es Hinweise."]},{"v":"1.15","t":["Jahreswechsel-Assistent: Ab Dezember prüft ein Fenster Übertrag, halbe Tage, Urlaub, das neue Jahr und das Backup.","Fehlt ab dem 10. eines Monats der Zeitnachweis des Vormonats, erscheint ein Hinweis-Chip.","Jahresrückblick: ab 15. Dezember in der Auswertung, mit Karte zum Speichern als Bild.","Ist die Pauschale erreicht, gibt es einmal Konfetti."]},{"v":"1.14","t":["Testmodus: oben den Knopf „Testmodus“ drücken und JÜP oder Messen ausprobieren. Ein Balken zeigt, wie sich JÜP verfügbar und das Konto ändern. Danach übernehmen oder verwerfen.","Brückentage: In der Auswertung steht jetzt, wo wenige freie Tage viele Tage am Stück ergeben.","Im Heute-Bereich zeigt ein Balken den Countdown bis zur nächsten Messe und während einer Messe „Tag x von y“."]},{"v":"1.13","t":["Rückgängig und Wiederholen: oben neben dem Speicherstatus oder mit Strg+Z und Strg+Y. Die letzten 30 Änderungen lassen sich zurücknehmen.","Automatische Sicherungspunkte: Die App sichert einmal am Tag still den Stand, die letzten 7 Tage lassen sich in den Einstellungen beim Backup wiederherstellen.","Verfallswarnung: Läuft in den nächsten zwei Monaten Guthaben ab, erscheint ein Hinweis mit freien Arbeitstagen davor als Vorschlag."]},{"v":"1.12","t":["Neu: der Infokompass am rechten Fensterrand. Ein Klick öffnet alle Erklärungen gebündelt: Pauschale, Freizeitkonto, JÜP, Zuschläge, Urlaub, Mobiles Arbeiten, Messen, Zeitnachweise, Hinweise, Backup und Drucken. Mit Suchfeld."]},{"v":"1.11","t":["Neben Pauschale, JÜP verfügbar, JÜP genommen, JÜP geplant, Freizeitkonto, Urlaub und Mobiles Arbeiten sitzt jetzt ein kleiner Kompass. Ein Klick öffnet eine Erklärung mit deinen aktuellen Zahlen, ein zweiter schließt sie."]},{"v": "1.10", "t": ["Neuerungen werden jetzt übersichtlich nach Versionen angezeigt, ältere lassen sich aufklappen.", "Die Backup-Erinnerung kommt jetzt standardmäßig alle 3 Tage. Einstellbar im Hinweisfenster oder in den Einstellungen beim Backup."]}, {"v": "1.9", "t": ["Unter JÜP verfügbar steht jetzt zusätzlich, was bis 31.12. laut Plan dazukommt und wie viele JÜP-Tage du im ganzen Jahr erarbeitest. Beim Darüberfahren siehst du die Aufteilung.", "Neue Backup-Erinnerung: Ist das letzte Backup länger her, erscheint ein Hinweisfenster. Dort lässt sich einstellen, wie oft erinnert wird, oder die Erinnerung abschalten. Die Einstellung gibt es auch in den Einstellungen beim Backup."]}, {"v": "1.8", "t": ["Notizen lassen sich jetzt farbig hervorheben: im Tagesfenster unter der Notiz Rot, Orange, Blau oder Grün wählen. Die Notiz-Ecke im Kalender, der Tooltip, die Monatsansicht und der Ausdruck zeigen die Farbe."]}, {"v": "1.7", "t": ["Einzeln angelegte Auf-, Laufzeit- und Abbautage innerhalb einer Messe werden jetzt automatisch der Messe zugeordnet. Im Messefenster erscheinen fehlende Tage als graue Zeile mit dem Knopf „Zuordnen“.", "Beim Messe-Eintragen steht jetzt das Jahr in der Überschrift und in den Datumsfeldern. Hat eine Messe Termine in einem anderen Jahr, führt ein Knopf direkt dorthin.", "Für 2027 sind die Messetermine hinterlegt (Stand November 2026): Unter Messen eine Messe auswählen, dann stehen Aufbau, Laufzeit und Abbau schon in den Feldern. Mit „Eintragen und übernehmen“ landen sie im Kalender. Neu in der Liste: gamescom Business Area."]}, {"v": "1.6", "t": ["Die Monatsansicht lässt sich jetzt drucken oder als PDF speichern: Buttons „Drucken“ und „Monat als PDF“ oben neben dem Monatsnamen. Mit Notizen, Uhrzeiten und Feiertagen. Auch der Jahreskalender hat jetzt einen Button „Drucken“."]}, {"v": "1.5", "t": ["Bei dunklen Hintergrundbildern sind die Kästen jetzt fast deckend weiß, damit die Schrift gut lesbar bleibt.", "Die Stunden unter JÜP verfügbar, JÜP genommen und JÜP geplant sind jetzt grün wie der Balken.", "Der Kalender als PDF trägt jetzt das Kompass-Logo: als „o“ im Namen und groß oben rechts.", "Das Fenster mit dem Zeitnachweis lässt sich jetzt am Kopf verschieben und an den unteren Ecken links und rechts größer oder kleiner ziehen.", "Korrektur: Bei eigenen Kachelfarben bleibt das Datum im Jahreskalender schwarz auf weißem Grund, mit Übergang zur gewählten Farbe.", "Hochgeladene Zeitnachweise werden jetzt als PDF auf diesem Gerät gespeichert. Im Prüfbericht und in der Auswertung öffnet der Button „Zeitnachweis“ das Original. Die PDFs sind auch im Backup enthalten. Bereits früher hochgeladene Nachweise bitte einmal neu hochladen."]}, {"v": "1.4", "t": ["Schulferien NRW lassen sich einblenden: mit dem gelben Schalter „Schulferien NRW“ rechts in der Legende unter dem Jahreskalender. Ferientage bekommen dann unten einen gelben Streifen, der Name steht im Tooltip. Standardmäßig ausgeblendet.", "Das Tagesfenster lässt sich mit der Maus verschieben: oben am Kopf mit dem Datum anfassen und ziehen."]}];
   const save=()=>{if(window.zkSave)return window.zkSave();try{localStorage.setItem('stundenkalender.v1',JSON.stringify(ST))}catch(e){}};
   const bar=document.createElement('div');bar.id='zkbar';bar.style.cssText='position:fixed;left:50%;bottom:16px;transform:translateX(-50%);z-index:60;max-width:min(560px,calc(100vw - 24px));padding:12px 14px;border-radius:14px;background:#16171a;color:#f4f3f0;box-shadow:0 10px 30px rgba(0,0,0,.35);font-size:14px;line-height:1.45;display:none';
   document.body.appendChild(bar);
@@ -2891,7 +2915,7 @@ document.addEventListener('click',function(ev){const b=ev.target.closest&&ev.tar
     ['Drucken und PDF',`<p><b>Jahreskalender:</b> „Drucken“ oder „Kalender als PDF“ unter dem Kalender.</p><p><b>Monat:</b> In der Monatsansicht „Drucken“ oder „Monat als PDF“, mit Notizen und Feiertagen.</p><p>Eingeblendete Schulferien und Notizfarben erscheinen auch im Ausdruck. Ist direktes Drucken nicht möglich, wird das PDF heruntergeladen.</p>`]];
     return sec.map(([t,c],i)=>`<details data-ipt="${t.toLowerCase()}"><summary>${t}</summary><div class="ip-c">${c}</div></details>`).join('')}
   const tab=document.createElement('button');tab.id='iptab';tab.type='button';tab.setAttribute('aria-label','Infokompass öffnen');tab.innerHTML=LOGO+'<span>Info</span>';document.body.appendChild(tab);
-  const P=document.createElement('aside');P.id='ippanel';P.setAttribute('aria-label','Infokompass');P.innerHTML=`<div class="ip-h">${LOGO}<div><div class="ip-k">Zeitkompass</div><h3>Infokompass</h3></div><button class="btn icon ghost ip-x" aria-label="Schließen">✕</button></div><input class="ip-s" type="search" placeholder="Suchen, z. B. Verfall oder Sonntag"><div class="ip-b"></div>`;document.body.appendChild(P);
+  const P=document.createElement('aside');P.id='ippanel';P.setAttribute('aria-label','Infokompass');P.innerHTML=`<div class="ip-h">${LOGO}<div><div class="ip-k">Zeitkompass</div><h3>Infokompass</h3></div><button class="btn icon ghost ip-x" aria-label="Schließen">✕</button></div><div style="padding:0 18px 10px"><button class="btn primary" data-tour style="width:100%">Tour starten (5 Minuten)</button></div><input class="ip-s" type="search" placeholder="Suchen, z. B. Verfall oder Sonntag"><div class="ip-b"></div>`;document.body.appendChild(P);
   const B=P.querySelector('.ip-b'),Q=P.querySelector('.ip-s');
   function filt(){const q=Q.value.trim().toLowerCase();B.querySelectorAll('details').forEach(d=>{const c=d.querySelector('.ip-c');if(!c.dataset.o)c.dataset.o=c.innerHTML;c.innerHTML=c.dataset.o;if(!q){d.hidden=false;return}const hit=d.textContent.toLowerCase().includes(q);d.hidden=!hit;if(hit){d.open=true;const re=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','gi');c.innerHTML=c.dataset.o.replace(/>([^<]+)</g,(m,t)=>'>'+t.replace(re,'<mark>$1</mark>')+'<')}})}
   function open(){B.innerHTML=content();Q.value='';P.classList.add('open');tab.setAttribute('aria-expanded','true')}
@@ -2954,29 +2978,8 @@ document.addEventListener('click',function(ev){const b=ev.target.closest&&ev.tar
   window.addEventListener('beforeunload',ev=>{if(window._zkSim){ev.preventDefault();ev.returnValue=''}});
   document.addEventListener('keydown',ev=>{if(window._zkSim&&(ev.ctrlKey||ev.metaKey)&&/^[zy]$/i.test(ev.key)){const t=ev.target;if(!(t&&(t.tagName==='INPUT'||t.tagName==='TEXTAREA'))){ev.preventDefault();ev.stopImmediatePropagation()}}},true);
   function mount(){const u=document.getElementById('zkUndo')||document.getElementById('sync');if(!u||document.getElementById('zkSim'))return;btn=document.createElement('button');btn.id='zkSim';btn.className='btn';btn.textContent='Testmodus';btn.title='Was-wäre-wenn: Änderungen ausprobieren, ohne zu speichern';u.parentNode.insertBefore(btn,u);btn.onclick=()=>window._zkSim?end(false):start()}
+  window.zkSimStart=()=>{if(!btn)mount();start()};window.zkSimStop=()=>{if(window._zkSim){window._zkSim=false;zkRestore(snap,false);document.body.classList.remove('zk-sim');if(btn)btn.textContent='Testmodus';if(B)B.remove(),B=null}};
   setTimeout(mount,1200);
-})();
-/* Brückentage-Finder in der Auswertung */
-(function(){
-  const pad=n=>String(n).padStart(2,'0'),KK=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()),add=(k,n)=>{const d=new Date(k+'T12:00');d.setDate(d.getDate()+n);return KK(d)};
-  const WDn=['So','Mo','Di','Mi','Do','Fr','Sa'],fdx=k=>WDn[new Date(k+'T12:00').getDay()]+' '+k.slice(8)+'.'+k.slice(5,7)+'.';
-  function calc(y){const today=KK(new Date()),Cs={};const C=yy=>Cs[yy]||(Cs[yy]=computeYear(yy));
-    const day=k=>{const c=C(+k.slice(0,4)).days[k];return c};
-    const off=k=>{const c=day(k);if(!c)return true;const i=c.i;if(i.we||i.legal||(i.frei&&!i.halb))return true;const t=c.e.t;return t==='urlaub'||t==='fza'||t==='frei'};
-    const busy=k=>{const c=day(k);return c&&(c.e.f||['aufbau','laufzeit','abbau','arbeit','dienst','mobil','krank'].includes(c.e.t))};
-    const out=[];let k=y+'-01-01';const end=y+'-12-31';
-    while(k<=end){if(!off(k)&&k>=today){let r=[k],j=add(k,1);while(!off(j)&&r.length<3){r.push(j);j=add(j,1)}
-        if(r.length<=2&&off(add(r[0],-1))&&off(j)&&!r.some(busy)){let a=add(r[0],-1);while(off(add(a,-1)))a=add(a,-1);let b=j;while(off(add(b,1)))b=add(b,1);
-          const len=Math.round((new Date(b+'T12:00')-new Date(a+'T12:00'))/864e5)+1;const names=[];let q=a;while(q<=b){const c=day(q);if(c&&c.i.name&&(c.i.legal||c.i.frei))names.push(c.i.name);q=add(q,1)}
-          if(names.length)out.push({r,a,b,len,cost:r.length,names})}
-        k=add(r[r.length-1],1);continue}k=add(k,1)}
-    const seen=new Set();return out.filter(o=>{const id=o.r.join();if(seen.has(id))return false;seen.add(id);return true}).sort((x,z)=>z.len/z.cost-x.len/x.cost||x.a.localeCompare(z.a))}
-  function render(){const sel=document.querySelector('[data-view="auswertung"][aria-selected="true"]');if(!sel)return;const main=document.querySelector('main');if(!main||main.querySelector('#bridges'))return;
-    const y=+((document.querySelector('.yearnav span')||{}).textContent||new Date().getFullYear());let L=[];try{L=calc(y)}catch(e){return}
-    const box=document.createElement('section');box.id='bridges';box.className='panel glass';
-    box.innerHTML=`<h2 class="sec">Brückentage ${y}</h2><p class="muted">Wo wenige JÜP- oder Urlaubstage viele freie Tage am Stück ergeben. Tage mit Messe oder Dienst sind ausgenommen. Eingetragen wird nichts, ein Klick springt zum Tag.</p>${L.length?`<div class="tscroll"><table><thead><tr><th>Anlass</th><th>Nehmen</th><th>Frei am Stück</th></tr></thead><tbody>${L.map(o=>`<tr class="clk" data-act="goto-day" data-k="${o.r[0]}"><td>${o.names.filter((v,i,a)=>a.indexOf(v)===i).join(', ')}</td><td><b>${o.cost} ${o.cost===1?'Tag':'Tage'}</b>: ${o.r.map(fdx).join(', ')}</td><td><b>${o.len} Tage</b>: ${fdx(o.a)} bis ${fdx(o.b)}</td></tr>`).join('')}</tbody></table></div>`:'<p>Für den Rest des Jahres gibt es keine freien Brückentage mehr.</p>'}`;
-    main.appendChild(box)}
-  let q=false;new MutationObserver(()=>{if(q)return;q=true;requestAnimationFrame(()=>{q=false;render()})}).observe(document.body,{childList:true,subtree:true});
 })();
 </script>
 <script>
@@ -3292,6 +3295,172 @@ document.addEventListener('click',function(ev){const b=ev.target.closest&&ev.tar
     main.appendChild(s);
     s.onclick=ev=>{const b=ev.target.closest('[data-fzgo]');if(!b)return;const i=+b.dataset.fzgo,v=s.querySelector(`[data-fzs="${i}"]`).value;if(!v){s.querySelector(`[data-fzs="${i}"]`).focus();return}B[i].ks.forEach(k=>zkSetEntry(k,{f:v}));s.remove();zkRender()}}
   let q=false;new MutationObserver(()=>{if(q)return;q=true;requestAnimationFrame(()=>{q=false;try{box()}catch(e){}})}).observe(document.body,{childList:true,subtree:true});
+})();
+</script>
+<script>
+/* Kompass-Schule: Grundtour */
+(function(){
+  const pad=n=>String(n).padStart(2,'0'),KK=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate()),TK=()=>KK(new Date());
+  const WDL=['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'];
+  const LOGO='<svg viewBox="0 0 66 66" aria-hidden="true"><rect x="1" y="1" width="64" height="64" rx="15" fill="#2b2d33"/><circle cx="33" cy="33" r="21" fill="none" stroke="#fff" stroke-width="6"/><polygon points="33,15 38.5,33 27.5,33" fill="#E85D04"/><polygon points="33,51 38.5,33 27.5,33" fill="#8D9199"/></svg>';
+  const S=()=>zkST().settings,sv=()=>{try{zkSave()}catch(e){}},esc4=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  let T=null,T0={}; /* {i, steps, k, ownSim, raf} */
+  function seed(){const y=new Date().getFullYear(),Y=(zkST().years||{})[y],n=Y&&Y.entries?Object.keys(Y.entries).length:0;if(n>=10)return null;
+    const d=new Date();d.setDate(d.getDate()+3);while(d.getDay()!==1)d.setDate(d.getDate()+1);if(d.getFullYear()!==y||KK(d)>y+'-12-01'){d.setFullYear(y,0,1);d.setDate(d.getDate()+7);while(d.getDay()!==1)d.setDate(d.getDate()+1)}
+    const F=(zkST().fairs||[]),fair=(F.find(x=>x.id==='ism')||F.find(x=>/anuga|dmexco|gamescom/i.test(x.name))||F[0]||{}).id;const P=[['aufbau','07:00','19:00'],['aufbau','07:00','19:00'],['aufbau','07:00','18:00'],['laufzeit','08:00','18:30'],['laufzeit','08:00','18:30'],['laufzeit','08:00','18:30'],['laufzeit','08:00','18:30'],['abbau','07:00','19:00'],['abbau','07:00','17:00'],['fza'],['fza']];
+    const add=n=>{const x=new Date(d);x.setDate(x.getDate()+n);return KK(x)},first=KK(d);
+    P.forEach((p,i)=>{const o={t:p[0]};if(p[1]){o.s=p[1];o.e=p[2];if(fair)o.f=fair}zkSetEntry(add(i),o)});const seeded=new Set();P.forEach((p,i)=>seeded.add(add(i)));for(let i=21;i<26;i++)seeded.add(add(i));
+    /* mobiles Arbeiten in den laufenden Monat legen, damit es im Stand und in der Auswertung erscheint */
+    {const C=computeYear(y),now=new Date(),mk=KK(now).slice(0,7);let mb=Object.keys(C.days).filter(k=>k.startsWith(mk)&&!seeded.has(k)&&C.days[k].soll>0&&C.days[k].e.t==='gleitzeit'&&new Date(k+'T12:00').getDay()!==5).sort();
+      if(mb.length<2)mb=[add(14),add(16)];else{const t=KK(now),fut=mb.filter(k=>k>t),pas=mb.filter(k=>k<=t);mb=fut.length>=2?[fut[0],fut[Math.min(2,fut.length-1)]]:pas.slice(-2)}
+      mb.slice(0,2).forEach(k=>zkSetEntry(k,{t:'mobil'}))}for(let i=21;i<26;i++)zkSetEntry(add(i),{t:'urlaub'});zkRender();return first.slice(8)+'.'+first.slice(5,7)+'.'}
+  function pickDay(){const y=new Date().getFullYear(),C=computeYear(y),t=TK();let best=null;
+    for(const k of Object.keys(C.days).sort()){if(k<=t)continue;const dc=C.days[k];if(!dc||dc.soll<=0||dc.e.t!=='gleitzeit'||dc.e.f)continue;const dow=new Date(k+'T12:00').getDay();if(dow===5)return k;if(!best)best=k}
+    return best}
+  function pickDay2(k){const y=new Date().getFullYear(),C=computeYear(y),t=TK();for(const x of Object.keys(C.days).sort()){if(x<=t||x===k)continue;const dc=C.days[x];if(dc&&dc.soll>0&&dc.e.t==='gleitzeit'&&!dc.e.f&&new Date(x+'T12:00').getDay()!==5)return x}return null}
+  const view=v=>{const b=document.querySelector(`[data-view="${v}"]`);if(b&&b.getAttribute('aria-selected')!=='true')b.click()};
+  const setOpen=o=>{const st=document.getElementById('settings');if(o){if(!st||st.hidden){const b=document.querySelector('[data-act="settings"]');b&&b.click()}}else if(st&&!st.hidden){const c=st.querySelector('[data-act="close-settings"]');c?c.click():st.hidden=true}};
+  const CY=()=>new Date().getFullYear(),toY=y=>{const u=zkUI();if(u.year!==y){u.year=y;zkRender()}};
+  const J=()=>{setOpen(false);toY(CY());view('jahr')};
+  const PY=2027,M27=()=>{try{zkCloseDrawer()}catch(e){}setOpen(false);toY(PY);view('messen')};
+  const mfOk=()=>{const m=zkUI().mf;return !!(m&&m.f==='anu'&&m.l1)};
+  const MF=[
+    {sel:'main>.panel:nth-of-type(1)',before:M27,h:'Messe eintragen',x:`In der Ansicht „Messen“ trägst du ganze Messen ein. Für ${PY} sind die Termine schon hinterlegt (Stand November 2026, Änderungen möglich).`,scroll:true},
+    {sel:'main>.panel:nth-of-type(1) label:has([data-mf="f"])',before:M27,h:'Messe wählen',task:'Wähle bei „Messe“ die Anuga.',x:'Achte darauf, was danach in den Datumsfeldern passiert.',wait:mfOk,scroll:true},
+    {sel:'main>.panel:nth-of-type(1) .mfgrid',before:M27,h:'Termine automatisch eingetragen',x:'Aufbau, Laufzeit und Abbau der Anuga stehen jetzt in den Feldern. Weicht deine Zuteilung ab, zum Beispiel ein späterer Aufbau, änderst du die Felder einfach, bevor du übernimmst.',scroll:true},
+    {sel:'main>.panel:nth-of-type(1) [data-act="mf-preview"]',before:()=>{M27();window._zkAnuH=JSON.stringify(((zkST().years||{})[PY]||{}).entries||{})},h:'Übernehmen',task:'Klick auf „Eintragen und übernehmen“.',x:'Damit werden alle Tage der Messe auf einmal in den Kalender gesetzt.',wait:()=>JSON.stringify(((zkST().years||{})[PY]||{}).entries||{})!==window._zkAnuH,scroll:true},
+      {sel:'#grid',before:()=>{setOpen(false);toY(PY);view('jahr')},h:'Im Kalender',x:`Die Anuga steht jetzt im Kalender ${PY}: Aufbau, Laufzeit und Abbau, jeweils mit der Messe verknüpft. Einzelne Tage kannst du danach wie gewohnt im Tagesfenster anpassen.`,scroll:true}];
+
+  const lblK=k=>k?WDL[new Date(k+'T12:00').getDay()]+', '+k.slice(8)+'.'+k.slice(5,7)+'.':'';
+  const END=sim=>({h:'Ende der Tour',x:(sim?'Alles, was während der Tour eingetragen oder geändert wurde, wird jetzt verworfen. ':'')+'Weitere Touren findest du im Infokompass.',go:'Tour beenden',last:true});
+  const TOP={
+    jup:{t:'JÜP planen',sim:true,seed:true,f:k=>[
+      {sel:'#pegel',before:J,h:'JÜP verfügbar',x:'„JÜP verfügbar“ zeigt, wie viele freie Tage du noch verplanen kannst, ohne dass dein Konto bis Jahresende ins Minus rutscht. Bereits geplante JÜP und Einsätze sind schon eingerechnet.',scroll:true},
+      ...(k?[{sel:`#grid .d[data-k="${k}"]`,before:()=>{J();try{zkCloseDrawer()}catch(e){}},h:'Einen Tag planen',task:`Klick auf ${lblK(k)}`,x:'Wir planen diesen Tag zur Übung als JÜP.',wait:()=>zkUI().drawer===k,scroll:true,hit:true},
+        {sel:'#drawer',h:'JÜP wählen',task:'Wähle bei der Tagesart „JÜP“.',x:'Mehrere Tage auf einmal: Unter „Von–bis eintragen“ ein Enddatum eingeben, oder im Kalender mit gedrückter Umschalttaste mehrere Tage markieren.',wait:()=>zkEntry(k).t==='fza'},
+        {sel:'#pegel',before:()=>{try{zkCloseDrawer()}catch(e){}J()},h:'Wirkung',x:'Der Tag ist eingerechnet. „JÜP verfügbar“ ist gesunken, „JÜP geplant“ gestiegen. Der Balken unten zeigt vorher und nachher.',scroll:true}]:[]),
+      {sel:'#bfind',before:()=>{try{zkCloseDrawer()}catch(e){}view('auswertung')},h:'Brückentage',x:'In der Auswertung schlägt der Kompass Brückentage vor: wo wenige JÜP- oder Urlaubstage viele freie Tage am Stück ergeben. Eingetragen wird dabei nichts.',scroll:true},
+      END(true)]},
+    messe:{t:'Messe eintragen',sim:true,seed:true,f:k=>{const k2=pickDay2(k);return[
+      ...MF,
+      {sel:'main>.panel:nth-of-type(1)',before:M27,h:'Neue Messe anlegen',x:'Fehlt eine Messe in der Liste, legst du sie oben rechts mit „+ Neue Messe anlegen“ an. Umbenennen und entfernen geht in den Einstellungen.',scroll:true},
+      ...(k2?[{sel:`#grid .d[data-k="${k2}"]`,before:()=>{J();try{zkCloseDrawer()}catch(e){}},h:'Einzelnen Tag zuordnen',task:`Klick auf ${lblK(k2)}`,x:'Einzelne Tage, zum Beispiel einen Zusatztag mitten in der Messe, ordnest du im Tagesfenster zu.',wait:()=>zkUI().drawer===k2,scroll:true,hit:true,kk:k2},
+        {sel:'#drawer label:has(select[data-f="f"])',h:'Messe wählen',task:'Wähle bei „Messe“ eine Messe aus.',x:'Die Tagesart, zum Beispiel Gearbeitet oder Aufbau, bleibt. Der Tag zählt jetzt für die Messe.',wait:()=>!!zkEntry(k2).f,scroll:true}]:[]),
+      {sel:'main>.panel:nth-of-type(2)',before:()=>{try{zkCloseDrawer()}catch(e){}setOpen(false);toY(CY());view('messen')},h:'Messeübersicht',x:'Die Übersicht zeigt pro Messe Aufbau, Laufzeit, Abbau, Wochenend- und Feiertage, Zuschläge und das Guthaben, das die Messe einbringt.',scroll:true},
+      {sel:'#fzbox',before:()=>{toY(CY());view('messen')},h:'Tage ohne Messe',x:'Darunter listet der Kompass zusammenhängende Arbeitstage ohne Messe auf. Mit „Zuordnen“ ergänzt du die Messe für den ganzen Block.',scroll:true},
+      END(true)]}},
+    zn:{t:'Zeitnachweis abgleichen',f:()=>[
+      {sel:'main .panel:has([data-act="zn-import"])',before:()=>view('auswertung'),h:'Abgleich mit Zeitnachweis',x:'Lade hier jeden Monat das PDF deines Zeitnachweises. Der Kompass liest die Werte aus und vergleicht sie mit deinen Einträgen.',scroll:true},
+      {sel:'main .panel:has([data-act="zn-import"])',before:()=>view('auswertung'),h:'Abweichungen',x:'Weichen Kompass und Zeitnachweis ab, siehst du das hier pro Monat. Der Zeitnachweis gilt: Der Kompass rechnet ab dem abgeglichenen Monat mit dessen Werten weiter.',scroll:true},
+      {sel:'#pegel',before:J,h:'Erinnerung',x:'Fehlt ab dem 10. eines Monats der Zeitnachweis des Vormonats, erscheint hier ein Hinweis mit „PDF laden“. Die geladenen PDFs siehst du jederzeit wieder und kannst sie neu laden.',scroll:true},
+      END(false)]},
+    backup:{t:'Backup und Gerätewechsel',f:()=>[
+      {sel:'#settings .sdata',before:()=>setOpen(true),h:'Wo deine Daten liegen',x:'Der Zeitkompass speichert nur in diesem Browser auf diesem Gerät. Wird der Browser-Speicher gelöscht, sind die Daten weg. Deshalb ist ein Backup wichtig.',scroll:true},
+      {sel:'#settings .sdata',before:()=>setOpen(true),h:'Backup speichern',x:'„Backup speichern“ lädt eine Datei mit allen Einträgen, Einstellungen und Zeitnachweisen herunter. Lege sie zum Beispiel in OneDrive oder schicke sie dir per Mail. Der Kompass erinnert dich regelmäßig daran.',scroll:true},
+      {sel:'#settings .sdata',before:()=>setOpen(true),h:'Gerät wechseln',x:'Auf dem neuen Gerät den Zeitkompass öffnen und „Backup laden“ wählen. Danach ist alles wieder da. Zusätzlich sichert die App einmal am Tag still einen Stand, die letzten 7 lassen sich wiederherstellen.',scroll:true},
+      {sel:'#settings .steil',before:()=>setOpen(true),h:'Teilen',x:'Unter „Teilen“ gibst du die App per Link oder QR-Code weiter. Mit „Einstellungen teilen“ übernehmen Kollegen deine Messeliste und Regeln, ohne deine persönlichen Daten.',scroll:true},
+      END(false)]},
+    teilzeit:{t:'Teilzeit einrichten',sim:true,f:()=>{let init=null;return[
+      {sel:'#settings .sgrid>.sbox:first-child',before:()=>{setOpen(true);init=+((zkST().settings.sollDays||[])[5]||0)},h:'Sollstunden pro Tag',x:'Trage für jeden Wochentag deine vertraglichen Sollstunden ein. Ein freier Tag bekommt 0. Die Wochensumme rechnet der Kompass selbst.',scroll:true},
+      {sel:'#settings label:has([data-set="sollDays.5"])',before:()=>{setOpen(true);if(init==null)init=+((zkST().settings.sollDays||[])[5]||0)},h:'Zum Ausprobieren',task:'Ändere „Soll Fr“ auf einen anderen Wert, zum Beispiel 0.',x:'Die Woche darunter passt sich sofort an. Das wird nach der Tour wieder verworfen.',wait:()=>+((zkST().settings.sollDays||[])[5]||0)!==init,scroll:true},
+      {sel:'#settings .sgrid>.sbox:nth-child(2)',before:()=>setOpen(true),h:'Gleitzeiten',x:'Hier stehen Beginn und Ende deiner normalen Tage und des Freitags. Sie gelten für alle Tage ohne eigene Zeiten.',scroll:true},
+      {sel:'#settings .sgrid>.sbox:has([data-set="pool"])',before:()=>setOpen(true),h:'Pauschale und Übertrag',x:'Prüfe, welche Pauschale pro Jahr für dich gilt, und trage sie ein. Darunter gehört der Übertrag aus deinem letzten Zeitnachweis: Freizeitanspruch nach Monaten und die schon erbrachte Pauschale.',scroll:true},
+      {sel:'#settings .sgrid>.sbox:has([data-set="vacation"])',before:()=>setOpen(true),h:'Urlaub',x:'Trage deinen Urlaubsanspruch in Tagen ein.',scroll:true},
+      END(true)]}}};
+  function steps(k){const k2=pickDay2(k),lb2=k2?WDL[new Date(k2+'T12:00').getDay()]+', '+k2.slice(8)+'.'+k2.slice(5,7)+'.':'',lbl=k?WDL[new Date(k+'T12:00').getDay()]+', '+k.slice(8)+'.'+k.slice(5,7)+'.':'';
+    const L=[
+      {t:'Willkommen',h:'Willkommen im Zeitkompass',x:'In etwa fünf Minuten zeige ich dir das Wichtigste. Zum Üben schalte ich den Testmodus ein: Nichts, was du jetzt einträgst, wird gespeichert.',go:'Los geht’s'},
+      {sel:'.today',before:J,h:'Heute',x:'Hier siehst du auf einen Blick deinen Tag, die Arbeitstage am Stück, den nächsten freien Tag, die nächste Messe und deinen nächsten Urlaub.'},
+      {sel:'#grid',before:J,h:'Dein Jahr',x:'Jede Kachel ist ein Tag. Die Farbe zeigt die Tagesart, zum Beispiel Gleitzeit, Aufbau, Laufzeit, Abbau, JÜP oder Urlaub. Ein Klick öffnet den Tag.'+(T0.seed?' Zur Veranschaulichung sind ab '+T0.seed+' ein paar Beispiele eingetragen: eine Messe (ISM) mit Aufbau, Laufzeit und Abbau, zwei JÜP-Tage, zwei Tage mobiles Arbeiten und eine Woche Urlaub. Sie verschwinden nach der Tour.':'')}];
+    if(k)L.push(
+      {sel:`#grid .d[data-k="${k}"]`,before:()=>{J();try{zkCloseDrawer()}catch(e){}},h:'Probier es aus',task:`Klick auf ${lbl}`,x:'Der Tag ist orange markiert.',wait:()=>zkUI().drawer===k,scroll:true,hit:true},
+      {sel:'#drawer',h:'Tagesart wählen',task:'Wähle bei der Tagesart „JÜP“.',x:'Hier trägst du auch Zeiten, Pausen, eine Notiz oder die Messe ein. Mit den Pfeilen oben blätterst du zum nächsten Tag.',wait:()=>zkEntry(k).t==='fza'},
+      {sel:'#pegel',h:'Eingetragen',x:'Der JÜP-Tag ist eingerechnet. Hier siehst du Pauschale, Konto und verfügbare JÜP-Tage'+(T0.seed?', rechts außerdem den Anteil mobiles Arbeiten im laufenden Monat':'')+'. Der Balken unten zeigt die Änderung gegenüber vorher.',before:()=>{try{zkCloseDrawer()}catch(e){}J()},scroll:true});
+    else L.push({sel:'#pegel',h:'Dein Stand',x:'Hier rechnet der Kompass: Pauschale, Konto und verfügbare JÜP-Tage. Jeder Eintrag im Kalender ändert diese Werte sofort.',scroll:true});
+    L.push(
+      ...MF);
+    if(k2)L.push(
+      {sel:`#grid .d[data-k="${k2}"]`,before:()=>{J();try{zkCloseDrawer()}catch(e){}},h:'Tag einer Messe zuordnen',task:`Klick auf ${lb2}`,x:'Wir ordnen diesen Tag zur Übung einer Messe zu.',wait:()=>zkUI().drawer===k2,scroll:true,hit:true,kk:k2},
+      {sel:'#drawer label:has(select[data-f="f"])',h:'Messe wählen',task:'Wähle bei „Messe“ eine Messe aus, zum Beispiel die ISM.',x:'Der Tag zählt dann für diese Messe: in der Messeübersicht, in der Auswertung und im Jahresrückblick. Ganze Messeblöcke trägst du am schnellsten oben mit „Von–bis eintragen“ ein.',wait:()=>!!zkEntry(k2).f,scroll:true});
+    L.push(
+      {sel:'.tabs',before:()=>{try{zkCloseDrawer()}catch(e){}J()},h:'Ansichten',x:'Jahr, Monat, Auswertung und Messen. In der Auswertung findest du Zuschläge, Brückentage und den Jahresrückblick. Die Tasten J, M, A und S wechseln direkt.'},
+      {sel:'#settings .sgrid>.sbox:first-child',before:()=>setOpen(true),h:'Einstellungen: persönliche Angaben',x:'In den Einstellungen trägst du ein, was nur für dich gilt. Orange markierte Felder sind persönlich, zum Beispiel Sollstunden pro Tag, Gleitzeiten, Urlaub und der Übertrag aus dem letzten Zeitnachweis. Grau markierte Felder sind Vorgaben aus MTV oder Gesetz.',scroll:true},
+      {sel:'#settings .sdata',before:()=>setOpen(true),h:'Einstellungen: Daten',x:'Deine Daten liegen nur in diesem Browser. Sichere deshalb regelmäßig ein Backup. Der Kompass erinnert dich daran. Darunter unter „Teilen“ gibst du die App und deine Einstellungen an Kollegen weiter.',scroll:true},
+      {sel:'#iptab',before:()=>setOpen(false),h:'Infokompass',x:'Alles noch mal zum Nachlesen, mit Suche. Hier kannst du diese Tour jederzeit neu starten. Die kleinen Kompasse neben den Werten erklären einzelne Zahlen.'},
+      {t:'Ende',h:'Ende der Tour',x:'Alles, was während der Tour eingetragen wurde, wird jetzt verworfen. Deine Daten bleiben unverändert. Weitere Erklärungen findest du jederzeit im Infokompass.',go:'Tour beenden',last:true});
+    return L}
+  function el(s){return s?document.querySelector(s):null}
+  function place(){if(!T)return;const st=T.steps[T.i],sp=document.getElementById('zkt-spot'),bb=document.getElementById('zkt-bub');if(!sp||!bb)return;const e=el(st.sel);
+    if(!e||!e.getBoundingClientRect().width){sp.className='none';bb.style.left=Math.max(12,(innerWidth-bb.offsetWidth)/2)+'px';bb.style.top=Math.max(12,innerHeight*.32)+'px'}
+    else{let r=e.getBoundingClientRect();const p=6;if(!st._sc&&st.scroll!==false&&(r.top>innerHeight-40||r.bottom<40)){st._sc=1;try{e.scrollIntoView({block:r.height>innerHeight*.7?'start':'center',behavior:'smooth'})}catch(x){}}sp.className=(st.task?'task':'')+(st.hit?' hit':'');Object.assign(sp.style,{left:r.left-p+'px',top:r.top-p+'px',width:r.width+2*p+'px',height:r.height+2*p+'px'});
+      const bw=bb.offsetWidth,bh=bb.offsetHeight;let x,y;
+      if(r.bottom+bh+20<innerHeight){y=r.bottom+14;x=r.left}else if(r.top-bh-20>0){y=r.top-bh-14;x=r.left}else if(r.right+bw+20<innerWidth){x=r.right+14;y=Math.min(innerHeight-bh-12,Math.max(12,r.top))}else if(r.left-bw-20>0){x=r.left-bw-14;y=Math.min(innerHeight-bh-12,Math.max(12,r.top))}else{x=(innerWidth-bw)/2;y=innerHeight-bh-16}
+      bb.style.left=Math.min(innerWidth-bw-12,Math.max(12,x))+'px';bb.style.top=Math.min(innerHeight-bh-12,Math.max(12,y))+'px'}
+    T.raf=requestAnimationFrame(place)}
+  function show(){const st=T.steps[T.i],n=T.steps.length;st._sc=0;if(st.before)st.before();
+    const blk=document.getElementById('zkt-block');blk.style.display=st.task?'none':'block';document.body.classList.add('zk-tour');document.body.classList.toggle('zkt-ip',st.sel==='#iptab');document.body.classList.toggle('zkt-hit',!!st.hit);
+    const bb=document.getElementById('zkt-bub');
+    bb.innerHTML=`<div class="tk">${LOGO}<div><small>${T.kind==='grund'?'Tour':esc4(TOP[T.kind].t)} · ${T.i+1} von ${n}</small><b>${st.h}</b></div></div>${st.task?`<p class="task">${st.task}</p>`:''}<p>${st.x}</p><div class="tb"><div class="dots">${T.steps.map((s,j)=>`<i class="${j===T.i?'on':''}"></i>`).join('')}</div><span class="sp"></span>${!st.last?'<button class="sk" data-tk="skip">Beenden</button>':''}${T.i>0&&!st.last?'<button class="bk" data-tk="back">Zurück</button>':''}${st.wait?'<button class="bk" data-tk="next">Überspringen</button>':`<button class="go" data-tk="next">${st.go||'Weiter'}</button>`}</div>`;
+    const e=el(st.sel);if(e&&st.scroll!==false)try{e.scrollIntoView({block:st.sel==='#grid'?'start':'center',behavior:'smooth'})}catch(x){}
+    clearInterval(T.w);if(st.wait)T.w=setInterval(()=>{try{if(T&&st.wait()){clearInterval(T.w);setTimeout(()=>go(1),350)}}catch(e){}},250);
+    setTimeout(()=>{const b=bb.querySelector('.go,[data-tk=next]');b&&b.focus()},60)}
+  function go(d){if(!T)return;const st=T.steps[T.i];if(d>0&&st.last)return stop(true);T.i=Math.max(0,Math.min(T.steps.length-1,T.i+d));
+    if(d<0&&T.steps[T.i].wait)T.i=Math.max(0,T.i-1);show()}
+  function start(kind){kind=typeof kind==='string'&&TOP[kind]?kind:'grund';if(T)return;['fswin','zknews','settings'].forEach(id=>{const W=document.getElementById(id);if(W)W.hidden=true});try{const ip=document.getElementById('ippanel');ip&&ip.classList.remove('open')}catch(e){}
+    try{zkCloseDrawer()}catch(e){}const u=zkUI();u.view='jahr';u.year=new Date().getFullYear();zkRender();
+    const useSim=kind==='grund'||TOP[kind].sim,own=useSim&&!window._zkSim;if(own)try{zkSimStart()}catch(e){}
+    T0={seed:own&&(kind==='grund'||TOP[kind].seed)?seed():null};const k=pickDay();T={i:0,steps:kind==='grund'?steps(k):TOP[kind].f(k),k,own,kind};
+    const blk=document.createElement('div');blk.id='zkt-block';const sp=document.createElement('div');sp.id='zkt-spot';const bb=document.createElement('div');bb.id='zkt-bub';bb.setAttribute('role','dialog');bb.setAttribute('aria-live','polite');
+    document.body.append(blk,sp,bb);sp.addEventListener('click',()=>{if(!T)return;const st=T.steps[T.i];if(!st.hit)return;try{zkOpenDrawer(st.kk||T.k)}catch(e){}});bb.addEventListener('click',ev=>{const b=ev.target.closest('[data-tk]');if(!b)return;const a=b.dataset.tk;if(a==='next')go(1);else if(a==='back')go(-1);else stop(false)});
+    show();place()}
+  function stop(done){if(!T)return;cancelAnimationFrame(T.raf);clearInterval(T.w);const own=T.own,kind=T.kind;T=null;try{setOpen(false)}catch(e){}try{const u=zkUI();u.year=new Date().getFullYear()}catch(e){}document.body.classList.remove('zk-tour','zkt-ip','zkt-hit');['zkt-block','zkt-spot','zkt-bub'].forEach(id=>{const e=document.getElementById(id);e&&e.remove()});
+    try{zkCloseDrawer()}catch(e){}if(own)try{zkSimStop()}catch(e){}
+    setTimeout(()=>{try{const s=S();if(kind==='grund'){if(done)s.tourDone=1;else s.tourSkip=1}else if(done){s.toursDone=[...new Set([...(s.toursDone||[]),kind])]}sv();zkRender()}catch(e){}},50)}
+  window.zkTour=start;
+  document.addEventListener('keydown',ev=>{if(!T)return;if(ev.key==='Escape'){ev.preventDefault();ev.stopImmediatePropagation();stop(false)}else if(ev.key==='ArrowRight'&&!T.steps[T.i].wait&&!/INPUT|TEXTAREA|SELECT/.test((document.activeElement||{}).tagName||'')){ev.preventDefault();ev.stopImmediatePropagation();go(1)}else if(ev.key==='ArrowLeft'&&!T.steps[T.i].wait){ev.preventDefault();ev.stopImmediatePropagation();go(-1)}},true);
+  document.addEventListener('click',ev=>{const b=ev.target.closest&&ev.target.closest('[data-tour]');if(!b)return;ev.preventDefault();ev.stopImmediatePropagation();const d=b.closest('.alert');d&&d.remove();start(b.dataset.tour||'grund')},true);
+  document.addEventListener('click',ev=>{const b=ev.target.closest&&ev.target.closest('[data-tourno]');if(!b)return;const s=S();s.tourSkip=1;sv();const d=b.closest('.alert');d&&d.remove()},true);
+  /* Angebot für neue Nutzer, sobald die persönlichen Angaben bestätigt sind */
+  function offer(){if(T)return;const t=document.querySelector('.today');if(!t)return;const s=S(),ex=t.querySelector('.tour-hint');const want=s.setupNew&&s.setupOk&&!s.tourDone&&!s.tourSkip;
+    if(!want){ex&&ex.remove();return}if(ex)return;const d=document.createElement('div');d.className='alert info tour-hint';d.style.cssText='grid-column:1/-1;margin-top:8px';d.innerHTML='<span><b>Neu hier?</b> Eine kurze Tour zeigt dir in etwa fünf Minuten das Wichtigste. Zum Üben, ohne dass etwas gespeichert wird.</span><button class="btn primary" data-tour>Tour starten</button><button class="x" data-tourno aria-label="Nicht anzeigen">✕</button>';t.appendChild(d)}
+  let q=false;new MutationObserver(()=>{if(q)return;q=true;requestAnimationFrame(()=>{q=false;try{offer()}catch(e){}})}).observe(document.body,{childList:true,subtree:true});
+  setTimeout(()=>{const z=new URLSearchParams(location.search).get('zeige')||'';if(z==='tour')start();else if(z.startsWith('tour-'))start(z.slice(5))},2600);
+  /* Liste der Themen-Touren im Infokompass */
+  function tlist(){const P=document.getElementById('ippanel');if(!P)return;const b=P.querySelector('[data-tour]');if(!b)return;let L=P.querySelector('.tlist');const done=new Set(S().toursDone||[]);
+    if(!L){L=document.createElement('div');L.className='tlist';b.parentNode.appendChild(L)}
+    const html='<div class="tl-h">Themen-Touren</div>'+Object.entries(TOP).map(([id,o])=>`<button class="tl-b" data-tour="${id}"><span>${o.t}</span><i>${done.has(id)?'✓':''}</i></button>`).join('');if(L.dataset.h!==html){L.innerHTML=html;L.dataset.h=html}}
+  setInterval(()=>{try{tlist()}catch(e){}},1000);
+})();
+</script>
+<script>
+/* Neu-Punkte: kurze Erklärung direkt an neuen Funktionen */
+(function(){
+  const D=[
+    {id:'tour',sel:'#iptab',t:'Tour und Themen-Touren',x:'Im Infokompass startest du jetzt eine geführte Tour und kurze Themen-Touren, etwa zu JÜP, Messen oder Backup.'},
+    {id:'find',sel:'#zkFind',t:'Notizen durchsuchen',x:'Durchsucht alle Notizen aller Jahre. Auch mit der Taste /.'},
+    {id:'sim',sel:'#zkSim',t:'Testmodus',x:'Probiere Planungen aus, ohne dass etwas gespeichert wird. Danach übernehmen oder verwerfen.'},
+    {id:'undo',sel:'#zkUndo',t:'Rückgängig',x:'Macht die letzte Änderung rückgängig, auch mit Strg+Z. Strg+Y stellt sie wieder her.'},
+    {id:'heat',sel:'.hmtog',t:'Belastung',x:'Färbt jeden Tag nach den gearbeiteten Stunden und zeigt Wochen- und Monatssummen.'},
+    {id:'ics',sel:'[data-icsopen]',t:'Für Outlook',x:'Exportiert JÜP, Urlaub und Messetage als Kalenderdatei für Outlook oder das Handy.'},
+    {id:'share',sel:'#settings .steil h3',t:'Teilen',x:'App und Einstellungen an Kollegen weitergeben, ohne persönliche Daten.'}];
+  const S=()=>zkST().settings,sv=()=>{try{zkSave()}catch(e){}};let busy=false;
+  function seen(){return new Set(S().dotsSeen||[])}
+  function mark(id){const s=S();s.dotsSeen=[...new Set([...(s.dotsSeen||[]),id])];sv()}
+  function run(){if(busy||document.body.classList.contains('zk-tour'))return;let s;try{s=S()}catch(e){return}
+    if(s.setupNew&&!s.dotsInit){s.dotsInit=1;s.dotsSeen=D.map(d=>d.id);sv();return}
+    const se=seen();let shown=0;
+    D.forEach(d=>{const el=document.querySelector(d.sel),ex=document.querySelector(`.zk-dot[data-dot="${d.id}"]`);
+      if(se.has(d.id)||!el||shown>=2){ex&&ex.remove();return}
+      if(!el.getBoundingClientRect().width){return}
+      shown++;if(ex&&ex.parentNode===el)return;ex&&ex.remove();if(getComputedStyle(el).position==='static')el.style.position='relative';
+      const b=document.createElement('span');b.className='zk-dot';b.dataset.dot=d.id;b.title='Neu: '+d.t;b.setAttribute('role','button');b.setAttribute('aria-label','Neu: '+d.t);el.appendChild(b)})}
+  document.addEventListener('click',ev=>{const b=ev.target.closest&&ev.target.closest('.zk-dot');if(!b)return;ev.preventDefault();ev.stopImmediatePropagation();const d=D.find(x=>x.id===b.dataset.dot);if(!d)return;
+    let p=document.getElementById('zkdotpop');p&&p.remove();p=document.createElement('div');p.id='zkdotpop';p.innerHTML=`<b>Neu: ${d.t}</b>${d.x}<br><button>Verstanden</button>`;document.body.appendChild(p);
+    const r=b.getBoundingClientRect();p.style.left=Math.max(12,Math.min(innerWidth-p.offsetWidth-12,r.left-p.offsetWidth/2))+'px';p.style.top=(r.bottom+p.offsetHeight+10<innerHeight?r.bottom+8:Math.max(12,r.top-p.offsetHeight-8))+'px';
+    const close=()=>{p.remove();mark(d.id);b.remove();busy=false;run()};busy=true;p.querySelector('button').onclick=close;
+    setTimeout(()=>document.addEventListener('click',function o(e){if(!p.contains(e.target)){document.removeEventListener('click',o,true);if(document.body.contains(p)){p.remove();busy=false}}},true),0)},true);
+  let q=false;new MutationObserver(()=>{if(q)return;q=true;setTimeout(()=>{q=false;try{run()}catch(e){}},300)}).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:['hidden']});
+  setTimeout(()=>{try{run()}catch(e){}},3500);
 })();
 </script>
 <script>
